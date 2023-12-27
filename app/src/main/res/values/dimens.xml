@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="defaultTextSize">26sp</dimen>
+    <dimen name="defaultCornerRadius">16dp</dimen>
+    <dimen name="defaultPadding">8dp</dimen>
+    <dimen name="defaultIconSize">24dp</dimen>
+
+
+</resources>
