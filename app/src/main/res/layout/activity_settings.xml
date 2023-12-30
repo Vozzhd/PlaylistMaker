@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginStart="@dimen/defaultMargin"
+        android:gravity="center_vertical">
+
+        <ImageButton
+            android:layout_width="@dimen/defaultIconSize"
+            android:layout_height="@dimen/defaultIconSize"
+
+            android:background="@color/transparent"
+            android:src="@drawable/leftarrow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="-2dp"
+
+            android:text="@string/textOfSettingsButton"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settingsLineHeight"
+        android:layout_marginStart="@dimen/defaultMargin"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="6dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:text="@string/darkThemeText"
+            android:textColor="@color/black"
+            android:textSize="@dimen/defaultTextSizeSettings"
+            android:textAllCaps="false"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="12dp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settingsLineHeight"
+        android:layout_marginStart="@dimen/defaultMargin"
+        android:layout_marginEnd="12dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:text="@string/shareAppText"
+            android:textColor="@color/black"
+            android:textSize="@dimen/defaultTextSizeSettings"
+            android:textAllCaps="false"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="@dimen/defaultIconSize"
+            android:layout_height="@dimen/defaultIconSize"
+            android:layout_gravity="center"
+            android:src="@drawable/shareicon" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settingsLineHeight"
+        android:layout_marginStart="@dimen/defaultMargin"
+        android:layout_marginEnd="12dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:text="@string/supportText"
+            android:textColor="@color/black"
+            android:textSize="@dimen/defaultTextSizeSettings"
+            android:textAllCaps="false"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="@dimen/defaultIconSize"
+            android:layout_height="@dimen/defaultIconSize"
+            android:layout_gravity="center"
+            android:src="@drawable/supporticon" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settingsLineHeight"
+        android:layout_marginStart="@dimen/defaultMargin"
+        android:layout_marginEnd="12dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:text="@string/userAgreementText"
+            android:textColor="@color/black"
+            android:textSize="@dimen/defaultTextSizeSettings"
+            android:textAllCaps="false"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="@dimen/defaultIconSize"
+            android:layout_height="@dimen/defaultIconSize"
+            android:layout_gravity="center"
+            android:src="@drawable/quotright" />
+
+
+    </LinearLayout>
+</LinearLayout>

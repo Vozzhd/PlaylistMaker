@@ -22,25 +22,26 @@
 
         android:text="@string/app_name"
         android:textColor="@color/white"
-        android:textSize="@dimen/defaultTextSize" />
+        android:textSize="@dimen/defaultTextSizeMainMenu" />
+
     <!--Первая кнопка-->
 
     <com.google.android.material.button.MaterialButton
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
         android:layout_weight="3"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/white"
 
         android:text="@string/textOfFindButton"
         android:textAllCaps="false"
         android:textColor="@color/black"
-        android:textSize="@dimen/defaultTextSize"
+        android:textSize="@dimen/defaultTextSizeMainMenu"
         app:cornerRadius="@dimen/defaultCornerRadius"
 
         app:icon="@drawable/magnifier"
         app:iconGravity="textStart"
-        app:iconPadding="8dp"
+        app:iconPadding="@dimen/defaultPadding"
         app:iconSize="@dimen/defaultIconSize"
         app:iconTint="@color/black"
 
@@ -49,19 +50,19 @@
     <com.google.android.material.button.MaterialButton
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
         android:layout_weight="3"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/white"
 
         android:text="@string/textOfMediaButton"
         android:textAllCaps="false"
         android:textColor="@color/black"
-        android:textSize="@dimen/defaultTextSize"
+        android:textSize="@dimen/defaultTextSizeMainMenu"
         app:cornerRadius="@dimen/defaultCornerRadius"
 
         app:icon="@drawable/noteicon"
         app:iconGravity="textStart"
-        app:iconPadding="8dp"
+        app:iconPadding="@dimen/defaultPadding"
         app:iconSize="@dimen/defaultIconSize"
         app:iconTint="@color/black"
 
@@ -70,19 +71,19 @@
     <com.google.android.material.button.MaterialButton
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
         android:layout_weight="3"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/white"
 
         android:text="@string/textOfSettingsButton"
         android:textAllCaps="false"
         android:textColor="@color/black"
-        android:textSize="@dimen/defaultTextSize"
+        android:textSize="@dimen/defaultTextSizeMainMenu"
         app:cornerRadius="@dimen/defaultCornerRadius"
 
         app:icon="@drawable/gearicon"
         app:iconGravity="textStart"
-        app:iconPadding="8dp"
+        app:iconPadding="@dimen/defaultPadding"
         app:iconSize="@dimen/defaultIconSize"
         app:iconTint="@color/black"
 

@@ -3,4 +3,8 @@
     <string name="textOfFindButton">Поиск</string>
     <string name="textOfMediaButton">Медиатека</string>
     <string name="textOfSettingsButton">Настройки</string>
+    <string name="darkThemeText">Тёмная тема</string>
+    <string name="shareAppText">Поделиться приложением</string>
+    <string name="userAgreementText">Пользовательское соглашение</string>
+    <string name="supportText">Написать в поддержку</string>
 </resources>
