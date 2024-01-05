@@ -28,46 +28,41 @@
             android:layout_marginTop="-2dp"
 
             android:text="@string/textOfSettingsButton"
+            android:textAllCaps="false"
             android:textColor="@color/black"
             android:textSize="22sp"
-            android:textStyle="bold"
-            android:textAllCaps="false"/>
+            android:textStyle="bold" />
 
     </LinearLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/settingsLineHeight"
         android:layout_marginStart="@dimen/defaultMargin"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="6dp">
+        android:layout_marginEnd="6dp"
+        android:gravity="center_horizontal">
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center_vertical|start"
 
             android:text="@string/darkThemeText"
+            android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="@dimen/defaultTextSizeSettings"
-            android:textAllCaps="false"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:textSize="@dimen/defaultTextSizeSettings" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center_vertical|end"
             android:layout_marginEnd="12dp" />
 
+    </FrameLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/settingsLineHeight"
         android:layout_marginStart="@dimen/defaultMargin"
@@ -77,28 +72,24 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center_vertical|start"
 
             android:text="@string/shareAppText"
+            android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="@dimen/defaultTextSizeSettings"
-            android:textAllCaps="false"/>
+            android:textSize="@dimen/defaultTextSizeSettings" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
 
         <ImageView
             android:layout_width="@dimen/defaultIconSize"
             android:layout_height="@dimen/defaultIconSize"
-            android:layout_gravity="center"
+            android:layout_gravity="center_vertical|end"
             android:src="@drawable/shareicon" />
 
 
-    </LinearLayout>
+    </FrameLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/settingsLineHeight"
         android:layout_marginStart="@dimen/defaultMargin"
@@ -108,55 +99,44 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center_vertical|start"
 
             android:text="@string/supportText"
+            android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="@dimen/defaultTextSizeSettings"
-            android:textAllCaps="false"/>
+            android:textSize="@dimen/defaultTextSizeSettings" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
 
         <ImageView
             android:layout_width="@dimen/defaultIconSize"
             android:layout_height="@dimen/defaultIconSize"
-            android:layout_gravity="center"
+            android:layout_gravity="center_vertical|end"
             android:src="@drawable/supporticon" />
 
 
-    </LinearLayout>
+    </FrameLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/settingsLineHeight"
         android:layout_marginStart="@dimen/defaultMargin"
         android:layout_marginEnd="12dp">
 
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center_vertical|start"
 
             android:text="@string/userAgreementText"
+            android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="@dimen/defaultTextSizeSettings"
-            android:textAllCaps="false"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
+            android:textSize="@dimen/defaultTextSizeSettings" />
         <ImageView
             android:layout_width="@dimen/defaultIconSize"
             android:layout_height="@dimen/defaultIconSize"
-            android:layout_gravity="center"
+            android:layout_gravity="center_vertical|end"
             android:src="@drawable/quotright" />
 
 
-    </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

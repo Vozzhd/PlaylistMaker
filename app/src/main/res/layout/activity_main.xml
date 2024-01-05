@@ -9,8 +9,7 @@
     android:background="@color/YA_blue"
     android:orientation="vertical"
 
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
+    android:paddingHorizontal="16dp"
     >
     <!--View с текстом Playlist maker-->
     <TextView
