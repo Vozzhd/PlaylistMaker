@@ -6,6 +6,6 @@
     <dimen name="defaultPadding">8dp</dimen>
     <dimen name="defaultIconSize">24dp</dimen>
     <dimen name="defaultMargin">16dp</dimen>
-    <dimen name="settingsLineHeight">61dp</dimen>
+    <dimen name="settingsLineHeight">60dp</dimen>
 
 </resources>
