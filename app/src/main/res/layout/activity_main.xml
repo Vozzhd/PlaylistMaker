@@ -1,18 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="@color/YA_blue"
+    android:orientation="vertical"
 
+    android:paddingHorizontal="16dp"
+    >
+    <!--View с текстом Playlist maker-->
     <TextView
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:paddingBottom="28dp"
+        android:paddingTop="14dp"
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="@dimen/defaultTextSizeMainMenu" />
+
+    <!--Первая кнопка-->
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/findButton"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/white"
+
+        android:text="@string/textOfFindButton"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="@dimen/defaultTextSizeMainMenu"
+        app:cornerRadius="@dimen/defaultCornerRadius"
+
+        app:icon="@drawable/magnifier"
+        app:iconGravity="textStart"
+        app:iconPadding="@dimen/defaultPadding"
+        app:iconSize="@dimen/defaultIconSize"
+        app:iconTint="@color/black"
+
+        />
+    <!--Вторая кнопка-->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/libraryButton"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/white"
+
+        android:text="@string/textOfMediaButton"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="@dimen/defaultTextSizeMainMenu"
+        app:cornerRadius="@dimen/defaultCornerRadius"
+
+        app:icon="@drawable/noteicon"
+        app:iconGravity="textStart"
+        app:iconPadding="@dimen/defaultPadding"
+        app:iconSize="@dimen/defaultIconSize"
+        app:iconTint="@color/black"
+
+        />
+    <!--Третья кнопка-->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/settingsButton"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/white"
+
+        android:text="@string/textOfSettingsButton"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="@dimen/defaultTextSizeMainMenu"
+        app:cornerRadius="@dimen/defaultCornerRadius"
+
+        app:icon="@drawable/gearicon"
+        app:iconGravity="textStart"
+        app:iconPadding="@dimen/defaultPadding"
+        app:iconSize="@dimen/defaultIconSize"
+        app:iconTint="@color/black"
+
+        />
+</LinearLayout>
+
+
