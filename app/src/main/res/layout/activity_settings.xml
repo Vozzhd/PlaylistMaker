@@ -71,6 +71,7 @@
             android:text="@string/supportText" />
 
         <ImageView
+            android:id="@+id/supportButton"
             style="@style/regularImageSmallView"
             android:src="@drawable/supporticon" />
 
@@ -83,6 +84,7 @@
             android:text="@string/userAgreementText" />
 
         <ImageView
+            android:id="@+id/userAgreementButton"
             style="@style/regularImageSmallView"
             android:src="@drawable/quotright" />
 
