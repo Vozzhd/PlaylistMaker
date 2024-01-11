@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="defaultTextSizeForTitle">22sp</dimen>
+    <dimen name="defaultTextSize">16sp</dimen>
+    <dimen name="defaultCornerRadius">16dp</dimen>
+    <dimen name="defaultPadding">8dp</dimen>
+    <dimen name="defaultIconSize">24dp</dimen>
+    <dimen name="defaultMargin">16dp</dimen>
+    <dimen name="settingsLineHeight">60dp</dimen>
+
+</resources>
