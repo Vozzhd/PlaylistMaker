@@ -41,8 +41,6 @@
             android:text="@string/darkThemeText" />
 
         <androidx.appcompat.widget.SwitchCompat
-            android:theme="@style/colorSwitchStyle"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
