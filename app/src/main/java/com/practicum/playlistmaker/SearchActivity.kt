@@ -9,12 +9,24 @@ import android.widget.EditText
 import android.widget.ImageView
 
 class SearchActivity : AppCompatActivity() {
+    private var savedInputInFindView: String = DEFAULT_TEXT
+
+    companion object {
+        const val SAVED_TEXT_KEY = "INPUT_IN_FIND_FIELD"
+        const val DEFAULT_TEXT = ""
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+        if (savedInstanceState != null) {
+            savedInputInFindView = savedInstanceState.getString(SAVED_TEXT_KEY, DEFAULT_TEXT)
+        }
 
         val inputEditText = findViewById<EditText>(R.id.findField)
         val clearButton = findViewById<ImageView>(R.id.clearButton)
+
+        inputEditText.setText(savedInputInFindView)
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
@@ -30,11 +42,12 @@ class SearchActivity : AppCompatActivity() {
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
+
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 clearButton.visibility = clearButtonVisibility(p0)
+                savedInputInFindView = inputEditText.text.toString()
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -43,5 +56,10 @@ class SearchActivity : AppCompatActivity() {
 
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(SAVED_TEXT_KEY, savedInputInFindView)
     }
 }
