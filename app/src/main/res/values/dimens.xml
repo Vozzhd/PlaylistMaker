@@ -6,6 +6,11 @@
     <dimen name="defaultPadding">8dp</dimen>
     <dimen name="defaultIconSize">24dp</dimen>
     <dimen name="defaultMargin">16dp</dimen>
-    <dimen name="settingsLineHeight">60dp</dimen>
-
+    <dimen name="defaultFrameLayoutLineHeight">60dp</dimen>
+    <dimen name="radiusOfEditTextViewCorners">8dp</dimen>
+    <dimen name="marginFromTopForSearchField">64dp</dimen>
+    <dimen name="defaultSmallIconSize">16dp</dimen>
+    <dimen name="defaultInset">0dp</dimen>
+    <dimen name="defaultMarginEndSettingsView">12dp</dimen>
+    <dimen name="marginFromTopForTitle">24dp</dimen>
 </resources>

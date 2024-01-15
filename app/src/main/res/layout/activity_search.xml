@@ -7,7 +7,7 @@
     android:theme="@style/Base.Theme.PlaylistMaker">
 
     <TextView
-        style="@style/titleText"
+        style="@style/TitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/defaultMargin"
@@ -16,20 +16,20 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/defaultFrameLayoutLineHeight"
         android:layout_marginHorizontal="@dimen/defaultMargin"
-        android:layout_marginTop="64dp">
+        android:layout_marginTop="@dimen/marginFromTopForSearchField">
 
         <EditText
             android:id="@+id/findField"
-            style="@style/editTextView"
+            style="@style/EditTextView"
             android:drawableStart="@drawable/magnifier"
             android:hint="@string/hintInFindTextView" />
 
         <ImageView
             android:id="@+id/clearButton"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="@dimen/defaultSmallIconSize"
+            android:layout_height="@dimen/defaultSmallIconSize"
             android:layout_gravity="center_vertical|end"
             android:layout_marginEnd="12dp"
             android:src="@drawable/clear_icon"

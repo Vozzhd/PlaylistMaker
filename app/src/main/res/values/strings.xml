@@ -13,4 +13,5 @@
     <string name="supportLetterAddressee">Vozzhd@yandex.ru</string>
     <string name="linkToTermsOfUse">https://yandex.ru/legal/practicum_offer/</string>
     <string name="hintInFindTextView">Поиск</string>
+    <string name="hintInShareWindow">share by:</string>
 </resources>

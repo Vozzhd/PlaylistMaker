@@ -14,7 +14,7 @@
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="14dp"
+        android:paddingTop="@dimen/defaultMargin"
         android:paddingBottom="28dp"
 
         android:text="@string/app_name"
@@ -25,21 +25,21 @@
     <!--Первая кнопка-->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/findButton"
-        style="@style/bigButton"
+        style="@style/BigButton"
         android:text="@string/textOfFindButton"
         app:icon="@drawable/magnifier" />
 
     <!--Вторая кнопка-->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/libraryButton"
-        style="@style/bigButton"
+        style="@style/BigButton"
         android:text="@string/textOfMediaButton"
         app:icon="@drawable/noteicon" />
 
     <!--Третья кнопка-->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settingsButton"
-        style="@style/bigButton"
+        style="@style/BigButton"
         android:text="@string/textOfSettingsButton"
         app:icon="@drawable/gearicon" />
 

@@ -3,8 +3,8 @@ package com.practicum.playlistmaker
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.FrameLayout
 import android.widget.ImageButton
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
 
@@ -18,17 +18,17 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
-        val shareButton = findViewById<ImageView>(R.id.shareButton)
+        val shareButton = findViewById<FrameLayout>(R.id.shareButton)
         shareButton.setOnClickListener {
             val intent = Intent()
             val sharedLink = getString(R.string.linkInsideShareButton)
             intent.action = Intent.ACTION_SEND
-            intent.putExtra(Intent.EXTRA_TEXT, sharedLink);
-            intent.type = "application/octet-stream"
-            startActivity(Intent.createChooser(intent, "share to:"))
+            intent.putExtra(Intent.EXTRA_TEXT, sharedLink)
+            intent.type = "text/plain"
+            startActivity(Intent.createChooser(intent, getString(R.string.hintInShareWindow)))
         }
 
-        val supportButton = findViewById<ImageView>(R.id.supportButton)
+        val supportButton = findViewById<FrameLayout>(R.id.supportButton)
         supportButton.setOnClickListener {
 
             val intent = Intent(Intent.ACTION_SENDTO)
@@ -45,7 +45,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val userAgreementButton = findViewById<ImageView>(R.id.userAgreementButton)
+        val userAgreementButton = findViewById<FrameLayout>(R.id.userAgreementButton)
         userAgreementButton.setOnClickListener {
             val linkToTermsOfUse = getString(R.string.linkToTermsOfUse)
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(linkToTermsOfUse))
