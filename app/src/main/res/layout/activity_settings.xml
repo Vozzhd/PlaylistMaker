@@ -21,71 +21,73 @@
             android:src="@drawable/leftarrow" />
 
         <TextView
-            style="@style/titleText"
+            style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="@dimen/marginFromTopForTitle"
 
-            android:layout_marginTop="-2dp"
             android:text="@string/textOfSettingsButton" />
 
     </LinearLayout>
 
     <FrameLayout
-        style="@style/frameLayoutSettingActivity"
+        style="@style/FrameLayoutSettingActivity"
+        android:layout_marginEnd="6dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="6dp">
+        >
 
         <TextView
-            style="@style/regularTextView"
+            style="@style/RegularTextView"
             android:text="@string/darkThemeText" />
 
         <androidx.appcompat.widget.SwitchCompat
-            android:theme="@style/colorSwitchStyle"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
-            android:layout_marginEnd="12dp"
             />
 
 
     </FrameLayout>
 
-    <FrameLayout style="@style/frameLayoutSettingActivity">
+    <FrameLayout
+        android:id="@+id/shareButton"
+        style="@style/FrameLayoutSettingActivity">
 
         <TextView
-            style="@style/regularTextView"
+            style="@style/RegularTextView"
             android:text="@string/shareAppText" />
 
         <ImageView
-            android:id="@+id/shareButton"
-            style="@style/regularImageSmallView"
+            style="@style/RegularImageSmallView"
             android:src="@drawable/shareicon" />
 
 
     </FrameLayout>
 
-    <FrameLayout style="@style/frameLayoutSettingActivity">
+    <FrameLayout
+        android:id="@+id/supportButton"
+        style="@style/FrameLayoutSettingActivity">
 
         <TextView
-            style="@style/regularTextView"
+            style="@style/RegularTextView"
             android:text="@string/supportText" />
 
         <ImageView
-            style="@style/regularImageSmallView"
+            style="@style/RegularImageSmallView"
             android:src="@drawable/supporticon" />
 
     </FrameLayout>
 
-    <FrameLayout style="@style/frameLayoutSettingActivity">
+    <FrameLayout
+        android:id="@+id/userAgreementButton"
+        style="@style/FrameLayoutSettingActivity">
 
         <TextView
-            style="@style/regularTextView"
+            style="@style/RegularTextView"
             android:text="@string/userAgreementText" />
 
         <ImageView
-            style="@style/regularImageSmallView"
+            style="@style/RegularImageSmallView"
             android:src="@drawable/quotright" />
 
     </FrameLayout>

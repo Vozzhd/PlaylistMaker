@@ -2,13 +2,15 @@
 
 <resources>
 
-    <style name="bigButton">
+    <style name="BigButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">3</item>
         <item name="android:layout_marginBottom">16dp</item>
         <item name="android:backgroundTint">@color/YP_white</item>
         <item name="cornerRadius">@dimen/defaultCornerRadius</item>
+        <item name="android:insetTop">@dimen/defaultInset</item>
+        <item name="android:insetBottom">@dimen/defaultInset</item>
 
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">@color/YP_black</item>
@@ -23,14 +25,14 @@
 
     </style>
 
-    <style name="frameLayoutSettingActivity">
+    <style name="FrameLayoutSettingActivity">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/settingsLineHeight</item>
+        <item name="android:layout_height">@dimen/defaultFrameLayoutLineHeight</item>
         <item name="android:layout_marginStart">@dimen/defaultMargin</item>
-        <item name="android:layout_marginEnd">12dp</item>
+        <item name="android:layout_marginEnd">@dimen/defaultMarginEndSettingsView</item>
     </style>
 
-    <style name="regularTextView">
+    <style name="RegularTextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical|start</item>
@@ -42,26 +44,38 @@
         <item name="android:textSize">@dimen/defaultTextSize</item>
     </style>
 
-    <style name="titleText">
+    <style name="TitleText">
+
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textSize">@dimen/defaultTextSizeForTitle</item>
         <item name="android:fontFamily">@font/ys_display_bold</item>
         <item name="android:letterSpacing">0</item>
+
     </style>
 
-    <style name="regularImageSmallView">
+    <style name="RegularImageSmallView">
         <item name="android:layout_width">@dimen/defaultIconSize</item>
         <item name="android:layout_height">@dimen/defaultIconSize</item>
         <item name="android:layout_gravity">center_vertical|end</item>=
     </style>
 
-    <style name="colorSwitchStyle" parent="Theme.AppCompat.DayNight">
+    <style name="EditTextView">
 
-        <item name="colorSwitchThumbNormal">@color/YP_text_gray</item>
-        <item name="colorAccent">@color/YP_blue</item>
-        <item name="trackTint">@color/switch_color</item>
+        <item name="android:inputType">text</item>
+        <item name="maxLines">1</item>
 
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+
+        <item name="android:background">@drawable/custom_edit_text_rounded</item>
+        <item name="android:drawablePadding">12dp</item>
+
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textColorHint">?attr/colorTertiary</item>
+        <item name="android:textColor">?attr/colorTertiary</item>
+        <item name="android:paddingStart">12dp</item>
     </style>
+
 
 </resources>

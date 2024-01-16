@@ -1,12 +1,21 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.PlaylistMaker" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="colorPrimary">@color/YP_black</item>
         <item name="colorPrimaryVariant">@color/YP_black</item>
         <item name="colorOnPrimary">@color/YP_white</item>
+        <item name="colorPrimaryInverse">@color/YP_white</item>
 
+        <item name="colorSecondary">@color/YP_white</item>
+        <item name="colorSecondaryContainer">@color/YP_white</item>
+
+        <item name="colorTertiary">@color/YP_black</item>
+
+        <item name="colorSwitchThumbNormal">@color/YP_text_gray</item>
+        <item name="colorAccent">@color/YP_blue</item>
+        <item name="trackTint">@color/switch_color</item>
 
 
     </style>

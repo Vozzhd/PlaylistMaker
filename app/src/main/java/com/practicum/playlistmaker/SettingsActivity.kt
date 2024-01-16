@@ -1,9 +1,12 @@
 package com.practicum.playlistmaker
+
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.widget.FrameLayout
 import android.widget.ImageButton
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -11,17 +14,43 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
         val backToMainButton = findViewById<ImageButton>(R.id.backButton)
-        backToMainButton.setOnClickListener{
+        backToMainButton.setOnClickListener {
             finish()
         }
 
-        val shareButton = findViewById<ImageView>(R.id.shareButton)
-        shareButton.setOnClickListener{
+        val shareButton = findViewById<FrameLayout>(R.id.shareButton)
+        shareButton.setOnClickListener {
             val intent = Intent()
-            intent.action=Intent.ACTION_SEND
-            intent.putExtra(Intent.EXTRA_TEXT, "https://practicum.yandex.ru/");
-            intent.type="application/octet-stream"
-            startActivity(Intent.createChooser(intent,"share to:"))
+            val sharedLink = getString(R.string.linkInsideShareButton)
+            intent.action = Intent.ACTION_SEND
+            intent.putExtra(Intent.EXTRA_TEXT, sharedLink)
+            intent.type = "text/plain"
+            startActivity(Intent.createChooser(intent, getString(R.string.hintInShareWindow)))
         }
+
+        val supportButton = findViewById<FrameLayout>(R.id.supportButton)
+        supportButton.setOnClickListener {
+
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.data = Uri.parse("mailto:")
+
+            val subject = getString(R.string.supportLetterSubject)
+            val message = getString(R.string.supportLetterText)
+            val addressee = getString(R.string.supportLetterAddressee)
+
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(addressee))
+            intent.putExtra(Intent.EXTRA_SUBJECT, subject)
+            intent.putExtra(Intent.EXTRA_TEXT, message)
+
+            startActivity(intent)
+        }
+
+        val userAgreementButton = findViewById<FrameLayout>(R.id.userAgreementButton)
+        userAgreementButton.setOnClickListener {
+            val linkToTermsOfUse = getString(R.string.linkToTermsOfUse)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(linkToTermsOfUse))
+            startActivity(intent)
+        }
+
     }
 }
