@@ -77,5 +77,11 @@
         <item name="android:paddingStart">12dp</item>
     </style>
 
+    <style name="DescriptionText">
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">?attr/colorSecondary</item>
+        <item name="android:fontFamily">@font/ys_text_regular</item>
+        <item name="android:textSize">@dimen/textSizeForArtistName</item>
 
+    </style>
 </resources>

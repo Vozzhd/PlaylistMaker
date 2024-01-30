@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:backgroundTint="@color/transparent">
+
+    <ImageView
+        android:id="@+id/albumCoverImage"
+        android:layout_width="@dimen/musicAlbumCoverSmall"
+        android:layout_height="@dimen/musicAlbumCoverSmall"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="12dp" />
+
+    <TextView
+        android:id="@+id/trackName"
+        style="@style/RegularTextView"
+        android:layout_width="250dp"
+        android:layout_height="20dp"
+        android:layout_gravity="top"
+
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="12dp"
+
+        android:maxLines="1"
+        android:textColor="?attr/colorOnPrimary" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="13dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="32dp">
+
+        <TextView
+            android:id="@+id/artistName"
+            style="@style/DescriptionText"
+            android:layout_gravity="center_vertical"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:maxLines="1"
+            android:layout_weight="1"
+             />
+
+        <ImageView
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_dot" />
+
+        <TextView
+            android:id="@+id/trackDuration"
+            style="@style/DescriptionText"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="?attr/colorSecondary"/>
+
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:layout_width="@dimen/defaultIconSize"
+        android:layout_height="@dimen/defaultIconSize"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/quotright" />
+
+
+</FrameLayout>
