@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class SearchActivity : AppCompatActivity() {
     private var savedInputInFindView: String = DEFAULT_TEXT
+    private lateinit var inputEditText: EditText
 
     companion object {
         const val SAVED_TEXT_KEY = "SAVED_TEXT_KEY"
@@ -23,7 +24,7 @@ class SearchActivity : AppCompatActivity() {
         val recyclerViewTracks = findViewById<RecyclerView>(R.id.recyclerViewTracks)
         val trackViewAdapter = TrackAdapter(takeMockPlaylist())
         recyclerViewTracks.adapter = trackViewAdapter
-
+        inputEditText = findViewById<EditText>(R.id.findField)
 
         val inputEditText = findViewById<EditText>(R.id.findField)
         val clearButton = findViewById<ImageView>(R.id.clearButton)
@@ -61,7 +62,6 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val inputEditText = findViewById<EditText>(R.id.findField)
         inputEditText.setSelection(inputEditText.length())
     }
 

@@ -13,12 +13,12 @@ class TrackViewHolder(itemView: View) : ViewHolder(itemView) {
     private val artistName: TextView = itemView.findViewById(R.id.artistName)
     private val trackTime: TextView = itemView.findViewById(R.id.trackDuration)
     private val albumCover: ImageView = itemView.findViewById(R.id.albumCoverImage)
-
+    private val corner = itemView.resources.getDimension(R.dimen.corner_radius).toInt()
     fun bind(model: Track) {
         trackName.text = model.trackName
         artistName.text = model.artistName
         trackTime.text = model.trackTime
-        val corner = itemView.resources.getDimension(R.dimen.corner_radius).toInt()
+
         Glide
             .with(itemView)
             .load(model.artworkUrl100)

@@ -22,7 +22,8 @@
         android:layout_marginTop="12dp"
 
         android:maxLines="1"
-        android:textColor="?attr/colorOnPrimary" />
+        android:textColor="?attr/colorOnPrimary"
+        android:ellipsize="end" />
 
     <LinearLayout
         android:layout_width="wrap_content"
