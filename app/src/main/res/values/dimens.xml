@@ -13,4 +13,7 @@
     <dimen name="defaultInset">0dp</dimen>
     <dimen name="defaultMarginEndSettingsView">12dp</dimen>
     <dimen name="marginFromTopForTitle">24dp</dimen>
+    <dimen name="musicAlbumCoverSmall">45dp</dimen>
+    <dimen name="textSizeForArtistName">11sp</dimen>
+    <dimen name="corner_radius">2dp</dimen>
 </resources>
