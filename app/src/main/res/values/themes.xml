@@ -2,9 +2,9 @@
 
     <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
-        <item name="colorPrimary">@color/YP_white</item>
+        <item name="colorPrimary">@color/YP_white</item> <!-- Day White - Night Black -->
         <item name="colorPrimaryVariant">@color/YP_blue</item>
-        <item name="colorOnPrimary">@color/YP_black</item>
+        <item name="colorOnPrimary">@color/YP_black</item> <!-- Day Black - Night White -->
         <item name="colorPrimaryInverse">@color/YP_black</item>
 
         <item name="colorSecondary">@color/YP_text_gray</item>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/colorPrimary"
     android:orientation="vertical"
     android:theme="@style/Base.Theme.PlaylistMaker">
@@ -25,7 +25,9 @@
             android:id="@+id/findField"
             style="@style/EditTextView"
             android:drawableStart="@drawable/magnifier"
-            android:hint="@string/hintInFindTextView" />
+            android:hint="@string/hintInFindTextView"
+            android:imeOptions="actionDone"
+            android:singleLine="true" />
 
         <ImageView
             android:id="@+id/clearButton"
@@ -42,8 +44,44 @@
         android:id="@+id/recyclerViewTracks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="140dp"
         android:layout_gravity="top"
+        android:layout_marginTop="140dp"
         android:backgroundTint="@color/transparent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/refreshButton"
+        style="@style/RegularTextView"
+        android:backgroundTint="?attr/colorOnPrimary"
+        android:textColor="?attr/colorPrimary"
+        android:layout_width="90dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="458dp"
+        android:gravity="center"
+        android:textSize="11dp"
+        android:text="Обновить"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/errorImage"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="210dp"
+        android:src="@drawable/connection_error"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/placeholderMessage"
+        style="@style/RegularTextView"
+        android:layout_width="312dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="346dp"
+        android:textAlignment="center"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
 </FrameLayout>
