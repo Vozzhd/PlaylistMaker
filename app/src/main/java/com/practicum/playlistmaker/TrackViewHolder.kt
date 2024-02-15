@@ -18,8 +18,13 @@ class TrackViewHolder(itemView: View) : ViewHolder(itemView) {
 
     fun bind(model: Track) {
         trackName.text = model.trackName
-        artistName.text = model.artistName.trim()
-        trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis.toInt())
+        artistName.text = model.artistName
+        if (!model.trackTimeMillis.isNullOrBlank()) {
+            trackTime.text =
+                SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis.toInt())
+        } else {
+            trackTime.text = "-:--"
+        }
 
         Glide
             .with(itemView)

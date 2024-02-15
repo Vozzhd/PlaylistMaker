@@ -16,4 +16,5 @@
     <string name="hintInShareWindow">share by:</string>
     <string name="nothing_found">Ничего не нашлось</string>
     <string name="something_went_wrong">Проблемы со связью \n\n Загрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="defaultTrackTime">"-:--"</string>
 </resources>

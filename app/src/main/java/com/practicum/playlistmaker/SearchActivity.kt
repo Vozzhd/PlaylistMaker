@@ -10,7 +10,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,8 +30,7 @@ class SearchActivity : AppCompatActivity() {
         .build()
 
     private val itunesService = retrofit.create(ItunesAPI::class.java)
-    private val trackList =
-        ArrayList<Track>()
+    private val trackList = mutableListOf<Track>()
 
     companion object {
         const val SAVED_TEXT_KEY = "SAVED_TEXT_KEY"
@@ -43,11 +41,10 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         val recyclerViewTracks = findViewById<RecyclerView>(R.id.recyclerViewTracks)
-        val trackViewAdapter =
-            TrackAdapter(trackList)
+        val trackViewAdapter = TrackAdapter(trackList)
         recyclerViewTracks.adapter = trackViewAdapter
 
-        inputEditText = findViewById<EditText>(R.id.findField)
+        inputEditText = findViewById(R.id.findField)
         placeholderMessage = findViewById(R.id.placeholderMessage)
         val inputEditText = findViewById<EditText>(R.id.findField)
         val clearButton = findViewById<ImageView>(R.id.clearButton)
@@ -68,7 +65,7 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        fun showMessage(text: String, additionalMessage: String) {
+        fun showMessage(text: String) {
             if (text.isNotEmpty()) {
                 placeholderMessage.visibility = View.VISIBLE
                 trackList.clear()
@@ -81,45 +78,41 @@ class SearchActivity : AppCompatActivity() {
 
         fun searchTrack() {
             if (inputEditText.text.isNotEmpty()) {
-                itunesService.search(inputEditText.text.toString()).enqueue(object :
-                    Callback<TrackResponse> {
-                    override fun onResponse(
-                        call: Call<TrackResponse>,
-                        response: Response<TrackResponse>
-                    ) {
+                itunesService.search(inputEditText.text.toString()).enqueue(object : Callback<TrackResponse> {
+                    override fun onResponse(call: Call<TrackResponse>, response: Response<TrackResponse>) {
+
+                        var checkedResponseBody : List<Track> = mutableListOf()
+
+                        if (response.body()?.results !=null) {
+                             checkedResponseBody = response.body()?.results!!
+                        }
+
                         if (response.code() == 200) {
                             trackList.clear()
-                            if (response.body()?.results?.isNotEmpty() == true) {
-                                trackList.addAll(response.body()?.results!!)
-                                trackViewAdapter.notifyDataSetChanged()
+                            if (checkedResponseBody.isNotEmpty()) {
+                                trackList.addAll(checkedResponseBody)
+                                trackViewAdapter.notifyDataSetChanged()  //Надо бы поменять
                             }
                             if (trackList.isEmpty()) {
-                                showMessage(getString(R.string.nothing_found), "")
+                                showMessage(getString(R.string.nothing_found))
                                 errorImage.setImageResource(R.drawable.search_error)
                                 errorImage.visibility = View.VISIBLE
                             } else {
-                                showMessage("", "")
+                                showMessage("")
                                 errorImage.visibility = View.GONE
                                 refreshButton.visibility = View.GONE
                             }
                         } else {
-                            showMessage(
-                                getString(R.string.something_went_wrong),
-                                response.code().toString()
-                            )
-                        }
+                            showMessage(getString(R.string.something_went_wrong)) }
                     }
-
                     override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                        showMessage(getString(R.string.something_went_wrong), t.message.toString())
+                        showMessage(getString(R.string.something_went_wrong))
                         errorImage.setImageResource(R.drawable.connection_error)
                         errorImage.visibility = View.VISIBLE
                         refreshButton.visibility = View.VISIBLE
                     }
-
                 })
             }
-
         }
 
         val simpleTextWatcher = object : TextWatcher {
