@@ -8,6 +8,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -30,7 +31,7 @@ class SearchActivity : AppCompatActivity() {
         .build()
 
     private val itunesService = retrofit.create(ItunesAPI::class.java)
-    private val trackList = mutableListOf<Track>()
+    private val trackList = mutableListOf<Track>() //уйти от этого в будущем
 
     companion object {
         const val SAVED_TEXT_KEY = "SAVED_TEXT_KEY"
@@ -41,15 +42,17 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         val recyclerViewTracks = findViewById<RecyclerView>(R.id.recyclerViewTracks)
-        val trackViewAdapter = TrackAdapter(trackList)
+        val trackViewAdapter = TrackAdapter(trackList)//Убрать, использовать адаптер напрямую
         recyclerViewTracks.adapter = trackViewAdapter
 
         inputEditText = findViewById(R.id.findField)
-        placeholderMessage = findViewById(R.id.placeholderMessage)
+        placeholderMessage = findViewById(R.id.placeholderErrorMessage)
         val inputEditText = findViewById<EditText>(R.id.findField)
         val clearButton = findViewById<ImageView>(R.id.clearButton)
-        val errorImage = findViewById<ImageView>(R.id.errorImage)
-        val refreshButton = findViewById<Button>(R.id.refreshButton)
+        val placeholderErrorLayout = findViewById<FrameLayout>(R.id.placeholderErrorLayout)
+        val errorImage = findViewById<ImageView>(R.id.placeholderErrorImage)
+        val refreshButton = findViewById<Button>(R.id.placeholderRefreshButton)
+
         clearButton.setOnClickListener {
             inputEditText.setText("")
             inputEditText.hideKeyboard()
@@ -67,51 +70,68 @@ class SearchActivity : AppCompatActivity() {
 
         fun showMessage(text: String) {
             if (text.isNotEmpty()) {
-                placeholderMessage.visibility = View.VISIBLE
                 trackList.clear()
                 trackViewAdapter.notifyDataSetChanged()
                 placeholderMessage.text = text
             } else {
-                placeholderMessage.visibility = View.GONE
+                placeholderMessage.text = "Описание ошибки отсутствует"
+            }
+        }
+
+        fun setPlaceholderState(placeholderState: PlaceholderState) {
+            when (placeholderState) {
+                PlaceholderState.GOOD -> {
+                    placeholderErrorLayout.visibility = View.GONE
+                }
+                PlaceholderState.BAD_REQUEST -> {
+                    showMessage(getString(R.string.nothing_found))
+                    errorImage.setImageResource(R.drawable.search_error)
+                    refreshButton.visibility = View.GONE
+                    placeholderErrorLayout.visibility = View.VISIBLE
+                }
+                PlaceholderState.NO_CONNECTION -> {
+                    showMessage(getString(R.string.something_went_wrong))
+                    errorImage.setImageResource(R.drawable.connection_error)
+                    refreshButton.visibility = View.VISIBLE
+                    placeholderErrorLayout.visibility = View.VISIBLE
+                }
             }
         }
 
         fun searchTrack() {
             if (inputEditText.text.isNotEmpty()) {
-                itunesService.search(inputEditText.text.toString()).enqueue(object : Callback<TrackResponse> {
-                    override fun onResponse(call: Call<TrackResponse>, response: Response<TrackResponse>) {
+                itunesService.search(inputEditText.text.toString())
+                    .enqueue(object : Callback<TrackResponse> {
+                        override fun onResponse(
+                            call: Call<TrackResponse>,
+                            response: Response<TrackResponse>
+                        ) {
+                            var checkedResponseBody: List<Track> = mutableListOf()
 
-                        var checkedResponseBody : List<Track> = mutableListOf()
+                            if (response.body()?.results != null) {
+                                checkedResponseBody = response.body()?.results!!
+                            }
 
-                        if (response.body()?.results !=null) {
-                             checkedResponseBody = response.body()?.results!!
+                            if (response.code() == 200) {
+                                trackList.clear()
+                                if (checkedResponseBody.isNotEmpty()) {
+                                    trackList.addAll(checkedResponseBody)
+                                    trackViewAdapter.notifyDataSetChanged()
+                                }
+                                if (trackList.isEmpty()) {
+                                    setPlaceholderState(PlaceholderState.BAD_REQUEST)
+                                } else {
+                                    setPlaceholderState(PlaceholderState.GOOD)
+                                }
+                            } else {
+                                showMessage(getString(R.string.something_went_wrong))
+                            }
                         }
 
-                        if (response.code() == 200) {
-                            trackList.clear()
-                            if (checkedResponseBody.isNotEmpty()) {
-                                trackList.addAll(checkedResponseBody)
-                                trackViewAdapter.notifyDataSetChanged()  //Надо бы поменять
-                            }
-                            if (trackList.isEmpty()) {
-                                showMessage(getString(R.string.nothing_found))
-                                errorImage.setImageResource(R.drawable.search_error)
-                                errorImage.visibility = View.VISIBLE
-                            } else {
-                                showMessage("")
-                                errorImage.visibility = View.GONE
-                                refreshButton.visibility = View.GONE
-                            }
-                        } else {
-                            showMessage(getString(R.string.something_went_wrong)) }
-                    }
-                    override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                        showMessage(getString(R.string.something_went_wrong))
-                        errorImage.setImageResource(R.drawable.connection_error)
-                        errorImage.visibility = View.VISIBLE
-                        refreshButton.visibility = View.VISIBLE
-                    }
-                })
+                        override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                            setPlaceholderState(PlaceholderState.NO_CONNECTION)
+                        }
+                    })
             }
         }
 
