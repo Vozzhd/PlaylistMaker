@@ -29,18 +29,17 @@
         android:layout_width="wrap_content"
         android:layout_height="13dp"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="32dp">
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="44dp">
 
         <TextView
             android:id="@+id/artistName"
             style="@style/DescriptionText"
             android:layout_gravity="center_vertical"
-
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:maxLines="1"
-            android:layout_weight="1"
-             />
+            android:ellipsize="end"/>
 
         <ImageView
             android:layout_width="13dp"
@@ -53,8 +52,7 @@
             style="@style/DescriptionText"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textColor="?attr/colorSecondary"/>
+            android:layout_height="match_parent" />
 
 
     </LinearLayout>

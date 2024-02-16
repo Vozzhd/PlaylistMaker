@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/colorPrimary"
     android:orientation="vertical"
     android:theme="@style/Base.Theme.PlaylistMaker">
@@ -17,15 +17,19 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/defaultFrameLayoutLineHeight"
+        android:layout_height="52dp"
         android:layout_marginHorizontal="@dimen/defaultMargin"
         android:layout_marginTop="@dimen/marginFromTopForSearchField">
 
         <EditText
             android:id="@+id/findField"
             style="@style/EditTextView"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
             android:drawableStart="@drawable/magnifier"
-            android:hint="@string/hintInFindTextView" />
+            android:hint="@string/hintInFindTextView"
+            android:imeOptions="actionDone"
+            android:singleLine="true" />
 
         <ImageView
             android:id="@+id/clearButton"
@@ -42,8 +46,41 @@
         android:id="@+id/recyclerViewTracks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="140dp"
         android:layout_gravity="top"
+        android:layout_marginTop="132dp"
         android:backgroundTint="@color/transparent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <FrameLayout
+        android:id="@+id/placeholderErrorLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="210dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/placeholderErrorImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/connection_error" />
+
+        <TextView
+            android:id="@+id/placeholderErrorMessage"
+            style="@style/RegularTextView"
+            android:layout_width="312dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:layout_marginTop="136dp"
+            android:textAlignment="center"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/placeholderRefreshButton"
+            style="@style/SmallButton"
+            android:layout_marginTop="238dp"
+            android:text="@string/refreshButton" />
+    </FrameLayout>
 </FrameLayout>
