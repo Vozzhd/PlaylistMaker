@@ -6,17 +6,22 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
-
+import androidx.appcompat.widget.SwitchCompat
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-
         val backToMainButton = findViewById<ImageButton>(R.id.backButton)
         backToMainButton.setOnClickListener {
             finish()
         }
+
+        val themeSwitcher = findViewById<SwitchCompat>(R.id.themeSwitcher)
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+        }
+        themeSwitcher.isChecked = (application as App).darkTheme
 
         val shareButton = findViewById<FrameLayout>(R.id.shareButton)
         shareButton.setOnClickListener {
