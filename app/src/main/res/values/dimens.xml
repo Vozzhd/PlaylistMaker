@@ -17,4 +17,5 @@
     <dimen name="musicAlbumCoverSmall">45dp</dimen>
     <dimen name="textSizeForArtistName">11sp</dimen>
     <dimen name="corner_radius">2dp</dimen>
+    <dimen name="magrinTopTrackRecyclerView">132dp</dimen>
 </resources>

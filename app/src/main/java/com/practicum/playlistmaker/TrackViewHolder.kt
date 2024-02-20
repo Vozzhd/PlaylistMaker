@@ -17,6 +17,7 @@ class TrackViewHolder(itemView: View) : ViewHolder(itemView) {
     private val corner = itemView.resources.getDimension(R.dimen.corner_radius).toInt()
 
     fun bind(model: Track) {
+
         trackName.text = model.trackName
         artistName.text = model.artistName
         if (!model.trackTimeMillis.isNullOrBlank()) {

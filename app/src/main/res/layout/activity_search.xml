@@ -42,14 +42,42 @@
 
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewTracks"
+    <LinearLayout
+        android:id="@+id/historyView"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="top"
         android:layout_marginTop="132dp"
-        android:backgroundTint="@color/transparent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        android:backgroundTint="@color/transparent">
+
+        <TextView
+            android:id="@+id/historyViewTitle"
+            style="@style/TitleText"
+            android:layout_width="300dp"
+            android:layout_height="52dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="Вы искали"
+            android:visibility="gone"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewTracks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:backgroundTint="@color/transparent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/clearHistoryButton"
+            style="@style/SmallButton"
+            android:text="Очистить историю"
+            android:visibility="gone"
+            />
+
+
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/placeholderErrorLayout"
