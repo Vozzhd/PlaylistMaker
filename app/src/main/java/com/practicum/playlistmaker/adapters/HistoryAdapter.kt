@@ -8,7 +8,8 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.Track
 import com.practicum.playlistmaker.TrackViewHolder
 import com.practicum.playlistmaker.screens.SearchHistory
-class TrackAdapter(
+
+class HistoryAdapter(
     private val trackList: MutableList<Track>,
     sharedPreferences: SharedPreferences
 ) : RecyclerView.Adapter<TrackViewHolder>() {
@@ -20,15 +21,10 @@ class TrackAdapter(
             .inflate(R.layout.track_view, parent, false)
         return TrackViewHolder(view)
     }
-
     override fun getItemCount(): Int {
         return trackList.size
     }
-
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(trackList[position])
-        holder.itemView.setOnClickListener {
-            searchHistory.addToHistoryList (trackList[position])
-        }
     }
 }
