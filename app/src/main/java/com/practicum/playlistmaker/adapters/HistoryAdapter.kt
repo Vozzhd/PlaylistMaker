@@ -1,20 +1,17 @@
 package com.practicum.playlistmaker.adapters
 
-import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.Track
 import com.practicum.playlistmaker.TrackViewHolder
-import com.practicum.playlistmaker.screens.SearchHistory
+
 
 class HistoryAdapter(
     private val trackList: MutableList<Track>,
-    sharedPreferences: SharedPreferences
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
-    val searchHistory = SearchHistory(sharedPreferences)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater
             .from(parent.context)
@@ -27,4 +24,11 @@ class HistoryAdapter(
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(trackList[position])
     }
+    fun clear() {
+        trackList.clear()
+        notifyDataSetChanged()
+    }
+
+
+
 }

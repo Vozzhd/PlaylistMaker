@@ -43,7 +43,7 @@
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/historyView"
+        android:id="@+id/viewField"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

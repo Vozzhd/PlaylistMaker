@@ -14,10 +14,8 @@ class App : Application() {
         super.onCreate()
         sharedPrefs =
             getSharedPreferences(FILE_WITH_SAVED_STATES, MODE_PRIVATE) //Создали ссылку на файл
-        val statusOfDarkState =
-            sharedPrefs.getBoolean(THEME_STATE, darkTheme) //Вытащили оттуда статус по ключу
+        val statusOfDarkState = sharedPrefs.getBoolean(THEME_STATE, darkTheme) //Вытащили оттуда статус по ключу
         switchTheme(statusOfDarkState)
-
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {

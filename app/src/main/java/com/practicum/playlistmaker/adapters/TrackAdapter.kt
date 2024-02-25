@@ -13,7 +13,7 @@ class TrackAdapter(
     sharedPreferences: SharedPreferences
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
-    val searchHistory = SearchHistory(sharedPreferences)
+    private val searchHistory = SearchHistory(sharedPreferences)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater
             .from(parent.context)
@@ -30,5 +30,9 @@ class TrackAdapter(
         holder.itemView.setOnClickListener {
             searchHistory.addToHistoryList (trackList[position])
         }
+    }
+    fun clear() {
+        trackList.clear()
+        notifyDataSetChanged()
     }
 }

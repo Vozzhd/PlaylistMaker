@@ -11,7 +11,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.ItunesAPI
 import com.practicum.playlistmaker.PlaceholderState
@@ -28,6 +30,15 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
+
+    companion object {
+        const val SAVED_TEXT_KEY = "SAVED_TEXT_KEY"
+        const val DEFAULT_TEXT = ""
+
+        const val SAVE_HISTORY_DIRECTORY = "Saved history"
+        const val SAVE_HISTORY_KEY = "Saved history key"
+    }
+
     private var savedInputInFindView: String = DEFAULT_TEXT
 
     private lateinit var inputEditText: EditText
@@ -39,23 +50,16 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var historyTitleText: TextView
     private lateinit var clearHistoryButton: Button
     private lateinit var recyclerViewTracks: RecyclerView
+    private lateinit var viewField : LinearLayout
+    private lateinit var searchHistory: SearchHistory
+
     private val itunesBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
         .baseUrl(itunesBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val itunesService = retrofit.create(ItunesAPI::class.java)
-    private var data = mutableListOf<Track>() //уйти от этого в будущем
-
-    companion object {
-        const val SAVED_TEXT_KEY = "SAVED_TEXT_KEY"
-        const val DEFAULT_TEXT = ""
-
-        const val SAVE_HISTORY_DIRECTORY = "Saved history"
-        const val SAVE_HISTORY_KEY = "Saved history key"
-
-
-    }
+          private var data = mutableListOf<Track>() //уйти от этого в будущем (пока не вышло)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,16 +74,16 @@ class SearchActivity : AppCompatActivity() {
         historyTitleText = findViewById(R.id.historyViewTitle)
         clearHistoryButton = findViewById(R.id.clearHistoryButton)
         recyclerViewTracks = findViewById(R.id.recyclerViewTracks)
+        viewField = findViewById(R.id.viewField)
 
-        val sharedPreferencesForSearchHistory: SharedPreferences =
-            getSharedPreferences(SAVE_HISTORY_DIRECTORY, MODE_PRIVATE) //Создали ссылку на файл
-        val searchHistory = SearchHistory(sharedPreferencesForSearchHistory)
-
+        val sharedPreferencesForSearchHistory: SharedPreferences = getSharedPreferences(SAVE_HISTORY_DIRECTORY, MODE_PRIVATE)
+        searchHistory = SearchHistory(sharedPreferencesForSearchHistory)
+        searchHistory.initHistoryList()
         val trackViewAdapter = TrackAdapter(data, sharedPreferencesForSearchHistory)
-        val historyViewAdapter =
-            HistoryAdapter(SearchHistory.historyList, sharedPreferencesForSearchHistory)
+        val historyViewAdapter = HistoryAdapter(SearchHistory.historyList.asReversed())
 
         recyclerViewTracks.adapter = trackViewAdapter
+        recyclerViewTracks.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
@@ -91,7 +95,9 @@ class SearchActivity : AppCompatActivity() {
 
         clearHistoryButton.setOnClickListener {
             searchHistory.clearHistoryList()
-            trackViewAdapter.notifyDataSetChanged()
+            historyViewAdapter.clear()
+            historyTitleText.setTransitionVisibility(View.GONE)
+            clearHistoryButton.setTransitionVisibility(View.GONE)
         }
 
         fun getClearButtonVisibility(textInView: CharSequence?): Int {
@@ -135,15 +141,12 @@ class SearchActivity : AppCompatActivity() {
         }
 
         val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(textInView: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 clearButton.visibility = getClearButtonVisibility(textInView)
-                clearHistoryButton.visibility =
-                    if (inputEditText.hasFocus() && textInView?.isEmpty() == true && SearchHistory.historyList.isNotEmpty()) View.VISIBLE else View.GONE
-                historyTitleText.visibility =
-                    if (inputEditText.hasFocus() && textInView?.isEmpty() == true && SearchHistory.historyList.isNotEmpty()) View.VISIBLE else View.GONE
+                clearHistoryButton.visibility = if (inputEditText.hasFocus() && textInView?.isEmpty() == true && SearchHistory.historyList.isNotEmpty()) View.VISIBLE else View.GONE
+                historyTitleText.visibility = if (inputEditText.hasFocus() && textInView?.isEmpty() == true && SearchHistory.historyList.isNotEmpty()) View.VISIBLE else View.GONE
                 if (clearHistoryButton.visibility == View.VISIBLE) {
                     recyclerViewTracks.adapter = historyViewAdapter
                     historyViewAdapter.notifyDataSetChanged()
@@ -216,6 +219,7 @@ class SearchActivity : AppCompatActivity() {
             }
             false
         }
+
         refreshButton.setOnClickListener {
             searchTrack()
         }
