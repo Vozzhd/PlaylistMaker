@@ -9,7 +9,7 @@
     <dimen name="defaultMargin">16dp</dimen>
     <dimen name="defaultFrameLayoutLineHeight">60dp</dimen>
     <dimen name="radiusOfEditTextViewCorners">8dp</dimen>
-    <dimen name="marginFromTopForSearchField">64dp</dimen>
+    <dimen name="marginFromTopForSearchField">56dp</dimen>
     <dimen name="defaultSmallIconSize">16dp</dimen>
     <dimen name="defaultInset">0dp</dimen>
     <dimen name="defaultMarginEndSettingsView">12dp</dimen>

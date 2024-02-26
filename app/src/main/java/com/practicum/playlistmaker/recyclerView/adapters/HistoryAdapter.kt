@@ -1,13 +1,11 @@
-package com.practicum.playlistmaker.adapters
+package com.practicum.playlistmaker.recyclerView.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.Track
-import com.practicum.playlistmaker.TrackViewHolder
-
-
+import com.practicum.playlistmaker.recyclerView.Track
+import com.practicum.playlistmaker.recyclerView.TrackViewHolder
 class HistoryAdapter(
     private val trackList: MutableList<Track>,
 ) : RecyclerView.Adapter<TrackViewHolder>() {
@@ -28,7 +26,4 @@ class HistoryAdapter(
         trackList.clear()
         notifyDataSetChanged()
     }
-
-
-
 }

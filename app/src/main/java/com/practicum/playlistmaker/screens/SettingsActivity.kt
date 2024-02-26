@@ -18,12 +18,12 @@ class SettingsActivity : AppCompatActivity() {
         backToMainButton.setOnClickListener {
             finish()
         }
+
         val themeSwitcher = findViewById<SwitchCompat>(R.id.themeSwitcher)
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             (applicationContext as App).switchTheme(checked)
         }
         themeSwitcher.isChecked = (application as App).darkTheme
-
         val shareButton = findViewById<FrameLayout>(R.id.shareButton)
         shareButton.setOnClickListener {
             val intent = Intent()

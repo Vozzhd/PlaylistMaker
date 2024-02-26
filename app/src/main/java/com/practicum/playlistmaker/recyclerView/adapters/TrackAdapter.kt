@@ -1,12 +1,12 @@
-package com.practicum.playlistmaker.adapters
+package com.practicum.playlistmaker.recyclerView.adapters
 
 import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.Track
-import com.practicum.playlistmaker.TrackViewHolder
+import com.practicum.playlistmaker.recyclerView.Track
+import com.practicum.playlistmaker.recyclerView.TrackViewHolder
 import com.practicum.playlistmaker.screens.SearchHistory
 class TrackAdapter(
     private val trackList: MutableList<Track>,
@@ -24,7 +24,6 @@ class TrackAdapter(
     override fun getItemCount(): Int {
         return trackList.size
     }
-
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(trackList[position])
         holder.itemView.setOnClickListener {
@@ -33,6 +32,10 @@ class TrackAdapter(
     }
     fun clear() {
         trackList.clear()
+        notifyDataSetChanged()
+    }
+    fun addAllData(mutableList: MutableList<Track>) {
+        trackList.addAll(mutableList)
         notifyDataSetChanged()
     }
 }

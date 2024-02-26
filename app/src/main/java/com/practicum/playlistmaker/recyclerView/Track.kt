@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.recyclerView
 data class Track(
     val trackName: String,
     val artistName: String,

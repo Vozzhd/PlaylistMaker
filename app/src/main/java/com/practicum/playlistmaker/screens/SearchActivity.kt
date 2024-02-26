@@ -10,17 +10,19 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.ItunesAPI
-import com.practicum.playlistmaker.PlaceholderState
+import com.practicum.playlistmaker.recyclerView.PlaceholderState
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.Track
-import com.practicum.playlistmaker.adapters.HistoryAdapter
-import com.practicum.playlistmaker.adapters.TrackAdapter
+import com.practicum.playlistmaker.recyclerView.Track
+import com.practicum.playlistmaker.recyclerView.adapters.HistoryAdapter
+import com.practicum.playlistmaker.recyclerView.adapters.TrackAdapter
+import com.practicum.playlistmaker.replaceAdapter
 import com.practicum.playlistmaker.data.TrackResponse
 import com.practicum.playlistmaker.hideKeyboard
 import retrofit2.Call
@@ -52,6 +54,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var recyclerViewTracks: RecyclerView
     private lateinit var viewField : LinearLayout
     private lateinit var searchHistory: SearchHistory
+    private lateinit var backToMainButton : ImageButton
 
     private val itunesBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
@@ -59,8 +62,6 @@ class SearchActivity : AppCompatActivity() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val itunesService = retrofit.create(ItunesAPI::class.java)
-          private var data = mutableListOf<Track>() //уйти от этого в будущем (пока не вышло)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -75,12 +76,13 @@ class SearchActivity : AppCompatActivity() {
         clearHistoryButton = findViewById(R.id.clearHistoryButton)
         recyclerViewTracks = findViewById(R.id.recyclerViewTracks)
         viewField = findViewById(R.id.viewField)
+        backToMainButton = findViewById(R.id.backButton)
 
         val sharedPreferencesForSearchHistory: SharedPreferences = getSharedPreferences(SAVE_HISTORY_DIRECTORY, MODE_PRIVATE)
         searchHistory = SearchHistory(sharedPreferencesForSearchHistory)
         searchHistory.initHistoryList()
-        val trackViewAdapter = TrackAdapter(data, sharedPreferencesForSearchHistory)
-        val historyViewAdapter = HistoryAdapter(SearchHistory.historyList.asReversed())
+        val trackViewAdapter = TrackAdapter(mutableListOf(), sharedPreferencesForSearchHistory)
+        val historyViewAdapter = HistoryAdapter(SearchHistory.historyList)
 
         recyclerViewTracks.adapter = trackViewAdapter
         recyclerViewTracks.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
@@ -88,16 +90,17 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             inputEditText.setText("")
             inputEditText.hideKeyboard()
-            data.clear()
-            trackViewAdapter.notifyDataSetChanged()
+            trackViewAdapter.clear()
             placeholderErrorLayout.visibility = View.GONE
         }
-
         clearHistoryButton.setOnClickListener {
             searchHistory.clearHistoryList()
             historyViewAdapter.clear()
             historyTitleText.setTransitionVisibility(View.GONE)
             clearHistoryButton.setTransitionVisibility(View.GONE)
+        }
+        backToMainButton.setOnClickListener {
+            finish()
         }
 
         fun getClearButtonVisibility(textInView: CharSequence?): Int {
@@ -110,8 +113,7 @@ class SearchActivity : AppCompatActivity() {
 
         fun showMessage(text: String) {
             if (text.isNotEmpty()) {
-                data.clear()
-                trackViewAdapter.notifyDataSetChanged()
+                trackViewAdapter.clear()
                 placeholderMessage.text = text
             } else {
                 placeholderMessage.text = "Описание ошибки отсутствует"
@@ -145,22 +147,29 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(textInView: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 clearButton.visibility = getClearButtonVisibility(textInView)
-                clearHistoryButton.visibility = if (inputEditText.hasFocus() && textInView?.isEmpty() == true && SearchHistory.historyList.isNotEmpty()) View.VISIBLE else View.GONE
-                historyTitleText.visibility = if (inputEditText.hasFocus() && textInView?.isEmpty() == true && SearchHistory.historyList.isNotEmpty()) View.VISIBLE else View.GONE
-                if (clearHistoryButton.visibility == View.VISIBLE) {
-                    recyclerViewTracks.adapter = historyViewAdapter
-                    historyViewAdapter.notifyDataSetChanged()
-                } else {
-                    recyclerViewTracks.adapter = trackViewAdapter
-                    trackViewAdapter.notifyDataSetChanged()
-                }
                 savedInputInFindView = inputEditText.text.toString()
+
+                when (inputEditText.hasFocus() && textInView?.isEmpty() == true && SearchHistory.historyList.isNotEmpty()) {
+                    true -> {
+                        clearHistoryButton.visibility = View.VISIBLE
+                        historyTitleText.visibility = View.VISIBLE
+                        placeholderErrorLayout.visibility = View.GONE
+                        recyclerViewTracks.replaceAdapter(historyViewAdapter)
+                    }
+                    false -> {
+                        clearHistoryButton.visibility = View.GONE
+                        historyTitleText.visibility = View.GONE
+                        recyclerViewTracks.replaceAdapter(trackViewAdapter)
+                    }
+                }
             }
 
             override fun afterTextChanged(p0: Editable?) {
                 // empty
             }
         }
+
+
 
         fun searchTrack() {
             if (inputEditText.text.isNotEmpty()) {
@@ -177,12 +186,11 @@ class SearchActivity : AppCompatActivity() {
                             }
 
                             if (response.code() == 200) {
-                                data.clear()
+                               trackViewAdapter.clear()
                                 if (checkedResponseBody.isNotEmpty()) {
-                                    data.addAll(checkedResponseBody)
-                                    trackViewAdapter.notifyDataSetChanged()
+                                    trackViewAdapter.addAllData(checkedResponseBody as MutableList<Track>)
                                 }
-                                if (data.isEmpty()) {
+                                if (checkedResponseBody.isEmpty()) {
                                     setPlaceholderState(PlaceholderState.BAD_REQUEST)
                                 } else {
                                     setPlaceholderState(PlaceholderState.GOOD)
@@ -200,16 +208,15 @@ class SearchActivity : AppCompatActivity() {
         }
 
         inputEditText.setOnFocusChangeListener { _, hasFocus ->
-            clearHistoryButton.visibility =
-                if (hasFocus && inputEditText.text.isEmpty() && SearchHistory.historyList.isNotEmpty()) View.VISIBLE else View.GONE
-            historyTitleText.visibility =
-                if (hasFocus && inputEditText.text.isEmpty() && SearchHistory.historyList.isNotEmpty()) View.VISIBLE else View.GONE
-            if (clearHistoryButton.visibility == View.VISIBLE) {
-                recyclerViewTracks.adapter = historyViewAdapter
-                historyViewAdapter.notifyDataSetChanged()
-            } else {
-                recyclerViewTracks.adapter = trackViewAdapter
-                trackViewAdapter.notifyDataSetChanged()
+            when (hasFocus && inputEditText.text.isEmpty() && SearchHistory.historyList.isNotEmpty()) {
+                true -> {
+                    clearHistoryButton.visibility = View.VISIBLE
+                    historyTitleText.visibility = View.VISIBLE
+                    recyclerViewTracks.replaceAdapter(historyViewAdapter) }
+                false -> {
+                    clearHistoryButton.visibility = View.GONE
+                    historyTitleText.visibility = View.GONE
+                    recyclerViewTracks.replaceAdapter(trackViewAdapter) }
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
