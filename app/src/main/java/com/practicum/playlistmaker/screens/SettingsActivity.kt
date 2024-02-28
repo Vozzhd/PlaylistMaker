@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.screens
 
 import android.content.Intent
 import android.net.Uri
@@ -6,18 +6,24 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
-
+import androidx.appcompat.widget.SwitchCompat
+import com.practicum.playlistmaker.App
+import com.practicum.playlistmaker.R
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-
         val backToMainButton = findViewById<ImageButton>(R.id.backButton)
         backToMainButton.setOnClickListener {
             finish()
         }
 
+        val themeSwitcher = findViewById<SwitchCompat>(R.id.themeSwitcher)
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+        }
+        themeSwitcher.isChecked = (application as App).darkTheme
         val shareButton = findViewById<FrameLayout>(R.id.shareButton)
         shareButton.setOnClickListener {
             val intent = Intent()
@@ -51,6 +57,5 @@ class SettingsActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(linkToTermsOfUse))
             startActivity(intent)
         }
-
     }
 }
