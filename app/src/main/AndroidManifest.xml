@@ -24,6 +24,10 @@
             android:name=".screens.SettingsActivity"
             android:exported="false" />
         <activity
+            android:name=".screens.PlayerActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".screens.MainActivity"
             android:exported="true">
             <intent-filter>
