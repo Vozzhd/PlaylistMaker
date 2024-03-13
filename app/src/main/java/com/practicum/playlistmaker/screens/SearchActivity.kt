@@ -20,11 +20,10 @@ import com.practicum.playlistmaker.ItunesAPI
 import com.practicum.playlistmaker.recyclerView.PlaceholderState
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.recyclerView.Track
-import com.practicum.playlistmaker.recyclerView.adapters.HistoryAdapter
-import com.practicum.playlistmaker.recyclerView.adapters.TrackAdapter
-import com.practicum.playlistmaker.replaceAdapter
+import com.practicum.playlistmaker.recyclerView.TrackAdapter
 import com.practicum.playlistmaker.data.TrackResponse
 import com.practicum.playlistmaker.hideKeyboard
+import com.practicum.playlistmaker.replaceList
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -55,7 +54,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var viewField : LinearLayout
     private lateinit var searchHistory: SearchHistory
     private lateinit var backToMainButton : ImageButton
-
+    private lateinit var resultOfSearchList : MutableList <Track>
     private val itunesBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
         .baseUrl(itunesBaseUrl)
@@ -65,7 +64,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
+        resultOfSearchList = mutableListOf()
         inputEditText = findViewById(R.id.findField)
         placeholderMessage = findViewById(R.id.placeholderErrorMessage)
         clearButton = findViewById(R.id.clearButton)
@@ -81,8 +80,7 @@ class SearchActivity : AppCompatActivity() {
         val sharedPreferencesForSearchHistory: SharedPreferences = getSharedPreferences(SAVE_HISTORY_DIRECTORY, MODE_PRIVATE)
         searchHistory = SearchHistory(sharedPreferencesForSearchHistory)
         searchHistory.initHistoryList()
-        val trackViewAdapter = TrackAdapter(mutableListOf(), sharedPreferencesForSearchHistory)
-        val historyViewAdapter = HistoryAdapter(SearchHistory.historyList)
+        val trackViewAdapter = TrackAdapter(resultOfSearchList, sharedPreferencesForSearchHistory)
 
         recyclerViewTracks.adapter = trackViewAdapter
         recyclerViewTracks.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
@@ -90,12 +88,11 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             inputEditText.setText("")
             inputEditText.hideKeyboard()
-            trackViewAdapter.clear()
             placeholderErrorLayout.visibility = View.GONE
         }
         clearHistoryButton.setOnClickListener {
             searchHistory.clearHistoryList()
-            historyViewAdapter.clear()
+            trackViewAdapter.clear()
             historyTitleText.setTransitionVisibility(View.GONE)
             clearHistoryButton.setTransitionVisibility(View.GONE)
         }
@@ -154,12 +151,13 @@ class SearchActivity : AppCompatActivity() {
                         clearHistoryButton.visibility = View.VISIBLE
                         historyTitleText.visibility = View.VISIBLE
                         placeholderErrorLayout.visibility = View.GONE
-                        recyclerViewTracks.replaceAdapter(historyViewAdapter)
+                        trackViewAdapter.replaceList(SearchHistory.historyList)
                     }
                     false -> {
                         clearHistoryButton.visibility = View.GONE
                         historyTitleText.visibility = View.GONE
-                        recyclerViewTracks.replaceAdapter(trackViewAdapter)
+                        trackViewAdapter.replaceList(resultOfSearchList)
+
                     }
                 }
             }
@@ -188,7 +186,9 @@ class SearchActivity : AppCompatActivity() {
                             if (response.code() == 200) {
                                trackViewAdapter.clear()
                                 if (checkedResponseBody.isNotEmpty()) {
-                                    trackViewAdapter.addAllData(checkedResponseBody as MutableList<Track>)
+                                    resultOfSearchList = checkedResponseBody as MutableList<Track>
+                                    trackViewAdapter.addAllData(resultOfSearchList)
+
                                 }
                                 if (checkedResponseBody.isEmpty()) {
                                     setPlaceholderState(PlaceholderState.BAD_REQUEST)
@@ -212,11 +212,13 @@ class SearchActivity : AppCompatActivity() {
                 true -> {
                     clearHistoryButton.visibility = View.VISIBLE
                     historyTitleText.visibility = View.VISIBLE
-                    recyclerViewTracks.replaceAdapter(historyViewAdapter) }
+                    trackViewAdapter.replaceList(SearchHistory.historyList)
+                     }
                 false -> {
                     clearHistoryButton.visibility = View.GONE
                     historyTitleText.visibility = View.GONE
-                    recyclerViewTracks.replaceAdapter(trackViewAdapter) }
+                    trackViewAdapter.replaceList(resultOfSearchList)
+                    }
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
