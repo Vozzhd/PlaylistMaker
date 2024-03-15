@@ -185,7 +185,7 @@
         style="@style/TrackDetails"
         android:text="@string/albumGenre"
 
-        app:layout_constraintBottom_toTopOf="@id/releaseCountry"
+        app:layout_constraintBottom_toTopOf="@id/trackReleaseCountry"
         app:layout_constraintEnd_toStartOf="@id/rightGuideline"
 
         app:layout_constraintStart_toEndOf="@id/trackGenreText"
@@ -193,7 +193,7 @@
         tools:text="Rock" />
 
     <TextView
-        android:id="@+id/releaseCountry"
+        android:id="@+id/trackReleaseCountry"
         style="@style/TrackDetails"
         android:layout_marginBottom="20dp"
 
@@ -252,10 +252,10 @@
         android:layout_width="wrap_content"
         android:layout_height="18dp"
         android:text="@string/trackReleaseCountryText"
-        app:layout_constraintBaseline_toBaselineOf="@id/releaseCountry"
+        app:layout_constraintBaseline_toBaselineOf="@id/trackReleaseCountry"
 
         app:layout_constraintStart_toEndOf="@id/leftGuideline"
-        app:layout_constraintTop_toTopOf="@id/releaseCountry"
+        app:layout_constraintTop_toTopOf="@id/trackReleaseCountry"
 
         />
 

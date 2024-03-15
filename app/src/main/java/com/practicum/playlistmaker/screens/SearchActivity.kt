@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.screens
 
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,15 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.EditText
-import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.ItunesAPI
 import com.practicum.playlistmaker.recyclerView.PlaceholderState
 import com.practicum.playlistmaker.R
@@ -43,18 +36,7 @@ class SearchActivity : AppCompatActivity() {
 
     private var savedInputInFindView: String = DEFAULT_TEXT
 
-    private lateinit var inputEditText: EditText
-    private lateinit var placeholderMessage: TextView
-    private lateinit var clearButton: ImageView
-    private lateinit var placeholderErrorLayout: FrameLayout
-    private lateinit var errorImage: ImageView
-    private lateinit var refreshButton: Button
-    private lateinit var historyTitleText: TextView
-    private lateinit var clearHistoryButton: Button
-    private lateinit var recyclerViewTracks: RecyclerView
-    private lateinit var viewField: LinearLayout
     private lateinit var searchHistory: SearchHistory
-    private lateinit var backToMainButton: ImageButton
     private lateinit var resultOfSearchList: MutableList<Track>
     private val itunesBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
@@ -62,44 +44,43 @@ class SearchActivity : AppCompatActivity() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val itunesService = retrofit.create(ItunesAPI::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         resultOfSearchList = mutableListOf()
-        inputEditText = findViewById(R.id.findField)
-        placeholderMessage = findViewById(R.id.placeholderErrorMessage)
-        clearButton = findViewById(R.id.clearButton)
-        placeholderErrorLayout = findViewById(R.id.placeholderErrorLayout)
-        errorImage = findViewById(R.id.placeholderErrorImage)
-        refreshButton = findViewById(R.id.placeholderRefreshButton)
-        historyTitleText = findViewById(R.id.historyViewTitle)
-        clearHistoryButton = findViewById(R.id.clearHistoryButton)
-        recyclerViewTracks = findViewById(R.id.recyclerViewTracks)
-        viewField = findViewById(R.id.viewField)
-        backToMainButton = findViewById(R.id.backButton)
 
         val sharedPreferencesForSearchHistory: SharedPreferences =
             getSharedPreferences(SAVE_HISTORY_DIRECTORY, MODE_PRIVATE)
         searchHistory = SearchHistory(sharedPreferencesForSearchHistory)
         searchHistory.initHistoryList()
-        val trackViewAdapter = TrackAdapter(resultOfSearchList, sharedPreferencesForSearchHistory)
 
-        recyclerViewTracks.adapter = trackViewAdapter
-        recyclerViewTracks.layoutManager =
+        val trackViewAdapter = TrackAdapter(resultOfSearchList, sharedPreferencesForSearchHistory) { Track ->
+            val playerActivityIntent = Intent(this, PlayerActivity::class.java)
+            playerActivityIntent.putExtra(TrackAdapter.KEY_FOR_TRACK, Track)
+            startActivity(playerActivityIntent)
+        }
+
+        binding.recyclerViewTracks.adapter = trackViewAdapter
+        binding.recyclerViewTracks.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        clearButton.setOnClickListener {
-            inputEditText.setText("")
-            inputEditText.hideKeyboard()
-            placeholderErrorLayout.visibility = View.GONE
+        binding.clearButton.setOnClickListener {
+            binding.findField.setText("")
+            binding.findField.hideKeyboard()
+            binding.placeholderErrorLayout.visibility = View.GONE
         }
-        clearHistoryButton.setOnClickListener {
+
+        binding.clearHistoryButton.setOnClickListener {
             searchHistory.clearHistoryList()
             trackViewAdapter.clear()
-            historyTitleText.setTransitionVisibility(View.GONE)
-            clearHistoryButton.setTransitionVisibility(View.GONE)
+            binding.historyViewTitle.setTransitionVisibility(View.GONE)
+            binding.clearHistoryButton.setTransitionVisibility(View.GONE)
         }
-        backToMainButton.setOnClickListener {
+
+        binding.backButton.setOnClickListener {
             finish()
         }
 
@@ -114,30 +95,30 @@ class SearchActivity : AppCompatActivity() {
         fun showMessage(text: String) {
             if (text.isNotEmpty()) {
                 trackViewAdapter.clear()
-                placeholderMessage.text = text
+                binding.placeholderErrorMessage.text = text
             } else {
-                placeholderMessage.text = "Описание ошибки отсутствует"
+                binding.placeholderErrorMessage.text = "Описание ошибки отсутствует"
             }
         }
 
         fun setPlaceholderState(placeholderState: PlaceholderState) {
             when (placeholderState) {
                 PlaceholderState.GOOD -> {
-                    placeholderErrorLayout.visibility = View.GONE
+                    binding.placeholderErrorLayout.visibility = View.GONE
                 }
 
                 PlaceholderState.BAD_REQUEST -> {
                     showMessage(getString(R.string.nothing_found))
-                    errorImage.setImageResource(R.drawable.search_error)
-                    refreshButton.visibility = View.GONE
-                    placeholderErrorLayout.visibility = View.VISIBLE
+                    binding.placeholderErrorImage.setImageResource(R.drawable.search_error)
+                    binding.placeholderRefreshButton.visibility = View.GONE
+                    binding.placeholderErrorLayout.visibility = View.VISIBLE
                 }
 
                 PlaceholderState.NO_CONNECTION -> {
                     showMessage(getString(R.string.something_went_wrong))
-                    errorImage.setImageResource(R.drawable.connection_error)
-                    refreshButton.visibility = View.VISIBLE
-                    placeholderErrorLayout.visibility = View.VISIBLE
+                    binding.placeholderErrorImage.setImageResource(R.drawable.connection_error)
+                    binding.placeholderRefreshButton.visibility = View.VISIBLE
+                    binding.placeholderErrorLayout.visibility = View.VISIBLE
                 }
             }
         }
@@ -146,20 +127,20 @@ class SearchActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(textInView: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                clearButton.visibility = getClearButtonVisibility(textInView)
-                savedInputInFindView = inputEditText.text.toString()
+                binding.clearButton.visibility = getClearButtonVisibility(textInView)
+                savedInputInFindView = binding.findField.text.toString()
 
-                when (inputEditText.hasFocus() && textInView?.isEmpty() == true && SearchHistory.historyList.isNotEmpty()) {
+                when (binding.findField.hasFocus() && textInView?.isEmpty() == true && SearchHistory.historyList.isNotEmpty()) {
                     true -> {
-                        clearHistoryButton.visibility = View.VISIBLE
-                        historyTitleText.visibility = View.VISIBLE
-                        placeholderErrorLayout.visibility = View.GONE
+                        binding.clearHistoryButton.visibility = View.VISIBLE
+                        binding.historyViewTitle.visibility = View.VISIBLE
+                        binding.placeholderErrorLayout.visibility = View.GONE
                         trackViewAdapter.replaceList(SearchHistory.historyList)
                     }
 
                     false -> {
-                        clearHistoryButton.visibility = View.GONE
-                        historyTitleText.visibility = View.GONE
+                        binding.clearHistoryButton.visibility = View.GONE
+                        binding.historyViewTitle.visibility = View.GONE
                         trackViewAdapter.replaceList(resultOfSearchList)
 
                     }
@@ -173,8 +154,8 @@ class SearchActivity : AppCompatActivity() {
 
 
         fun searchTrack() {
-            if (inputEditText.text.isNotEmpty()) {
-                itunesService.search(inputEditText.text.toString())
+            if (binding.findField.text.isNotEmpty()) {
+                itunesService.search(binding.findField.text.toString())
                     .enqueue(object : Callback<TrackResponse> {
                         override fun onResponse(
                             call: Call<TrackResponse>,
@@ -210,37 +191,37 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        inputEditText.setOnFocusChangeListener { _, hasFocus ->
-            when (hasFocus && inputEditText.text.isEmpty() && SearchHistory.historyList.isNotEmpty()) {
+        binding.findField.setOnFocusChangeListener { _, hasFocus ->
+            when (hasFocus && binding.findField.text.isEmpty() && SearchHistory.historyList.isNotEmpty()) {
                 true -> {
-                    clearHistoryButton.visibility = View.VISIBLE
-                    historyTitleText.visibility = View.VISIBLE
+                    binding.clearHistoryButton.visibility = View.VISIBLE
+                    binding.historyViewTitle.visibility = View.VISIBLE
                     trackViewAdapter.replaceList(SearchHistory.historyList)
                 }
 
                 false -> {
-                    clearHistoryButton.visibility = View.GONE
-                    historyTitleText.visibility = View.GONE
+                    binding.clearHistoryButton.visibility = View.GONE
+                    binding.historyViewTitle.visibility = View.GONE
                     trackViewAdapter.replaceList(resultOfSearchList)
                 }
             }
         }
-        inputEditText.addTextChangedListener(simpleTextWatcher)
-        inputEditText.setOnEditorActionListener { _, actionId, _ ->
+        binding.findField.addTextChangedListener(simpleTextWatcher)
+        binding.findField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 searchTrack()
             }
             false
         }
 
-        refreshButton.setOnClickListener {
+        binding.placeholderRefreshButton.setOnClickListener {
             searchTrack()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        inputEditText.setSelection(inputEditText.length())
+        binding.findField.setSelection(binding.findField.length())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -252,8 +233,6 @@ class SearchActivity : AppCompatActivity() {
 
         super.onRestoreInstanceState(savedInstanceState)
         savedInputInFindView = savedInstanceState.getString(SAVED_TEXT_KEY, DEFAULT_TEXT)
-
-        val inputEditText = findViewById<EditText>(R.id.findField)
-        inputEditText.setText(savedInputInFindView)
+        binding.findField.setText(savedInputInFindView)
     }
 }

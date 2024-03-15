@@ -1,65 +1,47 @@
 package com.practicum.playlistmaker.screens
 
 import android.os.Bundle
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.google.gson.Gson
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.recyclerView.Track
 import com.practicum.playlistmaker.recyclerView.TrackAdapter
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityPlayerBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_player)
+        binding = ActivityPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val backButton = findViewById<ImageButton>(R.id.backButton)
-        val albumCoverImage = findViewById<ImageView>(R.id.albumCoverImageInPlayer)
-        val trackNameInPlayer = findViewById<TextView>(R.id.trackNameInPlayer)
-        val artistNameInPlayer = findViewById<TextView>(R.id.artistNameInPlayer)
-        val playButton = findViewById<ImageButton>(R.id.playButton)
-        val addButton = findViewById<ImageButton>(R.id.addButton)
-        val likeButton = findViewById<ImageButton>(R.id.likeButton)
-        val elapsedTrackTime = findViewById<TextView>(R.id.elapsedTrackTime)
-        val trackAlbumName = findViewById<TextView>(R.id.trackAlbumName)
-        val trackDuration = findViewById<TextView>(R.id.trackDuration)
-        val trackReleaseYear = findViewById<TextView>(R.id.trackReleaseYear)
-        val trackGenre = findViewById<TextView>(R.id.trackGenre)
-        val trackReleaseCountry = findViewById<TextView>(R.id.releaseCountry)
-        val corner = resources.getDimension(R.dimen.corner_radius_for_big_cover).toInt()
-        backButton.setOnClickListener {
-            finish()
+        val bigRoundForCorner = resources.getDimension(R.dimen.corner_radius_for_big_cover).toInt()
+        val track = intent.getSerializableExtra(TrackAdapter.KEY_FOR_TRACK) as Track
+        binding.apply {
+            trackReleaseCountry.text = track.country
+            trackAlbumName.text = track.collectionName
+            trackReleaseYear.text = track.releaseDate.substring(0, 4)
+            trackGenre.text = track.primaryGenreName
+            trackNameInPlayer.text = track.trackName
+            artistNameInPlayer.text = track.artistName
         }
-
-        val gson = Gson()
-        val json = intent.getStringExtra(TrackAdapter.KEY_FOR_TRACK)
-        val track = gson.fromJson(json, Track::class.java)
-
         Glide.with(this)
             .load(track.artworkUrl512)
-            .transform(RoundedCorners(corner))
-            .placeholder(R.drawable.placeholder_album_cover).into(albumCoverImage)
+            .transform(RoundedCorners(bigRoundForCorner))
+            .placeholder(R.drawable.placeholder_album_cover).into(binding.albumCoverImageInPlayer)
 
-
-        trackNameInPlayer.text = track.trackName
-        artistNameInPlayer.text = track.artistName
+        binding.backButton.setOnClickListener { finish() }
 
         if (track.trackTimeMillis.isNotBlank()) {
-            trackDuration.text =
+            binding.trackDuration.text =
                 SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis.toInt())
         } else {
-            trackDuration.text = "-:--"
+            binding.trackDuration.text = "-:--"
         }
 
-        trackAlbumName.text = track.collectionName
-        trackReleaseYear.text = track.releaseDate.substring(0, 4)
-        trackGenre.text = track.primaryGenreName
-        trackReleaseCountry.text = track.country
+
     }
 }
