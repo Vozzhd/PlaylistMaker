@@ -10,7 +10,4 @@ fun View.hideKeyboard() {
     val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(windowToken, 0)
 }
-fun TrackAdapter.replaceList (list:MutableList<Track>) {
-    this.trackList = list
-    this.notifyDataSetChanged()
-}
+

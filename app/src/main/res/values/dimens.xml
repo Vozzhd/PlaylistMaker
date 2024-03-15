@@ -17,5 +17,7 @@
     <dimen name="musicAlbumCoverSmall">45dp</dimen>
     <dimen name="textSizeForArtistName">11sp</dimen>
     <dimen name="corner_radius">2dp</dimen>
-    <dimen name="magrinTopTrackRecyclerView">132dp</dimen>
+    <dimen name="corner_radius_for_big_cover">8dp</dimen>
+    <dimen name="marginTopTrackRecyclerView">132dp</dimen>
+
 </resources>

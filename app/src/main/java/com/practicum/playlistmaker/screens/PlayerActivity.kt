@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.screens
 
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,9 +10,9 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.recyclerView.Track
+import com.practicum.playlistmaker.recyclerView.TrackAdapter
 import java.text.SimpleDateFormat
 import java.util.Locale
-import java.util.ResourceBundle
 
 class PlayerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,17 +32,17 @@ class PlayerActivity : AppCompatActivity() {
         val trackReleaseYear = findViewById<TextView>(R.id.trackReleaseYear)
         val trackGenre = findViewById<TextView>(R.id.trackGenre)
         val trackReleaseCountry = findViewById<TextView>(R.id.releaseCountry)
-        val corner = resources.getDimension(R.dimen.corner_radius).toInt()
+        val corner = resources.getDimension(R.dimen.corner_radius_for_big_cover).toInt()
         backButton.setOnClickListener {
             finish()
         }
 
         val gson = Gson()
-        val json = intent.getStringExtra("key")
+        val json = intent.getStringExtra(TrackAdapter.KEY_FOR_TRACK)
         val track = gson.fromJson(json, Track::class.java)
 
         Glide.with(this)
-            .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
+            .load(track.artworkUrl512)
             .transform(RoundedCorners(corner))
             .placeholder(R.drawable.placeholder_album_cover).into(albumCoverImage)
 
@@ -51,7 +50,7 @@ class PlayerActivity : AppCompatActivity() {
         trackNameInPlayer.text = track.trackName
         artistNameInPlayer.text = track.artistName
 
-        if (!track.trackTimeMillis.isNullOrBlank()) {
+        if (track.trackTimeMillis.isNotBlank()) {
             trackDuration.text =
                 SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis.toInt())
         } else {

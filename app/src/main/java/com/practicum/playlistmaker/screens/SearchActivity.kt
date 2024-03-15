@@ -22,8 +22,8 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.recyclerView.Track
 import com.practicum.playlistmaker.recyclerView.TrackAdapter
 import com.practicum.playlistmaker.data.TrackResponse
+import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.hideKeyboard
-import com.practicum.playlistmaker.replaceList
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,6 +31,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
+    lateinit var binding: ActivitySearchBinding
 
     companion object {
         const val SAVED_TEXT_KEY = "SAVED_TEXT_KEY"
@@ -51,10 +52,10 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var historyTitleText: TextView
     private lateinit var clearHistoryButton: Button
     private lateinit var recyclerViewTracks: RecyclerView
-    private lateinit var viewField : LinearLayout
+    private lateinit var viewField: LinearLayout
     private lateinit var searchHistory: SearchHistory
-    private lateinit var backToMainButton : ImageButton
-    private lateinit var resultOfSearchList : MutableList <Track>
+    private lateinit var backToMainButton: ImageButton
+    private lateinit var resultOfSearchList: MutableList<Track>
     private val itunesBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
         .baseUrl(itunesBaseUrl)
@@ -77,13 +78,15 @@ class SearchActivity : AppCompatActivity() {
         viewField = findViewById(R.id.viewField)
         backToMainButton = findViewById(R.id.backButton)
 
-        val sharedPreferencesForSearchHistory: SharedPreferences = getSharedPreferences(SAVE_HISTORY_DIRECTORY, MODE_PRIVATE)
+        val sharedPreferencesForSearchHistory: SharedPreferences =
+            getSharedPreferences(SAVE_HISTORY_DIRECTORY, MODE_PRIVATE)
         searchHistory = SearchHistory(sharedPreferencesForSearchHistory)
         searchHistory.initHistoryList()
         val trackViewAdapter = TrackAdapter(resultOfSearchList, sharedPreferencesForSearchHistory)
 
         recyclerViewTracks.adapter = trackViewAdapter
-        recyclerViewTracks.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+        recyclerViewTracks.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
@@ -153,6 +156,7 @@ class SearchActivity : AppCompatActivity() {
                         placeholderErrorLayout.visibility = View.GONE
                         trackViewAdapter.replaceList(SearchHistory.historyList)
                     }
+
                     false -> {
                         clearHistoryButton.visibility = View.GONE
                         historyTitleText.visibility = View.GONE
@@ -166,7 +170,6 @@ class SearchActivity : AppCompatActivity() {
                 // empty
             }
         }
-
 
 
         fun searchTrack() {
@@ -184,7 +187,7 @@ class SearchActivity : AppCompatActivity() {
                             }
 
                             if (response.code() == 200) {
-                               trackViewAdapter.clear()
+                                trackViewAdapter.clear()
                                 if (checkedResponseBody.isNotEmpty()) {
                                     resultOfSearchList = checkedResponseBody as MutableList<Track>
                                     trackViewAdapter.addAllData(resultOfSearchList)
@@ -213,12 +216,13 @@ class SearchActivity : AppCompatActivity() {
                     clearHistoryButton.visibility = View.VISIBLE
                     historyTitleText.visibility = View.VISIBLE
                     trackViewAdapter.replaceList(SearchHistory.historyList)
-                     }
+                }
+
                 false -> {
                     clearHistoryButton.visibility = View.GONE
                     historyTitleText.visibility = View.GONE
                     trackViewAdapter.replaceList(resultOfSearchList)
-                    }
+                }
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)

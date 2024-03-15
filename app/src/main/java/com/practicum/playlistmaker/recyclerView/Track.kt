@@ -1,7 +1,5 @@
 package com.practicum.playlistmaker.recyclerView
 
-import javax.xml.transform.stream.StreamSource
-
 data class Track(
     val trackName: String,
     val artistName: String,
@@ -12,5 +10,7 @@ data class Track(
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String
-
 )
+{
+    val artworkUrl512 get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+}
