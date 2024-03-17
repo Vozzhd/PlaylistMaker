@@ -20,4 +20,16 @@
     <string name="refreshButton">Обновить</string>
     <string name="clearHistoryButtonText">Очистить историю</string>
     <string name="historyViewTitleText">Вы искали</string>
+    <string name="songName"></string>
+    <string name="albumName"></string>
+    <string name="trackDuration" />
+    <string name="elapsedTrackTime">0:00</string>
+    <string name="albumReleaseYear" />
+    <string name="albumGenre" />
+    <string name="trackReleaseCountry" />
+    <string name="trackDurationText">Длительность</string>
+    <string name="albumNameText">Название альбома</string>
+    <string name="trackReleaseYearText">Год</string>
+    <string name="trackGenreText">Жанр</string>
+    <string name="trackReleaseCountryText">Страна</string>
 </resources>
