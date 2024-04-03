@@ -1,5 +1,4 @@
 package com.practicum.playlistmaker.screens
-
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
@@ -31,17 +30,15 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val SAVED_TEXT_KEY = "SAVED_TEXT_KEY"
         const val DEFAULT_TEXT = ""
-
         const val SAVE_HISTORY_DIRECTORY = "Saved history"
         const val SAVE_HISTORY_KEY = "Saved history key"
-
-        const val DEBOUNCE_DELAY = 2000L
+        const val DEBOUNCE_DELAY_FOR_SEND_SEARCH_REQUEST = 2000L
     }
 
     private var savedInputInFindView: String = DEFAULT_TEXT
 
     private lateinit var searchHistory: SearchHistory
-    private lateinit var resultOfSearchList: MutableList<Track>
+    private lateinit var searchResultsList: MutableList<Track>
     private val itunesBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
         .baseUrl(itunesBaseUrl)
@@ -54,7 +51,7 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        resultOfSearchList = mutableListOf()
+        searchResultsList = mutableListOf()
 
         val sharedPreferencesForSearchHistory: SharedPreferences =
             getSharedPreferences(SAVE_HISTORY_DIRECTORY, MODE_PRIVATE)
@@ -63,9 +60,9 @@ class SearchActivity : AppCompatActivity() {
 
         val handler = Handler(Looper.getMainLooper())
 
-        val trackViewAdapter = TrackAdapter(resultOfSearchList, sharedPreferencesForSearchHistory) { Track ->
+        val trackViewAdapter = TrackAdapter(searchResultsList, sharedPreferencesForSearchHistory) { track ->
                 val playerActivityIntent = Intent(this, PlayerActivity::class.java)
-                playerActivityIntent.putExtra(TrackAdapter.KEY_FOR_TRACK, Track)
+                playerActivityIntent.putExtra(TrackAdapter.KEY_FOR_TRACK, track)
                 startActivity(playerActivityIntent)
             }
 
@@ -126,6 +123,7 @@ class SearchActivity : AppCompatActivity() {
 
         fun searchTrack() {
             if (binding.findField.text.isNotEmpty()) {
+
                 binding.clearHistoryButton.visibility = View.GONE
                 binding.historyViewTitle.visibility = View.GONE
                 binding.recyclerViewTracks.visibility= View.GONE
@@ -148,8 +146,8 @@ class SearchActivity : AppCompatActivity() {
                             if (response.code() == 200) {
                                 trackViewAdapter.clear()
                                 if (checkedResponseBody.isNotEmpty()) {
-                                    resultOfSearchList = checkedResponseBody as MutableList<Track>
-                                    trackViewAdapter.addAllData(resultOfSearchList)
+                                    searchResultsList = checkedResponseBody as MutableList<Track>
+                                    trackViewAdapter.addAllData(searchResultsList)
 
                                 }
                                 if (checkedResponseBody.isEmpty()) {
@@ -173,7 +171,7 @@ class SearchActivity : AppCompatActivity() {
         val searchRunnable = Runnable { searchTrack() }
         fun searchDebounce() {
             handler.removeCallbacks(searchRunnable)
-            handler.postDelayed(searchRunnable, DEBOUNCE_DELAY)
+            handler.postDelayed(searchRunnable, DEBOUNCE_DELAY_FOR_SEND_SEARCH_REQUEST)
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -195,7 +193,7 @@ class SearchActivity : AppCompatActivity() {
                     false -> {
                         binding.clearHistoryButton.visibility = View.GONE
                         binding.historyViewTitle.visibility = View.GONE
-                        trackViewAdapter.replaceList(resultOfSearchList)
+                        trackViewAdapter.replaceList(searchResultsList)
                     }
                 }
             }
@@ -216,7 +214,7 @@ class SearchActivity : AppCompatActivity() {
                 false -> {
                     binding.clearHistoryButton.visibility = View.GONE
                     binding.historyViewTitle.visibility = View.GONE
-                    trackViewAdapter.replaceList(resultOfSearchList)
+                    trackViewAdapter.replaceList(searchResultsList)
                 }
             }
         }
@@ -227,7 +225,6 @@ class SearchActivity : AppCompatActivity() {
             }
             false
         }
-
         binding.placeholderRefreshButton.setOnClickListener {
             searchTrack()
         }
