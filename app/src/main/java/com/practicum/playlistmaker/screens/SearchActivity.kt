@@ -4,6 +4,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -32,6 +34,8 @@ class SearchActivity : AppCompatActivity() {
 
         const val SAVE_HISTORY_DIRECTORY = "Saved history"
         const val SAVE_HISTORY_KEY = "Saved history key"
+
+        const val DEBOUNCE_DELAY = 2000L
     }
 
     private var savedInputInFindView: String = DEFAULT_TEXT
@@ -57,32 +61,29 @@ class SearchActivity : AppCompatActivity() {
         searchHistory = SearchHistory(sharedPreferencesForSearchHistory)
         searchHistory.initHistoryList()
 
+        val handler = Handler(Looper.getMainLooper())
+
         val trackViewAdapter = TrackAdapter(resultOfSearchList, sharedPreferencesForSearchHistory) { Track ->
-            val playerActivityIntent = Intent(this, PlayerActivity::class.java)
-            playerActivityIntent.putExtra(TrackAdapter.KEY_FOR_TRACK, Track)
-            startActivity(playerActivityIntent)
-        }
+                val playerActivityIntent = Intent(this, PlayerActivity::class.java)
+                playerActivityIntent.putExtra(TrackAdapter.KEY_FOR_TRACK, Track)
+                startActivity(playerActivityIntent)
+            }
 
         binding.recyclerViewTracks.adapter = trackViewAdapter
-        binding.recyclerViewTracks.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.recyclerViewTracks.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         binding.clearButton.setOnClickListener {
             binding.findField.setText("")
             binding.findField.hideKeyboard()
             binding.placeholderErrorLayout.visibility = View.GONE
         }
-
         binding.clearHistoryButton.setOnClickListener {
             searchHistory.clearHistoryList()
             trackViewAdapter.clear()
             binding.historyViewTitle.setTransitionVisibility(View.GONE)
             binding.clearHistoryButton.setTransitionVisibility(View.GONE)
         }
-
-        binding.backButton.setOnClickListener {
-            finish()
-        }
+        binding.backButton.setOnClickListener { finish() }
 
         fun getClearButtonVisibility(textInView: CharSequence?): Int {
             return if (textInView.isNullOrEmpty()) {
@@ -123,44 +124,21 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(textInView: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                binding.clearButton.visibility = getClearButtonVisibility(textInView)
-                savedInputInFindView = binding.findField.text.toString()
-
-                when (binding.findField.hasFocus() && textInView?.isEmpty() == true && SearchHistory.historyList.isNotEmpty()) {
-                    true -> {
-                        binding.clearHistoryButton.visibility = View.VISIBLE
-                        binding.historyViewTitle.visibility = View.VISIBLE
-                        binding.placeholderErrorLayout.visibility = View.GONE
-                        trackViewAdapter.replaceList(SearchHistory.historyList)
-                    }
-
-                    false -> {
-                        binding.clearHistoryButton.visibility = View.GONE
-                        binding.historyViewTitle.visibility = View.GONE
-                        trackViewAdapter.replaceList(resultOfSearchList)
-
-                    }
-                }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                // empty
-            }
-        }
-
-
         fun searchTrack() {
             if (binding.findField.text.isNotEmpty()) {
+                binding.clearHistoryButton.visibility = View.GONE
+                binding.historyViewTitle.visibility = View.GONE
+                binding.recyclerViewTracks.visibility= View.GONE
+                binding.recievingTrackListProgressBar.visibility = View.VISIBLE
+
                 itunesService.search(binding.findField.text.toString())
                     .enqueue(object : Callback<TrackResponse> {
                         override fun onResponse(
                             call: Call<TrackResponse>,
                             response: Response<TrackResponse>
                         ) {
+                            binding.recievingTrackListProgressBar.visibility = View.GONE
+                            binding.recyclerViewTracks.visibility= View.VISIBLE
                             var checkedResponseBody: List<Track> = mutableListOf()
 
                             if (response.body()?.results != null) {
@@ -185,9 +163,45 @@ class SearchActivity : AppCompatActivity() {
                         }
 
                         override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                            binding.recievingTrackListProgressBar.visibility = View.GONE
                             setPlaceholderState(PlaceholderState.NO_CONNECTION)
                         }
                     })
+            }
+        }
+
+        val searchRunnable = Runnable { searchTrack() }
+        fun searchDebounce() {
+            handler.removeCallbacks(searchRunnable)
+            handler.postDelayed(searchRunnable, DEBOUNCE_DELAY)
+        }
+
+        val simpleTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(textInView: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                searchDebounce()
+                binding.clearButton.visibility = getClearButtonVisibility(textInView)
+                savedInputInFindView = binding.findField.text.toString()
+
+                when (binding.findField.hasFocus() && textInView?.isEmpty() == true && SearchHistory.historyList.isNotEmpty()) {
+                    true -> {
+                        binding.clearHistoryButton.visibility = View.VISIBLE
+                        binding.historyViewTitle.visibility = View.VISIBLE
+                        binding.placeholderErrorLayout.visibility = View.GONE
+                        trackViewAdapter.replaceList(SearchHistory.historyList)
+                    }
+
+                    false -> {
+                        binding.clearHistoryButton.visibility = View.GONE
+                        binding.historyViewTitle.visibility = View.GONE
+                        trackViewAdapter.replaceList(resultOfSearchList)
+                    }
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                // empty
             }
         }
 

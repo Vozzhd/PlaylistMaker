@@ -16,13 +16,13 @@
     <string name="hintInShareWindow">share by:</string>
     <string name="nothing_found">Ничего не нашлось</string>
     <string name="something_went_wrong">Проблемы со связью \n\n Загрузка не удалась. Проверьте подключение к интернету</string>
-    <string name="defaultTrackTime">"-:--"</string>
+    <string name="defaultTrackTime">"--:--"</string>
     <string name="refreshButton">Обновить</string>
     <string name="clearHistoryButtonText">Очистить историю</string>
     <string name="historyViewTitleText">Вы искали</string>
-    <string name="songName"></string>
-    <string name="albumName"></string>
     <string name="trackDuration" />
+    <string name="songName">Название трека</string>
+    <string name="albumName">Название альбома</string>
     <string name="elapsedTrackTime">0:00</string>
     <string name="albumReleaseYear" />
     <string name="albumGenre" />
@@ -32,4 +32,6 @@
     <string name="trackReleaseYearText">Год</string>
     <string name="trackGenreText">Жанр</string>
     <string name="trackReleaseCountryText">Страна</string>
+    <string name="searchTrackDebounce">2000L</string>
+    <string name="defaultElapsedTrackTimeVisu">00:00</string>
 </resources>

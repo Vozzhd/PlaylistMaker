@@ -52,6 +52,7 @@
             android:visibility="gone" />
 
     </FrameLayout>
+
     <FrameLayout
         android:id="@+id/placeholderErrorLayout"
         android:layout_width="wrap_content"
@@ -84,12 +85,13 @@
             android:layout_marginTop="238dp"
             android:text="@string/refreshButton" />
     </FrameLayout>
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="132dp"
-        android:backgroundTint="@color/transparent">
+        android:backgroundTint="@color/transparent"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/historyViewTitle"
@@ -99,6 +101,15 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:text="@string/historyViewTitleText"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/recievingTrackListProgressBar"
+            android:layout_width="@dimen/roundedProgressBarSize"
+            android:layout_height="@dimen/roundedProgressBarSize"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="140dp"
+            android:indeterminateTint="@color/progressBarColor"
             android:visibility="gone"/>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -108,8 +119,7 @@
             android:layout_weight="1"
             android:backgroundTint="@color/transparent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_track_layout"
-            />
+            tools:listitem="@layout/item_track_layout" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/clearHistoryButton"
@@ -117,8 +127,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="32dp"
             android:text="@string/clearHistoryButtonText"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
     </LinearLayout>
 
 

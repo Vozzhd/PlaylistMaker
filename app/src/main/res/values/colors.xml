@@ -7,5 +7,6 @@
     <color name="YP_light_gray">#E6E8EB</color>
     <color name="YP_text_gray">#AEAFB4</color>
     <color name="transparent">#00000000</color>
+    <color name="progressBarColor">#6200EE</color>
 
 </resources>
