@@ -86,10 +86,14 @@
             android:text="@string/refreshButton" />
     </FrameLayout>
 
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="132dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="132dp"
         android:backgroundTint="@color/transparent"
         android:orientation="vertical">
 
@@ -115,8 +119,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewTracks"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:backgroundTint="@color/transparent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_track_layout" />
@@ -129,6 +132,7 @@
             android:text="@string/clearHistoryButtonText"
             android:visibility="gone" />
     </LinearLayout>
+</ScrollView>
 
 
 </FrameLayout>
