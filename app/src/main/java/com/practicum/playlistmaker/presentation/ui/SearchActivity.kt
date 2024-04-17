@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.screens
+package com.practicum.playlistmaker.presentation.ui
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
@@ -10,14 +10,15 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.practicum.playlistmaker.ItunesAPI
-import com.practicum.playlistmaker.recyclerView.PlaceholderState
+import com.practicum.playlistmaker.data.ItunesAPI
+import com.practicum.playlistmaker.presentation.presenters.PlaceholderState
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.recyclerView.Track
-import com.practicum.playlistmaker.recyclerView.TrackAdapter
+import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.presentation.presenters.TrackAdapter
 import com.practicum.playlistmaker.data.TrackResponse
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
-import com.practicum.playlistmaker.hideKeyboard
+import com.practicum.playlistmaker.domain.hideKeyboard
+import com.practicum.playlistmaker.data.SearchHistory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

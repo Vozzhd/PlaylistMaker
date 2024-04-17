@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.recyclerView
+package com.practicum.playlistmaker.presentation.presenters
 
 import android.content.SharedPreferences
 import android.os.Handler
@@ -7,7 +7,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.screens.SearchHistory
+import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.data.SearchHistory
 
 class TrackAdapter(
     private val trackList: MutableList<Track>,

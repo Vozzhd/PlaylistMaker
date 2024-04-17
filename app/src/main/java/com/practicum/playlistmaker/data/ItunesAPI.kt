@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.data
 
 import com.practicum.playlistmaker.data.TrackResponse
 import retrofit2.Call

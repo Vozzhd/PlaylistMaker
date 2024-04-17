@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.screens
+package com.practicum.playlistmaker.presentation.ui
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
@@ -8,8 +8,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import com.practicum.playlistmaker.recyclerView.Track
-import com.practicum.playlistmaker.recyclerView.TrackAdapter
+import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.presentation.presenters.TrackAdapter
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -74,7 +74,7 @@ class PlayerActivity : AppCompatActivity() {
     }
     private fun showCurrentPosition(){
         if (playerState == STATE_PLAYING) {
-            handler.postDelayed(showCurrentTrackTime,REFRESH_TRACK_TIME_DELAY)
+            handler.postDelayed(showCurrentTrackTime, REFRESH_TRACK_TIME_DELAY)
         }
     }
     private fun preparePlayer(url:String) {
