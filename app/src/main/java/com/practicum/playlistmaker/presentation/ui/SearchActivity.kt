@@ -10,15 +10,16 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.practicum.playlistmaker.data.ItunesAPI
+import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.presentation.presenters.PlaceholderState
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.domain.entity.Track
 import com.practicum.playlistmaker.presentation.presenters.TrackAdapter
-import com.practicum.playlistmaker.data.TrackResponse
+import com.practicum.playlistmaker._nosort.TrackResponse
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.domain.hideKeyboard
-import com.practicum.playlistmaker.data.SearchHistory
+import com.practicum.playlistmaker._nosort.SearchHistory
+import com.practicum.playlistmaker.data.network.RetrofitApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,14 +39,22 @@ class SearchActivity : AppCompatActivity() {
 
     private var savedInputInFindView: String = DEFAULT_TEXT
 
+    private val getTrackListUseCase = Creator.provideGetTrackListUseCase()
+    val answer = getTrackListUseCase.execute("Abba")
+
+//показать лист или чёт с ним сделать
+
+
+
     private lateinit var searchHistory: SearchHistory
     private lateinit var searchResultsList: MutableList<Track>
-    private val itunesBaseUrl = "https://itunes.apple.com"
+
+
     private val retrofit = Retrofit.Builder()
-        .baseUrl(itunesBaseUrl)
+        .baseUrl("https://itunes.apple.com")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-    private val itunesService = retrofit.create(ItunesAPI::class.java)
+    private val itunesService = retrofit.create(RetrofitApi::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,12 +84,14 @@ class SearchActivity : AppCompatActivity() {
             binding.findField.hideKeyboard()
             binding.placeholderErrorLayout.visibility = View.GONE
         }
+
         binding.clearHistoryButton.setOnClickListener {
             searchHistory.clearHistoryList()
             trackViewAdapter.clear()
             binding.historyViewTitle.setTransitionVisibility(View.GONE)
             binding.clearHistoryButton.setTransitionVisibility(View.GONE)
         }
+
         binding.backButton.setOnClickListener { finish() }
 
         fun getClearButtonVisibility(textInView: CharSequence?): Int {
@@ -129,6 +140,8 @@ class SearchActivity : AppCompatActivity() {
                 binding.historyViewTitle.visibility = View.GONE
                 binding.recyclerViewTracks.visibility= View.GONE
                 binding.recievingTrackListProgressBar.visibility = View.VISIBLE
+
+
 
                 itunesService.search(binding.findField.text.toString())
                     .enqueue(object : Callback<TrackResponse> {

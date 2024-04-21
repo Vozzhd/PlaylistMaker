@@ -8,7 +8,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.domain.entity.Track
+import com.practicum.playlistmaker.presentation.model.TrackPresentation
 import com.practicum.playlistmaker.presentation.presenters.TrackAdapter
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -38,7 +39,7 @@ class PlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val bigRoundForCorner = resources.getDimension(R.dimen.corner_radius_for_big_cover).toInt()
-        val track = intent.getSerializableExtra(TrackAdapter.KEY_FOR_TRACK) as Track
+        val track = intent.getSerializableExtra(TrackAdapter.KEY_FOR_TRACK) as TrackPresentation
         val url = track.previewUrl
 
         preparePlayer(url)
@@ -65,8 +66,8 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
 
-        if (track.trackTimeMillis.isNotBlank()) {
-            binding.trackDuration.text = dateFormat.format(track.trackTimeMillis.toInt())
+        if (track.trackDuration.isNotBlank()) {
+            binding.trackDuration.text = dateFormat.format(track.trackDuration.toInt())
         } else {
             binding.trackDuration.text = "--:--"
         }
