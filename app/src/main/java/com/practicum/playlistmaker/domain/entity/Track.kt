@@ -1,5 +1,4 @@
 package com.practicum.playlistmaker.domain.entity
-
 import java.io.Serializable
 
 data class Track(
@@ -14,6 +13,3 @@ data class Track(
     val country: String,
     val previewUrl: String
 ) : Serializable
-//) : Serializable {
-//    val artworkUrl512 get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
-//}

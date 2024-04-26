@@ -38,14 +38,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private var savedInputInFindView: String = DEFAULT_TEXT
-
-    private val getTrackListUseCase = Creator.provideGetTrackListUseCase()
-    val answer = getTrackListUseCase.execute("Abba")
-
-//показать лист или чёт с ним сделать
-
-
-
     private lateinit var searchHistory: SearchHistory
     private lateinit var searchResultsList: MutableList<Track>
 

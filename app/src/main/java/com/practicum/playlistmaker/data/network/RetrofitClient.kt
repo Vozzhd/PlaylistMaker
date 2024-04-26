@@ -10,7 +10,7 @@ object RetrofitClient {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-    val api: RetrofitApi by lazy {
-        client.create(RetrofitApi::class.java)
+    val api: GetTrackApi by lazy {
+        client.create(GetTrackApi::class.java)
     }
 }

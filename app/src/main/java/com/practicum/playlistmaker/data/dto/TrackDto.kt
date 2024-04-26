@@ -1,7 +1,4 @@
-package com.practicum.playlistmaker.data.model
-
-import java.io.Serializable
-
+package com.practicum.playlistmaker.data.dto
 class TrackDto(
     val trackName: String,
     val artistName: String,
@@ -13,6 +10,4 @@ class TrackDto(
     val primaryGenreName: String,
     val country: String,
     val previewUrl: String
-) : Serializable {
-    val artworkUrl512 get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
-}
+)

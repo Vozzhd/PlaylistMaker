@@ -1,13 +1,11 @@
-package com.practicum.playlistmaker.domain.useCase
+package com.practicum.playlistmaker.domain.impl.useCase
 
-import com.practicum.playlistmaker.data.repository.GetTrackRepositoryImpl
 import com.practicum.playlistmaker.domain.entity.Track
 import com.practicum.playlistmaker.domain.model.Resource
-import com.practicum.playlistmaker.domain.repository.GetTrackRepository
-import okhttp3.Response
+import com.practicum.playlistmaker.domain.api.GetTrackListApi
 
 class GetTrackListUseCase(
-    private val trackListRepository: GetTrackRepository
+    private val trackListRepository: GetTrackListApi
 ) {
     fun execute(expression: String): List<Track> {
         when (val response = trackListRepository.getTrackList(expression)) {

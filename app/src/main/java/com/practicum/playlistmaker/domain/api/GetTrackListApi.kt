@@ -1,8 +1,8 @@
-package com.practicum.playlistmaker.domain.repository
+package com.practicum.playlistmaker.domain.api
 
 import com.practicum.playlistmaker.domain.entity.Track
 import com.practicum.playlistmaker.domain.model.Resource
 
-interface GetTrackRepository {
+interface GetTrackListApi {
     fun getTrackList(expression: String): Resource<List<Track>>
 }
