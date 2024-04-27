@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker._nosort
+package com.practicum.playlistmaker.data.network
 
 import com.practicum.playlistmaker.domain.entity.Track
 

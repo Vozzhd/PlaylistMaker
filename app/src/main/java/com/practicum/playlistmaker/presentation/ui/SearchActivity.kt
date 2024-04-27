@@ -10,15 +10,14 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.presentation.presenters.PlaceholderState
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.entity.Track
 import com.practicum.playlistmaker.presentation.presenters.TrackAdapter
-import com.practicum.playlistmaker._nosort.TrackResponse
+import com.practicum.playlistmaker.data.network.TrackResponse
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.domain.hideKeyboard
-import com.practicum.playlistmaker._nosort.SearchHistory
+import com.practicum.playlistmaker.data.SearchHistory
 import com.practicum.playlistmaker.data.network.RetrofitApi
 import retrofit2.Call
 import retrofit2.Callback

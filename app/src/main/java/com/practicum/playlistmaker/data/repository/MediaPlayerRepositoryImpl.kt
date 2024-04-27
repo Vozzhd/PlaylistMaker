@@ -6,29 +6,29 @@ import com.practicum.playlistmaker.domain.model.PlayerState
 
 class MediaPlayerRepositoryImpl : MediaPlayerRepository {
     private val mediaPlayer = MediaPlayer()
-    private var playerState = PlayerState.STATE_DEFAULT
+    private var playerState = PlayerState.DEFAULT
 
     override fun preparePlayer(url: String) {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
 
         mediaPlayer.setOnPreparedListener {
-            playerState = PlayerState.STATE_PREPARED
+            playerState = PlayerState.PREPARED
         }
         mediaPlayer.setOnCompletionListener {
-            playerState = PlayerState.STATE_PREPARED
+            playerState = PlayerState.PREPARED
         }
     }
 
     override fun playbackControl() {
         when (playerState) {
-            PlayerState.STATE_PLAYING -> {
+            PlayerState.PLAYING -> {
                 pause()
             }
-            PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> {
+            PlayerState.PREPARED, PlayerState.PAUSED -> {
                 play()
             }
-            PlayerState.STATE_DEFAULT -> {
+            PlayerState.DEFAULT -> {
                 //do nothing
             }
         }
@@ -36,12 +36,12 @@ class MediaPlayerRepositoryImpl : MediaPlayerRepository {
 
     override fun play() {
         mediaPlayer.start()
-        playerState = PlayerState.STATE_PLAYING
+        playerState = PlayerState.PLAYING
     }
 
     override fun pause() {
         mediaPlayer.pause()
-        playerState = PlayerState.STATE_PAUSED
+        playerState = PlayerState.PAUSED
     }
 
     override fun stop() {

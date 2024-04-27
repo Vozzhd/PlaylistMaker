@@ -40,7 +40,7 @@ class PlayerActivity : AppCompatActivity() {
         val url = trackPresentation.previewUrl
         player.preparePlayer(url)
 
-        binding.apply {
+        with(binding) {
             elapsedTrackTime.text = getString(R.string.defaultElapsedTrackTimeVisu)
             trackReleaseCountry.text = trackPresentation.country
             trackAlbumName.text = trackPresentation.collectionName
@@ -75,14 +75,14 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun playButtonState() {
         when (player.playerState()) {
-            PlayerState.STATE_DEFAULT -> {}
-            PlayerState.STATE_PREPARED -> {}
-            PlayerState.STATE_PLAYING -> {
+            PlayerState.DEFAULT -> {}
+            PlayerState.PREPARED -> {}
+            PlayerState.PLAYING -> {
                 binding.playButton.setImageResource(R.drawable.pause_button)
                 handler.post(showCurrentTrackTime)
             }
 
-            PlayerState.STATE_PAUSED -> binding.playButton.setImageResource(R.drawable.play_button)
+            PlayerState.PAUSED -> binding.playButton.setImageResource(R.drawable.play_button)
         }
     }
 

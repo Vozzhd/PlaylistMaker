@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker._nosort
+package com.practicum.playlistmaker.data
 
 import android.content.SharedPreferences
 import com.google.gson.GsonBuilder

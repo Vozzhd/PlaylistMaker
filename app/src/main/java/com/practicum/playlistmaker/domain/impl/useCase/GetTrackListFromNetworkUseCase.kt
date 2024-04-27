@@ -2,10 +2,10 @@ package com.practicum.playlistmaker.domain.impl.useCase
 
 import com.practicum.playlistmaker.domain.entity.Track
 import com.practicum.playlistmaker.domain.model.Resource
-import com.practicum.playlistmaker.domain.api.GetTrackListApi
+import com.practicum.playlistmaker.domain.api.GetTrackListUseCase
 
-class GetTrackListUseCase(
-    private val trackListRepository: GetTrackListApi
+class GetTrackListFromNetworkUseCase(
+    private val trackListRepository: GetTrackListUseCase
 ) {
     fun execute(expression: String): List<Track> {
         when (val response = trackListRepository.getTrackList(expression)) {

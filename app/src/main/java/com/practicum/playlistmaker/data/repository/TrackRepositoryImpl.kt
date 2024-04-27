@@ -3,12 +3,12 @@ package com.practicum.playlistmaker.data.repository
 import com.practicum.playlistmaker.data.dto.GetTrackListResponse
 import com.practicum.playlistmaker.data.mapper.GetTrackMapper
 import com.practicum.playlistmaker.domain.entity.Track
-import com.practicum.playlistmaker.domain.api.GetTrackListApi
+import com.practicum.playlistmaker.domain.api.GetTrackListUseCase
 import com.practicum.playlistmaker.domain.model.Resource
 
-class GetTrackRepositoryImpl(
+class TrackRepositoryImpl(
     private val getTrackNetworkClient: GetTrackNetworkClient
-) : GetTrackListApi {
+) : GetTrackListUseCase {
     override fun getTrackList(expression: String): Resource<List<Track>> {
         val response = getTrackNetworkClient.getTrackList(expression)
 

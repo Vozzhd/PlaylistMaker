@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.entity.Track
-import com.practicum.playlistmaker._nosort.SearchHistory
+import com.practicum.playlistmaker.data.SearchHistory
 
 class TrackAdapter(
     private val trackList: MutableList<Track>,
