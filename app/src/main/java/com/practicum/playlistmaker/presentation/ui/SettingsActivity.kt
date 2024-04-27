@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.screens
+package com.practicum.playlistmaker.presentation.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -7,7 +7,7 @@ import android.widget.FrameLayout
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import com.practicum.playlistmaker.App
+import com.practicum.playlistmaker.domain.App
 import com.practicum.playlistmaker.R
 
 class SettingsActivity : AppCompatActivity() {

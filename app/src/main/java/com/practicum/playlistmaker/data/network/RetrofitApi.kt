@@ -1,11 +1,9 @@
-package com.practicum.playlistmaker
-
-import com.practicum.playlistmaker.data.TrackResponse
+package com.practicum.playlistmaker.data.network
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface ItunesAPI {
+interface RetrofitApi {
     @GET("/search?entity=song")
     fun search(@Query("term") text: String): Call<TrackResponse>
 }

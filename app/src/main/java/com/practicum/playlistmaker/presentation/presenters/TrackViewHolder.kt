@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.recyclerView
+package com.practicum.playlistmaker.presentation.presenters
 
 import android.view.View
 import android.widget.ImageView
@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.domain.entity.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 

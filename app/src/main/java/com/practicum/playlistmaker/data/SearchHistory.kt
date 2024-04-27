@@ -1,14 +1,18 @@
-package com.practicum.playlistmaker.screens
+package com.practicum.playlistmaker.data
 
 import android.content.SharedPreferences
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import com.practicum.playlistmaker.recyclerView.Track
+import com.practicum.playlistmaker.domain.entity.Track
+import com.practicum.playlistmaker.presentation.ui.SearchActivity
 
 class SearchHistory(private val sharedPreferences: SharedPreferences) {
     companion object {
          var historyList: MutableList<Track> = mutableListOf()
     }
+
+
+
 
     private val gson = GsonBuilder().setPrettyPrinting().create()
     fun initHistoryList() {
