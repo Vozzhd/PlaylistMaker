@@ -1,11 +1,12 @@
 package com.practicum.playlistmaker.creator
 
-import com.practicum.playlistmaker.data.repository.GetTrackNetworkClient
-import com.practicum.playlistmaker.data.network.GetTrackRetrofitNetworkClient
-import com.practicum.playlistmaker.data.repository.TrackRepositoryImpl
-import com.practicum.playlistmaker.data.repository.MediaPlayerRepositoryImpl
-import com.practicum.playlistmaker.domain.impl.interactor.MediaPlayerInteractorImpl
-import com.practicum.playlistmaker.domain.impl.useCase.GetTrackListFromNetworkUseCase
+import com.practicum.playlistmaker.search.data.network.TrackGettingNetworkClient
+import com.practicum.playlistmaker.search.data.network.retrofit.TrackGettingRetrofitNetworkClient
+import com.practicum.playlistmaker.search.data.dto.TrackRepositoryImplGetting
+import com.practicum.playlistmaker.player.data.MediaPlayerRepositoryImpl
+import com.practicum.playlistmaker.search.domain.api.TrackGettingListUseCase
+import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
+import com.practicum.playlistmaker.search.domain.useCase.TrackListFromNetworkUseCase
 
 
 object Creator {
@@ -18,15 +19,15 @@ object Creator {
         return MediaPlayerRepositoryImpl()
     }
 
-    fun provideGetTrackListUseCase(): GetTrackListFromNetworkUseCase {
-        return GetTrackListFromNetworkUseCase(provideGetTrackRepository())
+    fun provideGetTrackListUseCase(): TrackListFromNetworkUseCase {
+        return TrackListFromNetworkUseCase(provideGetTrackRepository())
     }
 
-    private fun provideGetTrackNetworkClient(): GetTrackNetworkClient {
-        return GetTrackRetrofitNetworkClient()
+    private fun provideGetTrackNetworkClient(): TrackGettingNetworkClient {
+        return TrackGettingRetrofitNetworkClient()
     }
 
-    private fun provideGetTrackRepository(): com.practicum.playlistmaker.domain.api.GetTrackListUseCase {
-        return TrackRepositoryImpl(provideGetTrackNetworkClient())
+    private fun provideGetTrackRepository(): TrackGettingListUseCase {
+        return TrackRepositoryImplGetting(provideGetTrackNetworkClient())
     }
 }
