@@ -3,16 +3,15 @@ package com.practicum.playlistmaker.player.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.player.data.TrackPresentation
-import com.practicum.playlistmaker.practice.TrackModel
+import com.practicum.playlistmaker.player.domain.entity.Track
+import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
 
-class PlayerViewModelFactory (track : TrackPresentation, trackUrl : String) : ViewModelProvider.Factory {
+class PlayerViewModelFactory (track : Track, mediaPlayerInteractorImpl: MediaPlayerInteractorImpl) : ViewModelProvider.Factory {
 
     private val track by lazy (LazyThreadSafetyMode.NONE){ track }
-    private val trackUrl by lazy (LazyThreadSafetyMode.NONE){ trackUrl }
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-        return PlayerViewModel(trackUrl, track, Creator.provideMediaPlayer()) as T
+        return PlayerViewModel(track, Creator.provideMediaPlayer()) as T
     }
 }
