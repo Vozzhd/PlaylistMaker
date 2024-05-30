@@ -1,8 +1,6 @@
 package com.practicum.playlistmaker.player.ui
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -14,8 +12,6 @@ import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.player.data.TrackMapper
 import com.practicum.playlistmaker.search.ui.presenters.TrackAdapter
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -28,10 +24,14 @@ class PlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val bigRoundForCorner = resources.getDimension(R.dimen.corner_radius_for_big_cover).toInt()
-        val trackPresentation = TrackMapper.map(intent.getSerializableExtra(TrackAdapter.KEY_FOR_TRACK) as Track)
+        val trackPresentation =
+            TrackMapper.map(intent.getSerializableExtra(TrackAdapter.KEY_FOR_TRACK) as Track)
         val track = (intent.getSerializableExtra(TrackAdapter.KEY_FOR_TRACK) as Track)
 
-        viewModel = ViewModelProvider(this, PlayerViewModel.getViewModelFactory(track, Creator.provideMediaPlayer()))[PlayerViewModel::class.java]
+        viewModel = ViewModelProvider(
+            this,
+            PlayerViewModel.getViewModelFactory(track, Creator.provideMediaPlayer())
+        )[PlayerViewModel::class.java]
 
         with(binding) {
             elapsedTrackTime.text = getString(R.string.defaultElapsedTrackTimeVisu)
@@ -49,19 +49,8 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         viewModel.getPlayerState().observe(this) {
-            when (it) {
-                PlayerState.DEFAULT -> {}
-                PlayerState.PREPARED -> {}
-                PlayerState.PLAYING -> {
-                    binding.playButton.setImageResource(R.drawable.pause_button)
-                    viewModel.updatingElapsedTrackTime()
-                }
-                PlayerState.PAUSED -> binding.playButton.setImageResource(R.drawable.play_button)
-                PlayerState.COMPLETED -> {
-                    binding.playButton.setImageResource(R.drawable.play_button)
-                    binding.elapsedTrackTime.text = "00:00"
-                }
-            }
+            changeButtonImage(it)
+            trackingElapsedTime(it)
         }
         viewModel.getCurrentTimeLiveData().observe(this) {
             binding.elapsedTrackTime.text = it.toString()
@@ -80,11 +69,27 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
+    private fun trackingElapsedTime(playerState: PlayerState?) {
+        if (playerState == PlayerState.PLAYING) viewModel.updatingElapsedTrackTime()
+        if (playerState == PlayerState.COMPLETED) binding.elapsedTrackTime.text = "00:00"
+    }
+
+    private fun changeButtonImage(playerState: PlayerState) {
+        when (playerState) {
+            PlayerState.DEFAULT -> {}
+            PlayerState.PREPARED -> {}
+            PlayerState.PLAYING -> binding.playButton.setImageResource(R.drawable.pause_button)
+            PlayerState.PAUSED -> binding.playButton.setImageResource(R.drawable.play_button)
+            PlayerState.COMPLETED -> binding.playButton.setImageResource(R.drawable.play_button)
+        }
+    }
+
     override fun onPause() {
-       viewModel.removeUpdatingTimeCallbacks()
+        viewModel.removeUpdatingTimeCallbacks()
         viewModel.pause()
         super.onPause()
     }
+
     override fun onDestroy() {
         viewModel.release()
         super.onDestroy()
