@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.player.domain.entity.Track
-import com.practicum.playlistmaker.search.ui.SearchActivity
+import com.practicum.playlistmaker.search.ui.TrackSearchActivity
 
 class SearchHistory(private val sharedPreferences: SharedPreferences) {
     companion object {
@@ -16,14 +16,14 @@ class SearchHistory(private val sharedPreferences: SharedPreferences) {
 
     private val gson = GsonBuilder().setPrettyPrinting().create()
     fun initHistoryList() {
-        val valueFromSharedPreferences = sharedPreferences.getString(SearchActivity.SAVE_HISTORY_KEY, "")
+        val valueFromSharedPreferences = sharedPreferences.getString(TrackSearchActivity.SAVE_HISTORY_KEY, "")
         historyList = if (valueFromSharedPreferences.equals("")) mutableListOf()
         else gson.fromJson(valueFromSharedPreferences, object : TypeToken<List<Track>>() {}.type)
     }
 
     private fun putSavedTracksToSharedPreferences(tracks: MutableList<Track>) {
         sharedPreferences.edit()
-            .putString(SearchActivity.SAVE_HISTORY_KEY, gson.toJson(tracks))
+            .putString(TrackSearchActivity.SAVE_HISTORY_KEY, gson.toJson(tracks))
             .apply()
     }
 

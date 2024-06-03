@@ -1,9 +1,9 @@
 package com.practicum.playlistmaker.search.data.network.retrofit
 
 import com.practicum.playlistmaker.search.data.network.NetworkResponse
-import com.practicum.playlistmaker.search.data.network.TrackGettingNetworkClient
+import com.practicum.playlistmaker.search.data.network.PlaylistReceivingNetworkClient
 
-class TrackGettingRetrofitNetworkClient : TrackGettingNetworkClient {
+class PlaylistReceivingRetrofitNetworkClient : PlaylistReceivingNetworkClient {
     override fun getTrackList(expression: String): NetworkResponse {
         return try {
             val response = RetrofitClient.api.search(expression).execute()

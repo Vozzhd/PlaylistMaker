@@ -11,6 +11,7 @@ object RetrofitClient {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
     val api: TrackGettingApi by lazy {
         client.create(TrackGettingApi::class.java)
     }

@@ -33,7 +33,7 @@
         android:layout_marginTop="@dimen/marginFromTopForSearchField">
 
         <EditText
-            android:id="@+id/findField"
+            android:id="@+id/input_field"
             style="@style/EditTextView"
             android:layout_height="36dp"
             android:layout_gravity="center"
@@ -108,7 +108,7 @@
             android:visibility="gone" />
 
         <ProgressBar
-            android:id="@+id/recievingTrackListProgressBar"
+            android:id="@+id/progressBarAtView"
             android:layout_width="@dimen/roundedProgressBarSize"
             android:layout_height="@dimen/roundedProgressBarSize"
             android:layout_gravity="center_horizontal"

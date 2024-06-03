@@ -1,8 +1,11 @@
 package com.practicum.playlistmaker.search.ui.presenters
 
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -11,7 +14,14 @@ import com.practicum.playlistmaker.player.domain.entity.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TrackViewHolder(itemView: View) : ViewHolder(itemView) {
+class TrackViewHolder(
+    parent: ViewGroup,
+    private val clickListener: TrackClickListener
+) :
+    RecyclerView.ViewHolder(
+        LayoutInflater.from(parent.context)
+            .inflate(R.layout.track_view, parent, false)
+    )  {
     private val trackName: TextView = itemView.findViewById(R.id.trackName)
     private val artistName: TextView = itemView.findViewById(R.id.artistName)
     private val trackTime: TextView = itemView.findViewById(R.id.trackDuration)

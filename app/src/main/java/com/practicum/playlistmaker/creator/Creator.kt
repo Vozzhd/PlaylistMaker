@@ -1,12 +1,13 @@
 package com.practicum.playlistmaker.creator
 
-import com.practicum.playlistmaker.search.data.network.TrackGettingNetworkClient
-import com.practicum.playlistmaker.search.data.network.retrofit.TrackGettingRetrofitNetworkClient
-import com.practicum.playlistmaker.search.data.dto.TrackRepositoryImplGetting
+import android.content.Context
+import com.practicum.playlistmaker.search.data.dto.TracksRepositoryImplementation
 import com.practicum.playlistmaker.player.data.MediaPlayerRepositoryImpl
-import com.practicum.playlistmaker.search.domain.api.TrackGettingListUseCase
+import com.practicum.playlistmaker.search.domain.api.TracksRepository
 import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
-import com.practicum.playlistmaker.search.domain.useCase.TrackListFromNetworkUseCase
+import com.practicum.playlistmaker.search.data.network.retrofit.RetrofitNetworkClient
+import com.practicum.playlistmaker.search.domain.api.TracksInteractor
+import com.practicum.playlistmaker.search.domain.useCase.TracksInteractorImplementation
 
 
 object Creator {
@@ -14,20 +15,24 @@ object Creator {
     fun provideMediaPlayer(): MediaPlayerInteractorImpl {
         return MediaPlayerInteractorImpl(provideMediaPlayerRepository())
     }
-
     private fun provideMediaPlayerRepository(): MediaPlayerRepositoryImpl {
         return MediaPlayerRepositoryImpl()
     }
 
-    fun provideGetTrackListUseCase(): TrackListFromNetworkUseCase {
-        return TrackListFromNetworkUseCase(provideGetTrackRepository())
+
+
+    private fun provideTracksRepository(context: Context): TracksRepository {
+        return TracksRepositoryImplementation(RetrofitNetworkClient(context))
     }
 
-    private fun provideGetTrackNetworkClient(): TrackGettingNetworkClient {
-        return TrackGettingRetrofitNetworkClient()
+    fun provideTracksInteractor(context: Context): TracksInteractor {
+        return TracksInteractorImplementation(provideTracksRepository(context))
     }
 
-    private fun provideGetTrackRepository(): TrackGettingListUseCase {
-        return TrackRepositoryImplGetting(provideGetTrackNetworkClient())
-    }
+
+//    private fun provideGetTrackNetworkClient(context: Context): PlaylistReceivingNetworkClient {
+//        return PlaylistReceivingRetrofitNetworkClient(context)
+//    }
+
+
 }
