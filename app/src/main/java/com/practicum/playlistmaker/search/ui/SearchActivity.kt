@@ -77,7 +77,10 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this, SearchViewModel.getViewModelFactory())[SearchViewModel::class.java]
+        viewModel = ViewModelProvider(
+            this,
+            SearchViewModel.getViewModelFactory()
+        )[SearchViewModel::class.java]
         progressBar = findViewById(R.id.progressBarAtView)
         recyclerView = findViewById(R.id.recyclerViewTracks)
 
@@ -87,11 +90,11 @@ class SearchActivity : AppCompatActivity() {
 
         val sharedPreferencesForSearchHistory: SharedPreferences =
             getSharedPreferences(SAVE_HISTORY_DIRECTORY, MODE_PRIVATE)
-        historyRepositoryImplementation = HistoryRepositoryImplementation(sharedPreferencesForSearchHistory)
+        historyRepositoryImplementation =
+            HistoryRepositoryImplementation(sharedPreferencesForSearchHistory)
         historyRepositoryImplementation.initHistoryList()
 
-        binding.recyclerViewTracks.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.recyclerViewTracks.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         binding.clearButton.setOnClickListener {
             binding.inputField.setText("")
@@ -118,32 +121,10 @@ class SearchActivity : AppCompatActivity() {
 
         fun showMessage(text: String) {
             if (text.isNotEmpty()) {
-                //     trackViewAdapter.clear()
+                trackListAdapter.clear()
                 binding.placeholderErrorMessage.text = text
             } else {
                 binding.placeholderErrorMessage.text = "Описание ошибки отсутствует"
-            }
-        }
-
-        fun setPlaceholderState(placeholderState: PlaceholderState) {
-            when (placeholderState) {
-                PlaceholderState.GOOD -> {
-                    binding.placeholderErrorLayout.visibility = View.GONE
-                }
-
-                PlaceholderState.BAD_REQUEST -> {
-                    showMessage(getString(R.string.nothing_found))
-                    binding.placeholderErrorImage.setImageResource(R.drawable.search_error)
-                    binding.placeholderRefreshButton.visibility = View.GONE
-                    binding.placeholderErrorLayout.visibility = View.VISIBLE
-                }
-
-                PlaceholderState.NO_CONNECTION -> {
-                    showMessage(getString(R.string.something_went_wrong))
-                    binding.placeholderErrorImage.setImageResource(R.drawable.connection_error)
-                    binding.placeholderRefreshButton.visibility = View.VISIBLE
-                    binding.placeholderErrorLayout.visibility = View.VISIBLE
-                }
             }
         }
 
@@ -153,7 +134,7 @@ class SearchActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(textInView: CharSequence?, p1: Int, p2: Int, p3: Int) {
-               // viewModel.searchDebounce(changedText = textInView?.toString() ?: "")
+                // viewModel.searchDebounce(changedText = textInView?.toString() ?: "")
                 binding.clearButton.visibility = getClearButtonVisibility(textInView)
                 savedInputInSearchView = binding.inputField.text.toString()
 
@@ -210,18 +191,32 @@ class SearchActivity : AppCompatActivity() {
         binding.clearHistoryButton.visibility = View.GONE
         binding.historyViewTitle.visibility = View.GONE
         binding.recyclerViewTracks.visibility = View.GONE
+        binding.placeholderErrorLayout.visibility = View.GONE
+        binding.placeholderRefreshButton.visibility = View.GONE
         binding.progressBarAtView.visibility = View.VISIBLE
     }
 
     fun showError(errorMessage: String) {
-        recyclerView.visibility = View.GONE
-        placeholderMessage.visibility = View.VISIBLE
         progressBar.visibility = View.GONE
+        recyclerView.visibility = View.GONE
+
+        binding.placeholderErrorLayout.visibility = View.VISIBLE
+        placeholderMessage.visibility = View.VISIBLE
+        binding.placeholderRefreshButton.visibility = View.VISIBLE
+
+        binding.placeholderErrorImage.setImageResource(R.drawable.connection_error)
         placeholderMessage.text = errorMessage
     }
 
     fun showEmpty(emptyMessage: String) {
-        showError(emptyMessage)
+        progressBar.visibility = View.GONE
+        recyclerView.visibility = View.GONE
+
+        binding.placeholderErrorLayout.visibility = View.VISIBLE
+        placeholderMessage.visibility = View.VISIBLE
+
+        binding.placeholderErrorImage.setImageResource(R.drawable.search_error)
+        placeholderMessage.text = emptyMessage
     }
 
     fun renderScreen(state: TrackListState) {
@@ -233,6 +228,7 @@ class SearchActivity : AppCompatActivity() {
             TrackListState.Loading -> showLoading()
         }
     }
+
     fun showContent(movies: List<Track>) {
         binding.progressBarAtView.visibility = View.GONE
         binding.recyclerViewTracks.visibility = View.VISIBLE

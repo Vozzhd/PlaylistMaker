@@ -57,10 +57,10 @@ class TrackAdapter(
         }
     }
 
-//    fun clear() {
-//        trackList.clear()
-//        notifyDataSetChanged()
-//    }
+    fun clear() {
+        trackList.clear()
+        notifyDataSetChanged()
+    }
 //
 //    fun addAllData(mutableList: MutableList<Track>) {
 //        trackList.addAll(mutableList)
