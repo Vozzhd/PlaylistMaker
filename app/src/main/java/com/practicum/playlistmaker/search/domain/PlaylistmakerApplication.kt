@@ -1,8 +1,8 @@
 package com.practicum.playlistmaker.search.domain
 
 import android.app.Application
-import com.practicum.playlistmaker.search.ui.TrackSearchViewModel
+import com.practicum.playlistmaker.search.ui.SearchViewModel
 
 class PlaylistmakerApplication : Application() {
-    var trackSearchViewModel : TrackSearchViewModel? = null
+    var searchViewModel : SearchViewModel? = null
 }

@@ -24,8 +24,7 @@ class PlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val bigRoundForCorner = resources.getDimension(R.dimen.corner_radius_for_big_cover).toInt()
-        val trackPresentation =
-            TrackMapper.map(intent.getSerializableExtra(TrackAdapter.KEY_FOR_TRACK) as Track)
+        val trackPresentation = TrackMapper.map(intent.getSerializableExtra(TrackAdapter.KEY_FOR_TRACK) as Track)
         val track = (intent.getSerializableExtra(TrackAdapter.KEY_FOR_TRACK) as Track)
 
         viewModel = ViewModelProvider(

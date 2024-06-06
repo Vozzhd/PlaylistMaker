@@ -2,17 +2,13 @@ package com.practicum.playlistmaker.search.ui.presenters
 
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.entity.Track
-import com.practicum.playlistmaker.search.domain.useCase.SearchHistory
 
 class TrackAdapter(
 //   private val trackList: MutableList<Track>,
 //    sharedPreferences: SharedPreferences,
-//    private val clickListener : (Track) -> Unit
     private val clickListener: TrackClickListener
 ) : RecyclerView.Adapter<TrackViewHolder>() {
     companion object {
@@ -32,7 +28,7 @@ class TrackAdapter(
 //            .from(parent.context)
 //            .inflate(R.layout.track_view, parent, false)
 //        return TrackViewHolder(view)
-        return TrackViewHolder(parent, clickListener)
+        return TrackViewHolder(parent)
     }
 
     override fun getItemCount(): Int {
@@ -53,12 +49,12 @@ class TrackAdapter(
 
         holder.bind(trackList[position])
 
-//        holder.itemView.setOnClickListener {
-//            if (clickDebounce()) {
-//                searchHistory.addToHistoryList(trackList[position])
-//                clickListener(trackList[position])
-//            }
-//        }
+        holder.itemView.setOnClickListener {
+            if (clickDebounce()) {
+           //     searchHistory.addToHistoryList(trackList[position])
+                clickListener.onTrackClick(trackList[position])
+            }
+        }
     }
 
 //    fun clear() {

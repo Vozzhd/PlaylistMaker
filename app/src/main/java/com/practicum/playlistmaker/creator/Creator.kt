@@ -1,9 +1,9 @@
 package com.practicum.playlistmaker.creator
 
 import android.content.Context
-import com.practicum.playlistmaker.search.data.dto.TracksRepositoryImplementation
+import com.practicum.playlistmaker.search.data.api.TracksRepositoryImplementation
 import com.practicum.playlistmaker.player.data.MediaPlayerRepositoryImpl
-import com.practicum.playlistmaker.search.domain.api.TracksRepository
+import com.practicum.playlistmaker.search.data.api.TracksRepository
 import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.search.data.network.retrofit.RetrofitNetworkClient
 import com.practicum.playlistmaker.search.domain.api.TracksInteractor

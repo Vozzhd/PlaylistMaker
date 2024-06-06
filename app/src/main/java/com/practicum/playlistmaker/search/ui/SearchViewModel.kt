@@ -3,7 +3,6 @@ package com.practicum.playlistmaker.search.ui
 import android.app.Application
 import android.os.Handler
 import android.os.Looper
-import android.os.SystemClock
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,7 +15,7 @@ import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.ui.presenters.TrackListState
 
-class TrackSearchViewModel(application: Application) : AndroidViewModel(application) {
+class SearchViewModel(application: Application) : AndroidViewModel(application) {
     companion object {
         const val DEBOUNCE_DELAY_FOR_SEND_SEARCH_REQUEST = 2000L
         private val SEARCH_REQUEST_TOKEN = Any()
@@ -24,7 +23,7 @@ class TrackSearchViewModel(application: Application) : AndroidViewModel(applicat
 
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                TrackSearchViewModel(this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application)
+                SearchViewModel(this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application)
             }
         }
 
@@ -42,24 +41,6 @@ class TrackSearchViewModel(application: Application) : AndroidViewModel(applicat
 
     override fun onCleared() {
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-    }
-
-    fun searchDebounce(changedText: String) {
-        if (latestSearchText == changedText) {
-            return
-        }
-
-        this.latestSearchText = changedText
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-
-        val searchRunnable = Runnable { searchRequest(changedText) }
-
-        val postTime = SystemClock.uptimeMillis() + DEBOUNCE_DELAY_FOR_SEND_SEARCH_REQUEST
-        handler.postAtTime(
-            searchRunnable,
-            SEARCH_REQUEST_TOKEN,
-            postTime,
-        )
     }
 
     fun searchRequest(newSearchText: String) {
@@ -109,8 +90,6 @@ class TrackSearchViewModel(application: Application) : AndroidViewModel(applicat
     private fun renderState(state: TrackListState) {
         stateLiveData.postValue(state)
     }
+    fun addTrackToHistory(track: Track) {}
 
-    fun addToHistory(track: Track) {
-
-    }
 }

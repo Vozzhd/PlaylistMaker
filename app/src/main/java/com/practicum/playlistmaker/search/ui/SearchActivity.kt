@@ -21,13 +21,13 @@ import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.search.ui.presenters.TrackAdapter
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.hideKeyboard
-import com.practicum.playlistmaker.search.domain.useCase.SearchHistory
+import com.practicum.playlistmaker.search.data.local.HistoryRepositoryImplementation
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.search.domain.PlaylistmakerApplication
 import com.practicum.playlistmaker.search.ui.presenters.TrackClickListener
 import com.practicum.playlistmaker.search.ui.presenters.TrackListState
 
-class TrackSearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity() {
     lateinit var binding: ActivitySearchBinding
 
     companion object {
@@ -39,41 +39,28 @@ class TrackSearchActivity : AppCompatActivity() {
     }
 
     private var savedInputInSearchView: String = DEFAULT_TEXT
-    private lateinit var searchHistory: SearchHistory
-
-
-    // Переменные в разработке ниже
-
+    private lateinit var historyRepositoryImplementation: HistoryRepositoryImplementation
 
     private val trackListAdapter = TrackAdapter(
         object : TrackClickListener {
             override fun onTrackClick(track: Track) {
                 if (clickDebounce()) {
-                    val intent = Intent(this@TrackSearchActivity, PlayerActivity::class.java)
-                    intent.putExtra("trackUrl", track.previewUrl)
+                    val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
+                    intent.putExtra(TrackAdapter.KEY_FOR_TRACK, track)
                     startActivity(intent)
                 }
-            }
-
-            override fun addToHistoryList(track: Track) {
-                viewModel.addToHistory(track)
             }
         }
     )
 
     private val handler = Handler(Looper.getMainLooper())
     private var isClickAllowed: Boolean = true
-    private lateinit var viewModel: TrackSearchViewModel
+    private lateinit var viewModel: SearchViewModel
     private var textWatcher: TextWatcher? = null
     private lateinit var placeholderMessage: TextView
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
 
-
-    //Переменные в разработке выше
-
-
-    //Функции в разработке ниже
 
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
@@ -84,20 +71,13 @@ class TrackSearchActivity : AppCompatActivity() {
         return current
     }
 
-
-    //Функции в разработке выше
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(
-            this,
-            TrackSearchViewModel.getViewModelFactory()
-        )[TrackSearchViewModel::class.java]
-
+        viewModel = ViewModelProvider(this, SearchViewModel.getViewModelFactory())[SearchViewModel::class.java]
         progressBar = findViewById(R.id.progressBarAtView)
         recyclerView = findViewById(R.id.recyclerViewTracks)
 
@@ -107,8 +87,8 @@ class TrackSearchActivity : AppCompatActivity() {
 
         val sharedPreferencesForSearchHistory: SharedPreferences =
             getSharedPreferences(SAVE_HISTORY_DIRECTORY, MODE_PRIVATE)
-        searchHistory = SearchHistory(sharedPreferencesForSearchHistory)
-        searchHistory.initHistoryList()
+        historyRepositoryImplementation = HistoryRepositoryImplementation(sharedPreferencesForSearchHistory)
+        historyRepositoryImplementation.initHistoryList()
 
         binding.recyclerViewTracks.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -120,7 +100,7 @@ class TrackSearchActivity : AppCompatActivity() {
         }
 
         binding.clearHistoryButton.setOnClickListener {
-            searchHistory.clearHistoryList()
+            historyRepositoryImplementation.clearHistoryList()
             trackListAdapter.trackList.clear()
             binding.historyViewTitle.setTransitionVisibility(View.GONE)
             binding.clearHistoryButton.setTransitionVisibility(View.GONE)
@@ -167,60 +147,17 @@ class TrackSearchActivity : AppCompatActivity() {
             }
         }
 
-//        fun searchTrack() {
-//            if (binding.findField.text.isNotEmpty()) {
-//
-//                itunesService.search(binding.findField.text.toString())
-//                    .enqueue(object : Callback<TrackResponse> {
-//                        override fun onResponse(
-//                            call: Call<TrackResponse>,
-//                            response: Response<TrackResponse>
-//                        ) {
-
-//                            var checkedResponseBody: List<Track> = mutableListOf()
-//
-//                            if (response.body()?.results != null) {
-//                                checkedResponseBody = response.body()?.results!!
-//                            }
-//
-//                            if (response.code() == 200) {
-//                                trackViewAdapter.clear()
-//                                if (checkedResponseBody.isNotEmpty()) {
-//                                    searchResultsList = checkedResponseBody as MutableList<Track>
-//                                    trackViewAdapter.addAllData(searchResultsList)
-//
-//                                }
-//                                if (checkedResponseBody.isEmpty()) {
-//                                    setPlaceholderState(PlaceholderState.BAD_REQUEST)
-//                                } else {
-//                                    setPlaceholderState(PlaceholderState.GOOD)
-//                                }
-//                            } else {
-//                                showMessage(getString(R.string.something_went_wrong))
-//                            }
-//                        }
-//
-//                        override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-//                            binding.recievingTrackListProgressBar.visibility = View.GONE
-//                            setPlaceholderState(PlaceholderState.NO_CONNECTION)
-//                        }
-//                    })
-//            }
-//        }
-
-        viewModel.getScreenState().observe(this) {
-            renderScreen(it)
-        }
+        viewModel.getScreenState().observe(this) { renderScreen(it) }
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(textInView: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.searchDebounce(changedText = textInView?.toString() ?: "")
+               // viewModel.searchDebounce(changedText = textInView?.toString() ?: "")
                 binding.clearButton.visibility = getClearButtonVisibility(textInView)
                 savedInputInSearchView = binding.inputField.text.toString()
 
-                when (binding.inputField.hasFocus() && textInView?.isEmpty() == true && SearchHistory.historyList.isNotEmpty()) {
+                when (binding.inputField.hasFocus() && textInView?.isEmpty() == true && HistoryRepositoryImplementation.historyList.isNotEmpty()) {
                     true -> {
                         binding.clearHistoryButton.visibility = View.VISIBLE
                         binding.historyViewTitle.visibility = View.VISIBLE
@@ -243,7 +180,7 @@ class TrackSearchActivity : AppCompatActivity() {
         textWatcher.let { binding.inputField.removeTextChangedListener(it) }
 
         binding.inputField.setOnFocusChangeListener { _, hasFocus ->
-            when (hasFocus && binding.inputField.text.isEmpty() && SearchHistory.historyList.isNotEmpty()) {
+            when (hasFocus && binding.inputField.text.isEmpty() && HistoryRepositoryImplementation.historyList.isNotEmpty()) {
                 true -> {
                     binding.clearHistoryButton.visibility = View.VISIBLE
                     binding.historyViewTitle.visibility = View.VISIBLE
@@ -280,7 +217,6 @@ class TrackSearchActivity : AppCompatActivity() {
         recyclerView.visibility = View.GONE
         placeholderMessage.visibility = View.VISIBLE
         progressBar.visibility = View.GONE
-
         placeholderMessage.text = errorMessage
     }
 
@@ -310,7 +246,7 @@ class TrackSearchActivity : AppCompatActivity() {
         textWatcher?.let { binding.inputField.removeTextChangedListener(it) }
 
         if (isFinishing) {
-            (this.applicationContext as? PlaylistmakerApplication)?.trackSearchViewModel = null
+            (this.applicationContext as? PlaylistmakerApplication)?.searchViewModel = null
         }
     }
 

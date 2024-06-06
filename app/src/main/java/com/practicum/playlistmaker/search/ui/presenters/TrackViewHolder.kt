@@ -16,7 +16,6 @@ import java.util.Locale
 
 class TrackViewHolder(
     parent: ViewGroup,
-    private val clickListener: TrackClickListener
 ) :
     RecyclerView.ViewHolder(
         LayoutInflater.from(parent.context)
