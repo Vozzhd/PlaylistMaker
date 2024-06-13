@@ -6,4 +6,6 @@ interface HistoryRepository {
     fun initHistoryList()
     fun putSavedTracksToSharedPreferences(tracks: MutableList<Track>)
     fun addToHistoryList(track: Track)
+    fun getHistoryList(): MutableList<Track>
+    fun clearHistoryList()
 }

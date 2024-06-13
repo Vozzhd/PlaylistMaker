@@ -35,7 +35,7 @@ class TrackViewHolder(
             trackTime.text =
                 SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis.toInt())
         } else {
-            trackTime.text = "-:--"
+            trackTime.text = "--:--"
         }
 
         Glide

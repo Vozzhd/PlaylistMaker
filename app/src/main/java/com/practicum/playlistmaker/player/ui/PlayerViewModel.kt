@@ -59,14 +59,11 @@ class PlayerViewModel(
         if (mediaPlayer.playerState() == PlayerState.PLAYING) {
             handler.postDelayed(timeRunnable, TIMER_DELAY_MILLS)
         }
-
     }
 
     private fun getTimeFromRepository(): String {
         return dateFormat.format(mediaPlayer.showCurrentPosition())
-    }
-    //Место для разработки
-
+    } //Место для разработки
 
     fun getPlayerState(): LiveData<PlayerState> = playBackMutableLiveData // функция для наблюдения за состоянием из активити
 
@@ -74,7 +71,6 @@ class PlayerViewModel(
         mediaPlayer.playbackControl()
         playBackMutableLiveData.postValue(mediaPlayer.playerState())
     } // функция для управления кнопкой из активити
-
 
     fun removeUpdatingTimeCallbacks() {
         handler.removeCallbacks(timeRunnable)

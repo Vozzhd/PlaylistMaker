@@ -6,4 +6,6 @@ interface HistoryInteractor {
     fun initHistoryList()
     fun putSavedTracksToSharedPreferences(tracks: MutableList<Track>)
     fun addToHistoryList(track: Track)
+    fun getHistoryList(): List<Track>
+    fun clearHistoryList()
 }

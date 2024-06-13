@@ -9,6 +9,14 @@ class HistoryInteractorImplementation (private val historyRepository: HistoryRep
         historyRepository.initHistoryList()
     }
 
+    override fun getHistoryList(): List<Track> {
+      return  historyRepository.getHistoryList()
+    }
+
+    override fun clearHistoryList() {
+        historyRepository.clearHistoryList()
+    }
+
     override fun putSavedTracksToSharedPreferences(tracks: MutableList<Track>) {
         historyRepository.putSavedTracksToSharedPreferences(tracks)
     }

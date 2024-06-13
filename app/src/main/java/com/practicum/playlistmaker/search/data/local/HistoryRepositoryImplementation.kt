@@ -13,14 +13,14 @@ class HistoryRepositoryImplementation(private val sharedPreferences: SharedPrefe
 
     private val gson = GsonBuilder().setPrettyPrinting().create()
     override fun initHistoryList() {
-        val valueFromSharedPreferences = sharedPreferences.getString(SearchActivity.SAVE_HISTORY_KEY, "")
+        val valueFromSharedPreferences = sharedPreferences.getString(SearchActivity.SAVED_HISTORY_KEY, "")
         historyList = if (valueFromSharedPreferences.equals("")) mutableListOf()
         else gson.fromJson(valueFromSharedPreferences, object : TypeToken<List<Track>>() {}.type)
     }
 
     override fun putSavedTracksToSharedPreferences(tracks: MutableList<Track>) {
         sharedPreferences.edit()
-            .putString(SearchActivity.SAVE_HISTORY_KEY, gson.toJson(tracks))
+            .putString(SearchActivity.SAVED_HISTORY_KEY, gson.toJson(tracks))
             .apply()
     }
 
@@ -31,7 +31,11 @@ class HistoryRepositoryImplementation(private val sharedPreferences: SharedPrefe
         putSavedTracksToSharedPreferences(historyList)
     }
 
-    fun clearHistoryList() {
+    override fun getHistoryList(): MutableList<Track> {
+        return historyList
+    }
+
+    override fun clearHistoryList() {
         historyList.clear()
         putSavedTracksToSharedPreferences(historyList)
     }

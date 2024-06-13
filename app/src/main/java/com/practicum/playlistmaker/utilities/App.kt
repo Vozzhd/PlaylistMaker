@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.utilities
 
 import android.app.Application
 import android.content.SharedPreferences
@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatDelegate
 
 const val FILE_WITH_SAVED_STATES = "saved_theme_condition"
 const val THEME_STATE = "state_of_dark_theme"
+const val KEY_FOR_TRACK = "TrackInExtra"
+const val DEFAULT_TEXT = ""
 
 class App : Application() {
     private lateinit var sharedPrefs: SharedPreferences
