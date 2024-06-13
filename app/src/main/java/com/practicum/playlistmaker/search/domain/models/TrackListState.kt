@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.search.ui.presenters
+package com.practicum.playlistmaker.search.domain.models
 import com.practicum.playlistmaker.player.domain.entity.Track
 
 sealed interface TrackListState {

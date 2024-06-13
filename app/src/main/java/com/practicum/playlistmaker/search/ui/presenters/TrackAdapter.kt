@@ -37,5 +37,9 @@ class TrackAdapter(private val clickListener: ClickListener) : RecyclerView.Adap
                 clickListener.click(trackList[position])
             }
         }
+
+    }
+    fun interface ClickListener {
+        fun click(track: Track)
     }
 }

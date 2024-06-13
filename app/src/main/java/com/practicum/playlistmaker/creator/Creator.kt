@@ -4,16 +4,16 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.search.data.api.TracksRepositoryImplementation
 import com.practicum.playlistmaker.player.data.MediaPlayerRepositoryImpl
-import com.practicum.playlistmaker.search.data.api.TracksRepository
+import com.practicum.playlistmaker.search.domain.api.TracksRepository
 import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
-import com.practicum.playlistmaker.search.data.local.HistoryRepository
+import com.practicum.playlistmaker.search.domain.api.HistoryRepository
 import com.practicum.playlistmaker.search.data.local.HistoryRepositoryImplementation
 import com.practicum.playlistmaker.search.data.network.retrofit.RetrofitNetworkClient
 import com.practicum.playlistmaker.search.domain.api.HistoryInteractor
 import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.useCase.HistoryInteractorImplementation
 import com.practicum.playlistmaker.search.domain.useCase.TracksInteractorImplementation
-import com.practicum.playlistmaker.search.ui.SearchActivity
+import com.practicum.playlistmaker.utilities.SAVED_HISTORY_KEY
 
 
 object Creator {
@@ -42,7 +42,7 @@ object Creator {
     private fun provideTrackHistoryRepository(context: Context): HistoryRepository {
         return HistoryRepositoryImplementation(
             context.getSharedPreferences(
-                SearchActivity.SAVED_HISTORY_KEY,
+                SAVED_HISTORY_KEY,
                 AppCompatActivity.MODE_PRIVATE
             )
         )

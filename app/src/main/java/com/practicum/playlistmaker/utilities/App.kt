@@ -8,7 +8,7 @@ const val FILE_WITH_SAVED_STATES = "saved_theme_condition"
 const val THEME_STATE = "state_of_dark_theme"
 const val KEY_FOR_TRACK = "TrackInExtra"
 const val DEFAULT_TEXT = ""
-
+const val SAVED_HISTORY_KEY = "saved search history"
 class App : Application() {
     private lateinit var sharedPrefs: SharedPreferences
     var darkTheme : Boolean = false

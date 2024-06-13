@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.search.ui.viewMidel
+package com.practicum.playlistmaker.search.ui
 
 import android.app.Application
 import android.os.Handler
@@ -13,12 +13,13 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.search.domain.api.TracksInteractor
-import com.practicum.playlistmaker.search.ui.presenters.TrackListState
+import com.practicum.playlistmaker.search.domain.models.TrackListState
 import com.practicum.playlistmaker.utilities.SingleEventLiveData
 
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
     companion object {
         private val SEARCH_REQUEST_TOKEN = Any()
+        private const val SEARCH_DELAY = 2000L
 
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -40,12 +41,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         trackHistoryInteractor.addToHistoryList(track)
         clickEvent.postValue(track)
     }
-
-    override fun onCleared() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-    }
-
     fun searchRequest(newSearchText: String) {
+        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         if (newSearchText.isNotEmpty()) {
             renderState(TrackListState.Loading)
 
@@ -58,28 +55,52 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                             tracks.addAll(foundTracks)
                         }
 
-                        when {errorMessage != null -> {
-                            renderState(TrackListState.Error(getApplication<Application>().getString(R.string.something_went_wrong))) }
-                            tracks.isEmpty() -> { renderState(TrackListState.Empty(message = getApplication<Application>().getString(R.string.nothing_found)))}
-                            else -> { renderState(TrackListState.ContentFromNetwork(tracks))}}}})}}
+                        when {
+                            errorMessage != null -> {
+                                renderState(
+                                    TrackListState.Error(
+                                        getApplication<Application>().getString(
+                                            R.string.something_went_wrong
+                                        )
+                                    )
+                                )
+                            }
 
-    private fun renderState(state: TrackListState) {
-        stateLiveData.postValue(state)
+                            tracks.isEmpty() -> {
+                                renderState(
+                                    TrackListState.Empty(
+                                        message = getApplication<Application>().getString(
+                                            R.string.nothing_found
+                                        )
+                                    )
+                                )
+                            }
+
+                            else -> {
+                                renderState(TrackListState.ContentFromNetwork(tracks))
+                            }
+                        }
+                    }
+                })
+        }
     }
-
-    fun addToHistory(track: Track) {
-        trackHistoryInteractor.addToHistoryList(track = track)
-    }
-
-    fun getHistoryList(): List<Track> {
-        return trackHistoryInteractor.getHistoryList()
-    }
-
+    private fun renderState(state: TrackListState) = stateLiveData.postValue(state)
     fun showHistory() {
+        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         stateLiveData.postValue(TrackListState.ContentFromHistory(getHistoryList()))
     }
 
-    fun clearHistory() {
-        trackHistoryInteractor.clearHistoryList()
+    private fun getHistoryList(): List<Track>  = trackHistoryInteractor.getHistoryList()
+    fun clearHistory() = trackHistoryInteractor.clearHistoryList()
+    fun searchWithDebounce(changedText: String) {
+        if (changedText.isNotEmpty()) {
+            handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+            val searchRunnable = Runnable { searchRequest(changedText) }
+            handler.postDelayed(searchRunnable, SEARCH_REQUEST_TOKEN, SEARCH_DELAY)
+        }
     }
+    override fun onCleared() {
+        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+    }
+
 }
