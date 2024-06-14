@@ -13,7 +13,18 @@ import com.practicum.playlistmaker.search.domain.api.HistoryInteractor
 import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.useCase.HistoryInteractorImplementation
 import com.practicum.playlistmaker.search.domain.useCase.TracksInteractorImplementation
+import com.practicum.playlistmaker.settings.domain.useCase.ExternalNavigatorImpl
+import com.practicum.playlistmaker.settings.data.SettingsRepositoryImpl
+import com.practicum.playlistmaker.settings.domain.api.SharingRepository
+import com.practicum.playlistmaker.settings.data.SharingRepositoryImpl
+import com.practicum.playlistmaker.settings.domain.api.ExternalNavigator
+import com.practicum.playlistmaker.settings.domain.api.SettingsInteractor
+import com.practicum.playlistmaker.settings.domain.api.SettingsRepository
+import com.practicum.playlistmaker.settings.domain.api.SharingInteractor
+import com.practicum.playlistmaker.settings.domain.useCase.SettingsInteractorImpl
+import com.practicum.playlistmaker.settings.domain.useCase.SharingInteractorImpl
 import com.practicum.playlistmaker.utilities.SAVED_HISTORY_KEY
+import com.practicum.playlistmaker.utilities.SAVED_THEME_CONDITION
 
 
 object Creator {
@@ -30,15 +41,12 @@ object Creator {
     private fun provideTracksRepository(context: Context): TracksRepository {
         return TracksRepositoryImplementation(RetrofitNetworkClient(context))
     }
-
     fun provideTracksInteractor(context: Context): TracksInteractor {
         return TracksInteractorImplementation(provideTracksRepository(context))
     }
-
     fun provideTrackHistoryInteractor(context: Context): HistoryInteractor {
         return HistoryInteractorImplementation(provideTrackHistoryRepository(context))
     }
-
     private fun provideTrackHistoryRepository(context: Context): HistoryRepository {
         return HistoryRepositoryImplementation(
             context.getSharedPreferences(
@@ -46,6 +54,23 @@ object Creator {
                 AppCompatActivity.MODE_PRIVATE
             )
         )
+    }
+
+    fun provideSharingInteractor(context: Context) : SharingInteractor {
+        return SharingInteractorImpl(provideExternalNavigator(context), provideSharingReporitory(context))
+    }
+    private fun provideExternalNavigator(context: Context) : ExternalNavigator{
+        return ExternalNavigatorImpl(context)
+    }
+    private fun provideSharingReporitory(context: Context) : SharingRepository {
+        return SharingRepositoryImpl(context)
+    }
+
+    fun provideSettingInteractor(context: Context) : SettingsInteractor {
+        return SettingsInteractorImpl(provideSettingsRepository(context))
+    }
+    private fun provideSettingsRepository(context: Context) : SettingsRepository {
+        return SettingsRepositoryImpl(context.getSharedPreferences(SAVED_THEME_CONDITION, AppCompatActivity.MODE_PRIVATE))
     }
 
 }

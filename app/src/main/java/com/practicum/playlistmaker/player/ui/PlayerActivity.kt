@@ -11,8 +11,6 @@ import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.player.data.TrackMapper
-import com.practicum.playlistmaker.search.ui.presenters.TrackAdapter
-import com.practicum.playlistmaker.utilities.App
 import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
 
 class PlayerActivity : AppCompatActivity() {

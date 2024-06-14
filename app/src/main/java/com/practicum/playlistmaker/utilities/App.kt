@@ -4,20 +4,19 @@ import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 
-const val FILE_WITH_SAVED_STATES = "saved_theme_condition"
+const val SAVED_THEME_CONDITION = "saved_theme_condition"
 const val THEME_STATE = "state_of_dark_theme"
 const val KEY_FOR_TRACK = "TrackInExtra"
 const val DEFAULT_TEXT = ""
 const val SAVED_HISTORY_KEY = "saved search history"
+const val DARK_THEME = "dark theme"
 class App : Application() {
     private lateinit var sharedPrefs: SharedPreferences
     var darkTheme : Boolean = false
     //По умолчанию на данный момент после установки у приложения изначально тема
     override fun onCreate() {
         super.onCreate()
-        // darkTheme = initTheme()
-
-        sharedPrefs = getSharedPreferences(FILE_WITH_SAVED_STATES, MODE_PRIVATE)
+        sharedPrefs = getSharedPreferences(SAVED_THEME_CONDITION, MODE_PRIVATE)
         val statusOfDarkState = sharedPrefs.getBoolean(THEME_STATE, darkTheme)
         switchTheme(statusOfDarkState)
     }
