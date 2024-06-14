@@ -2,6 +2,10 @@ package com.practicum.playlistmaker.creator
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
+import com.practicum.playlistmaker.main.data.MainMenuRepositoryImpl
+import com.practicum.playlistmaker.main.domain.api.MainMenuInteractor
+import com.practicum.playlistmaker.main.domain.api.MainMenuRepository
+import com.practicum.playlistmaker.main.domain.useCase.MainMenuInteractorImpl
 import com.practicum.playlistmaker.search.data.api.TracksRepositoryImplementation
 import com.practicum.playlistmaker.player.data.MediaPlayerRepositoryImpl
 import com.practicum.playlistmaker.search.domain.api.TracksRepository
@@ -36,8 +40,6 @@ object Creator {
     private fun provideMediaPlayerRepository(): MediaPlayerRepositoryImpl {
         return MediaPlayerRepositoryImpl()
     }
-
-
     private fun provideTracksRepository(context: Context): TracksRepository {
         return TracksRepositoryImplementation(RetrofitNetworkClient(context))
     }
@@ -71,6 +73,13 @@ object Creator {
     }
     private fun provideSettingsRepository(context: Context) : SettingsRepository {
         return SettingsRepositoryImpl(context.getSharedPreferences(SAVED_THEME_CONDITION, AppCompatActivity.MODE_PRIVATE))
+    }
+
+    fun provideMainMenuInteractor(context: Context) : MainMenuInteractor {
+        return MainMenuInteractorImpl(provideMainMenuRepository(context))
+    }
+    private fun provideMainMenuRepository(context: Context): MainMenuRepository {
+        return MainMenuRepositoryImpl(context)
     }
 
 }

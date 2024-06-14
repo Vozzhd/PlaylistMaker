@@ -18,7 +18,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this, SettingsViewModel.getViewModelFactory())[SettingsViewModel::class.java]
+        viewModel = ViewModelProvider(this, SettingsViewModelFactory(application))[SettingsViewModel::class.java]
 
         binding.backButton.setOnClickListener {
             finish()

@@ -27,10 +27,7 @@ class PlayerActivity : AppCompatActivity() {
         val trackPresentation = TrackMapper.map(intent.getSerializableExtra(KEY_FOR_TRACK) as Track)
         val track = (intent.getSerializableExtra(KEY_FOR_TRACK) as Track)
 
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getViewModelFactory(track, Creator.provideMediaPlayer())
-        )[PlayerViewModel::class.java]
+        viewModel = ViewModelProvider(this, PlayerViewModelFactory(track,Creator.provideMediaPlayer()))[PlayerViewModel::class.java]
 
         with(binding) {
             elapsedTrackTime.text = getString(R.string.defaultElapsedTrackTimeVisu)
@@ -70,13 +67,13 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun trackingElapsedTime(playerState: PlayerState?) {
         if (playerState == PlayerState.PLAYING) viewModel.updatingElapsedTrackTime()
-        if (playerState == PlayerState.COMPLETED) binding.elapsedTrackTime.text = "00:00"
+        if (playerState == PlayerState.PREPARED) binding.elapsedTrackTime.text = "00:00"
     }
 
     private fun changeButtonImage(playerState: PlayerState) {
         when (playerState) {
-            PlayerState.DEFAULT -> {}
-            PlayerState.PREPARED -> {}
+            PlayerState.DEFAULT -> {binding.playButton.setImageResource(R.drawable.play_button)}
+            PlayerState.PREPARED -> {binding.playButton.setImageResource(R.drawable.play_button)}
             PlayerState.PLAYING -> binding.playButton.setImageResource(R.drawable.pause_button)
             PlayerState.PAUSED -> binding.playButton.setImageResource(R.drawable.play_button)
             PlayerState.COMPLETED -> binding.playButton.setImageResource(R.drawable.play_button)

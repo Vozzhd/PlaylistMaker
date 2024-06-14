@@ -5,7 +5,6 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.player.domain.model.PlayerState
@@ -24,24 +23,9 @@ class PlayerViewModel(
 
     companion object {
         private const val TIMER_DELAY_MILLS = 300L
-        fun getViewModelFactory(
-            track: Track,
-            mediaPlayer: MediaPlayerInteractorImpl
-        ): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return PlayerViewModel(
-                        track,
-                        mediaPlayer
-                    ) as T
-                }
-            }
     }
 
     private val playBackMutableLiveData = MutableLiveData<PlayerState>()
-
-    ///Место для разработки
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
@@ -63,14 +47,14 @@ class PlayerViewModel(
 
     private fun getTimeFromRepository(): String {
         return dateFormat.format(mediaPlayer.showCurrentPosition())
-    } //Место для разработки
+    }
 
-    fun getPlayerState(): LiveData<PlayerState> = playBackMutableLiveData // функция для наблюдения за состоянием из активити
+    fun getPlayerState(): LiveData<PlayerState> = playBackMutableLiveData
 
     fun playBackControl() {
         mediaPlayer.playbackControl()
         playBackMutableLiveData.postValue(mediaPlayer.playerState())
-    } // функция для управления кнопкой из активити
+    }
 
     fun removeUpdatingTimeCallbacks() {
         handler.removeCallbacks(timeRunnable)

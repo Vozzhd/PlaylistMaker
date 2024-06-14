@@ -1,10 +1,8 @@
 package com.practicum.playlistmaker.player.data
 
 import android.media.MediaPlayer
-import android.media.MediaPlayer.OnCompletionListener
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerRepository
 import com.practicum.playlistmaker.player.domain.model.PlayerState
-
 
 class MediaPlayerRepositoryImpl : MediaPlayerRepository {
     private val mediaPlayer = MediaPlayer()

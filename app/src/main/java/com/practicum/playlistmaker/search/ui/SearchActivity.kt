@@ -46,7 +46,7 @@ class SearchActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerViewTracks)
         placeholderMessage = findViewById(R.id.placeholderErrorMessage)
 
-        viewModel = ViewModelProvider(this, SearchViewModel.getViewModelFactory())[SearchViewModel::class.java]
+        viewModel = ViewModelProvider(this, SearchViewModelFactory(application))[SearchViewModel::class.java]
 
         trackListAdapter = TrackAdapter { viewModel.onTrackClick(it) }
 

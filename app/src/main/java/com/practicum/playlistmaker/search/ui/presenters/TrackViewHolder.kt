@@ -29,7 +29,7 @@ class TrackViewHolder(
 
         trackName.text = model.trackName
         artistName.text = model.artistName
-        if (!model.trackTimeMillis.isNullOrBlank()) {
+        if (model.trackTimeMillis.isNotBlank()) {
             trackTime.text =
                 SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis.toInt())
         } else {
