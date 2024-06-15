@@ -1,7 +1,9 @@
 package com.practicum.playlistmaker.search.data.api
 
+import android.app.Application
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.entity.Track
-import com.practicum.playlistmaker.player.domain.model.Resource
+import com.practicum.playlistmaker.utilities.Resource
 import com.practicum.playlistmaker.search.data.dto.TrackSearchRequest
 import com.practicum.playlistmaker.search.data.dto.TrackSearchResponse
 import com.practicum.playlistmaker.search.data.network.NetworkClient
@@ -13,7 +15,7 @@ class TracksRepositoryImplementation(private val networkClient: NetworkClient) :
         val response = networkClient.doRequest(TrackSearchRequest(expression))
         return when (response.resultCode) {
             -1 -> {
-                Resource.Error("Проверьте подключение к интернету")
+                Resource.Error(Application().resources.getString(R.string.checkInternetConnection))
             }
             200 -> {
                 Resource.Success((response as TrackSearchResponse).results.map {
@@ -32,20 +34,8 @@ class TracksRepositoryImplementation(private val networkClient: NetworkClient) :
                 })
             }
             else -> {
-                Resource.Error("Произошла ошибка сети")
+                Resource.Error(Application().resources.getString(R.string.internetError))
             }
         }
     }
 }
-
-
-//    override fun getTrackList(expression: String): Resource<List<Track>> {
-//        val response = trackGettingNetworkClient.getTrackList(expression)
-//
-//        return if (response is TrackGettingListResponse) {
-//            val result = TrackGettingMapper.map(response.trackDtoList)
-//            Resource.Success(result)
-//        } else {
-//            Resource.Error("Произошла ошибка сети")
-//        }
-//    }

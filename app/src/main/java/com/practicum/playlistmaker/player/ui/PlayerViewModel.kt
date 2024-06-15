@@ -5,15 +5,15 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.entity.Track
-import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel(
     track: Track,
-    private val mediaPlayer: MediaPlayerInteractorImpl
+    private val mediaPlayer: MediaPlayerInteractor
 ) : ViewModel() {
     init {
         mediaPlayer.preparePlayer(track.previewUrl)

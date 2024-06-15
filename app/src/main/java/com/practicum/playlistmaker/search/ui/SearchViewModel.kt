@@ -1,14 +1,11 @@
 package com.practicum.playlistmaker.search.ui
 
-import android.app.Application
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.ViewModel
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.player.domain.entity.Track
@@ -16,14 +13,14 @@ import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.models.TrackListState
 import com.practicum.playlistmaker.utilities.SingleEventLiveData
 
-class SearchViewModel(application: Application) : AndroidViewModel(application) {
+class SearchViewModel(private val context: Context) : ViewModel() {
     companion object {
         private val SEARCH_REQUEST_TOKEN = Any()
         private const val SEARCH_DELAY = 2000L
     }
 
-    private val trackSearchInteractor = Creator.provideTracksInteractor(getApplication())
-    private val trackHistoryInteractor = Creator.provideTrackHistoryInteractor(getApplication())
+    private val trackSearchInteractor = Creator.provideTracksInteractor(context)
+    private val trackHistoryInteractor = Creator.provideTrackHistoryInteractor(context)
     private val handler = Handler(Looper.getMainLooper())
 
     private val clickEvent = SingleEventLiveData<Track>()
@@ -53,7 +50,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                             errorMessage != null -> {
                                 renderState(
                                     TrackListState.Error(
-                                        getApplication<Application>().getString(
+                                        context.getString(
                                             R.string.something_went_wrong
                                         )
                                     )
@@ -63,7 +60,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                             tracks.isEmpty() -> {
                                 renderState(
                                     TrackListState.Empty(
-                                        message = getApplication<Application>().getString(
+                                        message = context.getString(
                                             R.string.nothing_found
                                         )
                                     )

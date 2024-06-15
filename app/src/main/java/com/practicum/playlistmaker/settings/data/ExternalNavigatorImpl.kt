@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.settings.domain.useCase
+package com.practicum.playlistmaker.settings.data
 
 import android.content.Context
 import android.content.Intent

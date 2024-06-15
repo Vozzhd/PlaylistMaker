@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.search.domain.useCase
 import java.util.concurrent.Executors
-import com.practicum.playlistmaker.player.domain.model.Resource
+import com.practicum.playlistmaker.utilities.Resource
 import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.api.TracksRepository
 class TracksInteractorImplementation(private val trackListRepository: TracksRepository) :

@@ -17,7 +17,6 @@ import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.search.ui.presenters.TrackAdapter
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.player.ui.PlayerActivity
-import com.practicum.playlistmaker.utilities.PlaylistmakerApplication
 import com.practicum.playlistmaker.search.domain.models.TrackListState
 import com.practicum.playlistmaker.utilities.hideKeyboard
 import com.practicum.playlistmaker.utilities.DEFAULT_TEXT
@@ -54,7 +53,7 @@ class SearchActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         binding.clearButton.setOnClickListener {
-            binding.inputField.setText("")
+            binding.inputField.setText(DEFAULT_TEXT)
             binding.inputField.hideKeyboard()
             trackListAdapter.notifyDataSetChanged()
             binding.placeholderErrorLayout.visibility = View.GONE
@@ -184,12 +183,6 @@ class SearchActivity : AppCompatActivity() {
             View.GONE
         } else {
             View.VISIBLE
-        }
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        if (isFinishing) {
-            (this.applicationContext as? PlaylistmakerApplication)?.searchViewModel = null
         }
     }
 

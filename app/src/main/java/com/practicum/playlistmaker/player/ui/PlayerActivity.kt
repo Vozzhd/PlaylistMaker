@@ -10,7 +10,6 @@ import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
-import com.practicum.playlistmaker.player.data.TrackMapper
 import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
 
 class PlayerActivity : AppCompatActivity() {
@@ -22,10 +21,12 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val trackMapper = Creator.provideTrackMapperInteractor()
 
         val bigRoundForCorner = resources.getDimension(R.dimen.corner_radius_for_big_cover).toInt()
-        val trackPresentation = TrackMapper.map(intent.getSerializableExtra(KEY_FOR_TRACK) as Track)
         val track = (intent.getSerializableExtra(KEY_FOR_TRACK) as Track)
+
+        val trackPresentation = trackMapper.map(track)
 
         viewModel = ViewModelProvider(this, PlayerViewModelFactory(track,Creator.provideMediaPlayer()))[PlayerViewModel::class.java]
 

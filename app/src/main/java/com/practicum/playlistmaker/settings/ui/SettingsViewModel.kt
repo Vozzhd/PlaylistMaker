@@ -4,9 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.settings.domain.model.ThemeSettings
 
@@ -23,6 +20,6 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun getThemeSettingsLiveData(): LiveData<ThemeSettings> = themeSettingsLiveData
     fun switchTheme(darkTheme: Boolean) {
         settingsInteractor.updateThemeSettings(ThemeSettings(darkTheme))
-        themeSettingsLiveData.postValue(settingsInteractor.getThemeSettings())
+        themeSettingsLiveData.value = settingsInteractor.getThemeSettings()
     }
 }
