@@ -17,10 +17,12 @@ import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.search.ui.presenters.TrackAdapter
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.player.ui.PlayerActivity
+import com.practicum.playlistmaker.player.ui.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.TrackListState
 import com.practicum.playlistmaker.utilities.hideKeyboard
 import com.practicum.playlistmaker.utilities.DEFAULT_TEXT
 import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
     companion object {
@@ -30,22 +32,21 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
     private var inputInSearchView = DEFAULT_TEXT
 
-    private lateinit var viewModel: SearchViewModel
     private lateinit var placeholderMessage: TextView
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var trackListAdapter: TrackAdapter
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        val viewModel by viewModel<SearchViewModel>()
         progressBar = findViewById(R.id.progressBarAtView)
         recyclerView = findViewById(R.id.recyclerViewTracks)
         placeholderMessage = findViewById(R.id.placeholderErrorMessage)
-
-        viewModel = ViewModelProvider(this, SearchViewModelFactory(application))[SearchViewModel::class.java]
 
         trackListAdapter = TrackAdapter { viewModel.onTrackClick(it) }
 

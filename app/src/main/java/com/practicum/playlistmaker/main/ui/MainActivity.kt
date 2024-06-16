@@ -4,27 +4,28 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.databinding.ActivityMainBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this, MainViewModelFactory(this))[MainViewModel::class.java]
+        val viewModel by viewModel<MainViewModel>()
 
         binding.findButton.setOnClickListener {
             viewModel.startSearchActivity()
         }
 
-        binding.libraryButton.setOnClickListener{
+        binding.libraryButton.setOnClickListener {
             viewModel.startMediaLibraryActivity()
+
         }
 
-        binding.settingsButton.setOnClickListener{
+        binding.settingsButton.setOnClickListener {
             viewModel.startSettingsActivity()
         }
     }

@@ -11,11 +11,12 @@ import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel by viewModel<PlayerViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,9 +27,9 @@ class PlayerActivity : AppCompatActivity() {
         val bigRoundForCorner = resources.getDimension(R.dimen.corner_radius_for_big_cover).toInt()
         val track = (intent.getSerializableExtra(KEY_FOR_TRACK) as Track)
 
-        val trackPresentation = trackMapper.map(track)
+        viewModel.initPlayer(track)
 
-        viewModel = ViewModelProvider(this, PlayerViewModelFactory(track,Creator.provideMediaPlayer()))[PlayerViewModel::class.java]
+        val trackPresentation = trackMapper.map(track)
 
         with(binding) {
             elapsedTrackTime.text = getString(R.string.defaultElapsedTrackTimeVisu)
@@ -73,8 +74,14 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun changeButtonImage(playerState: PlayerState) {
         when (playerState) {
-            PlayerState.DEFAULT -> {binding.playButton.setImageResource(R.drawable.play_button)}
-            PlayerState.PREPARED -> {binding.playButton.setImageResource(R.drawable.play_button)}
+            PlayerState.DEFAULT -> {
+                binding.playButton.setImageResource(R.drawable.play_button)
+            }
+
+            PlayerState.PREPARED -> {
+                binding.playButton.setImageResource(R.drawable.play_button)
+            }
+
             PlayerState.PLAYING -> binding.playButton.setImageResource(R.drawable.pause_button)
             PlayerState.PAUSED -> binding.playButton.setImageResource(R.drawable.play_button)
             PlayerState.COMPLETED -> binding.playButton.setImageResource(R.drawable.play_button)

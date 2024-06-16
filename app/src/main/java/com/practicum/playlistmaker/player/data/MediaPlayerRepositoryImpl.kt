@@ -4,8 +4,8 @@ import android.media.MediaPlayer
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerRepository
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 
-class MediaPlayerRepositoryImpl : MediaPlayerRepository {
-    private val mediaPlayer = MediaPlayer()
+class MediaPlayerRepositoryImpl (private val mediaPlayer : MediaPlayer) : MediaPlayerRepository  {
+
     private var playerState = PlayerState.DEFAULT
 
     override fun preparePlayer(url: String) {
