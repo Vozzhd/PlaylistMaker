@@ -27,12 +27,12 @@ val repositoryModule = module {
     }
 
     single<MediaPlayerRepository> { MediaPlayerRepositoryImpl(get()) }
-    factory <GetTrackRepository> {GetTrackRepositoryImpl()}
+    single <GetTrackRepository> {GetTrackRepositoryImpl()}
     single <TracksRepository> { TracksRepositoryImplementation(get()) }
     single <HistoryRepository> { HistoryRepositoryImplementation(get())}
     single <SharingRepository> { SharingRepositoryImpl(androidContext()) }
     single <SettingsRepository>{SettingsRepositoryImpl(get())}
     single <MainMenuRepository> {MainMenuRepositoryImpl(androidContext())}
-    factory { MediaPlayer() }
+    single <MediaPlayer>{ MediaPlayer() }
     factory { Gson() }
 }

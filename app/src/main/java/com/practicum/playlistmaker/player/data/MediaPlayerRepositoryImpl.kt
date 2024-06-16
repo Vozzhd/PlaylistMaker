@@ -4,65 +4,61 @@ import android.media.MediaPlayer
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerRepository
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 
-class MediaPlayerRepositoryImpl (private val mediaPlayer : MediaPlayer) : MediaPlayerRepository  {
+class MediaPlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : MediaPlayerRepository {
 
     private var playerState = PlayerState.DEFAULT
-
     override fun preparePlayer(url: String) {
+
+        mediaPlayer = MediaPlayer()
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener { playerState = PlayerState.PREPARED }
+        mediaPlayer.setOnCompletionListener { playerState = PlayerState.COMPLETED }
+    }
 
-        mediaPlayer.setOnPreparedListener {
+override fun playbackControl() {
+    when (playerState) {
+        PlayerState.PLAYING -> {
+            pause()
+        }
+
+        PlayerState.PREPARED, PlayerState.PAUSED -> {
+            play()
+        }
+
+        PlayerState.DEFAULT -> {
+            //do nothing
+        }
+
+        PlayerState.COMPLETED -> {
             playerState = PlayerState.PREPARED
         }
-        mediaPlayer.setOnCompletionListener {
-            playerState = PlayerState.COMPLETED
-        }
     }
+}
 
-    override fun playbackControl() {
-        when (playerState) {
-            PlayerState.PLAYING -> {
-                pause()
-            }
+override fun play() {
+    mediaPlayer.start()
+    playerState = PlayerState.PLAYING
+}
 
-            PlayerState.PREPARED, PlayerState.PAUSED -> {
-                play()
-            }
+override fun pause() {
+    mediaPlayer.pause()
+    playerState = PlayerState.PAUSED
+}
 
-            PlayerState.DEFAULT -> {
-                //do nothing
-            }
+override fun stop() {
+    mediaPlayer.release()
+}
 
-            PlayerState.COMPLETED -> {
-                playerState = PlayerState.PREPARED
-            }
-        }
-    }
+override fun release() {
+    mediaPlayer.release()
+}
 
-    override fun play() {
-        mediaPlayer.start()
-        playerState = PlayerState.PLAYING
-    }
+override fun showCurrentPosition(): Int {
+    return mediaPlayer.currentPosition
+}
 
-    override fun pause() {
-        mediaPlayer.pause()
-        playerState = PlayerState.PAUSED
-    }
-
-    override fun stop() {
-        mediaPlayer.release()
-    }
-
-    override fun release() {
-        mediaPlayer.release()
-    }
-
-    override fun showCurrentPosition(): Int {
-        return mediaPlayer.currentPosition
-    }
-
-    override fun playerState(): PlayerState {
-        return playerState
-    }
+override fun playerState(): PlayerState {
+    return playerState
+}
 }

@@ -2,11 +2,9 @@ package com.practicum.playlistmaker.player.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
@@ -22,14 +20,12 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val trackMapper = Creator.provideTrackMapperInteractor()
 
         val bigRoundForCorner = resources.getDimension(R.dimen.corner_radius_for_big_cover).toInt()
         val track = (intent.getSerializableExtra(KEY_FOR_TRACK) as Track)
-
         viewModel.initPlayer(track)
 
-        val trackPresentation = trackMapper.map(track)
+        val trackPresentation = viewModel.map(track)
 
         with(binding) {
             elapsedTrackTime.text = getString(R.string.defaultElapsedTrackTimeVisu)
@@ -84,7 +80,9 @@ class PlayerActivity : AppCompatActivity() {
 
             PlayerState.PLAYING -> binding.playButton.setImageResource(R.drawable.pause_button)
             PlayerState.PAUSED -> binding.playButton.setImageResource(R.drawable.play_button)
-            PlayerState.COMPLETED -> binding.playButton.setImageResource(R.drawable.play_button)
+            PlayerState.COMPLETED -> {
+                binding.playButton.setImageResource(R.drawable.play_button)
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.search.ui
 
 import android.app.Application
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
@@ -15,7 +16,8 @@ import com.practicum.playlistmaker.utilities.SingleEventLiveData
 
 class SearchViewModel(
     private val trackSearchInteractor : TracksInteractor,
-    private val trackHistoryInteractor : HistoryInteractor
+    private val trackHistoryInteractor : HistoryInteractor,
+    private val context: Context
 
 ) : ViewModel() {
     companion object {
@@ -52,7 +54,7 @@ class SearchViewModel(
                             errorMessage != null -> {
                                 renderState(
                                     TrackListState.Error(
-                                        Application().getString(R.string.something_went_wrong)
+                                        context.getString(R.string.something_went_wrong)
                                         )
                                     )
                             }
@@ -60,7 +62,7 @@ class SearchViewModel(
                             tracks.isEmpty() -> {
                                 renderState(
                                     TrackListState.Empty(
-                                        Application().getString(R.string.something_went_wrong)
+                                        context.getString(R.string.nothing_found)
                                         )
                                     )
                             }
