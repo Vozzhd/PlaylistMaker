@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.search.ui
 
+import android.app.Application
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
@@ -7,20 +8,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.player.domain.entity.Track
+import com.practicum.playlistmaker.search.domain.api.HistoryInteractor
 import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.models.TrackListState
 import com.practicum.playlistmaker.utilities.SingleEventLiveData
 
-class SearchViewModel(private val context: Context) : ViewModel() {
+class SearchViewModel(
+    private val trackSearchInteractor : TracksInteractor,
+    private val trackHistoryInteractor : HistoryInteractor,
+    private val context: Context
+
+) : ViewModel() {
     companion object {
         private val SEARCH_REQUEST_TOKEN = Any()
         private const val SEARCH_DELAY = 2000L
     }
 
-    private val trackSearchInteractor = Creator.provideTracksInteractor(context)
-    private val trackHistoryInteractor = Creator.provideTrackHistoryInteractor(context)
     private val handler = Handler(Looper.getMainLooper())
 
     private val clickEvent = SingleEventLiveData<Track>()
@@ -50,21 +54,17 @@ class SearchViewModel(private val context: Context) : ViewModel() {
                             errorMessage != null -> {
                                 renderState(
                                     TrackListState.Error(
-                                        context.getString(
-                                            R.string.something_went_wrong
+                                        context.getString(R.string.something_went_wrong)
                                         )
                                     )
-                                )
                             }
 
                             tracks.isEmpty() -> {
                                 renderState(
                                     TrackListState.Empty(
-                                        message = context.getString(
-                                            R.string.nothing_found
+                                        context.getString(R.string.nothing_found)
                                         )
                                     )
-                                )
                             }
 
                             else -> {

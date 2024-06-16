@@ -2,21 +2,19 @@ package com.practicum.playlistmaker.settings.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.utilities.App
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var viewModel: SettingsViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
 
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this, SettingsViewModelFactory(application))[SettingsViewModel::class.java]
+        val viewModel by viewModel<SettingsViewModel>()
 
         binding.backButton.setOnClickListener {
             finish()
@@ -28,10 +26,10 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.themeSwitcher.isChecked = (applicationContext as App).darkTheme
 
-        binding.supportButton.setOnClickListener{
+        binding.supportButton.setOnClickListener {
             viewModel.sendEmailToSupport()
         }
-        binding.userAgreementButton.setOnClickListener{
+        binding.userAgreementButton.setOnClickListener {
             viewModel.showUserAgreement()
         }
 

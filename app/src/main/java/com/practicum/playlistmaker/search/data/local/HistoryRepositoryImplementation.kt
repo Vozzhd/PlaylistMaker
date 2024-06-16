@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.search.domain.api.HistoryRepository
-import com.practicum.playlistmaker.utilities.SAVED_HISTORY_KEY
+import com.practicum.playlistmaker.utilities.SHARED_PREFS
 
 class HistoryRepositoryImplementation(private val sharedPreferences: SharedPreferences) :
     HistoryRepository {
@@ -14,13 +14,13 @@ class HistoryRepositoryImplementation(private val sharedPreferences: SharedPrefe
     private val gson = GsonBuilder().setPrettyPrinting().create()
 
     init {
-        val valueFromSharedPreferences = sharedPreferences.getString(SAVED_HISTORY_KEY, "")
+        val valueFromSharedPreferences = sharedPreferences.getString(SHARED_PREFS, "")
         historyList = if (valueFromSharedPreferences.equals("")) mutableListOf()
         else gson.fromJson(valueFromSharedPreferences, object : TypeToken<List<Track>>() {}.type)
     }
     override fun putSavedTracksToSharedPreferences(tracks: MutableList<Track>) {
         sharedPreferences.edit()
-            .putString(SAVED_HISTORY_KEY, gson.toJson(tracks))
+            .putString(SHARED_PREFS, gson.toJson(tracks))
             .apply()
     }
 
