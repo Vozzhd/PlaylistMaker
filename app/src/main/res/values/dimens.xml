@@ -20,4 +20,5 @@
     <dimen name="corner_radius_for_big_cover">8dp</dimen>
     <dimen name="marginTopTrackRecyclerView">132dp</dimen>
     <dimen name="roundedProgressBarSize">44dp</dimen>
+    <dimen name="textSizeForTabLayout">14dp</dimen>
 </resources>
