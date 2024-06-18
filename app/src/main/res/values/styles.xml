@@ -123,4 +123,11 @@
         <item name="android:textSize">@dimen/textSizeForArtistName</item>
 
     </style>
+
+    <style name="tabText" parent="TextAppearance.AppCompat">
+        <item name="textAllCaps">false</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/textSizeForTabLayout</item>
+    </style>
+
 </resources>

@@ -2,6 +2,7 @@
 <resources>
     <dimen name="defaultTextSizeForTitle">22sp</dimen>
     <dimen name="defaultTextSize">16sp</dimen>
+    <dimen name="texSizeFragmentsPlaceholder">19sp</dimen>
     <dimen name="defaultTextSizeSmall">14sp</dimen>
     <dimen name="defaultCornerRadius">16dp</dimen>
     <dimen name="defaultPadding">8dp</dimen>
@@ -20,4 +21,9 @@
     <dimen name="corner_radius_for_big_cover">8dp</dimen>
     <dimen name="marginTopTrackRecyclerView">132dp</dimen>
     <dimen name="roundedProgressBarSize">44dp</dimen>
+    <dimen name="textSizeForTabLayout">14dp</dimen>
+    <dimen name="placeholderSquareIconSize">120dp</dimen>
+    <dimen name="marginTopIconInFragment">104dp</dimen>
+    <dimen name="marginTopTextInFragment">240dp</dimen>
+
 </resources>

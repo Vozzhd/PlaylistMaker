@@ -39,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation ("androidx.fragment:fragment-ktx:1.5.5")
     implementation ("io.insert-koin:koin-android:3.3.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")

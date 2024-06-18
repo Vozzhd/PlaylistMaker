@@ -33,7 +33,7 @@
         android:layout_marginTop="@dimen/marginFromTopForSearchField">
 
         <EditText
-            android:id="@+id/input_field"
+            android:id="@+id/inputField"
             style="@style/EditTextView"
             android:layout_height="36dp"
             android:layout_gravity="center"
@@ -63,8 +63,8 @@
 
         <ImageView
             android:id="@+id/placeholderErrorImage"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="@dimen/placeholderSquareIconSize"
+            android:layout_height="@dimen/placeholderSquareIconSize"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/connection_error" />
 
