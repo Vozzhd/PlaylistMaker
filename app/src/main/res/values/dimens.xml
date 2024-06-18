@@ -2,6 +2,7 @@
 <resources>
     <dimen name="defaultTextSizeForTitle">22sp</dimen>
     <dimen name="defaultTextSize">16sp</dimen>
+    <dimen name="texSizeFragmentsPlaceholder">19sp</dimen>
     <dimen name="defaultTextSizeSmall">14sp</dimen>
     <dimen name="defaultCornerRadius">16dp</dimen>
     <dimen name="defaultPadding">8dp</dimen>

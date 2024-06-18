@@ -19,6 +19,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/marginTopTextInFragment"
         android:text="@string/mediaLibraryIsEmpty"
-        android:textSize="19sp"/>
+        android:textSize="@dimen/texSizeFragmentsPlaceholder"/>
 
 </FrameLayout>

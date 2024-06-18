@@ -29,7 +29,7 @@
         android:layout_marginTop="@dimen/marginTopTextInFragment"
         android:gravity="center"
         android:text="@string/PlaylistsAreEmpty"
-        android:textSize="19sp"/>
+        android:textSize="@dimen/texSizeFragmentsPlaceholder"/>
 
 
 </FrameLayout>
