@@ -4,16 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.practicum.playlistmaker.databinding.SettingsFragmentBinding
 import com.practicum.playlistmaker.utilities.App
-import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsActivity : Fragment() {
+class SettingsFragment : Fragment() {
 
-    private lateinit var binding: ActivitySettingsBinding
+    private lateinit var binding: SettingsFragmentBinding
     private val viewModel by viewModel<SettingsViewModel>()
 
 
@@ -22,20 +21,20 @@ class SettingsActivity : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = ActivitySettingsBinding.inflate(inflater, container, false)
+        binding = SettingsFragmentBinding.inflate(inflater, container, false)
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = ActivitySettingsBinding.inflate(layoutInflater)
 
+        viewModel.getThemeSettings()
 
         binding.shareButton.setOnClickListener {
             viewModel.shareApp()
         }
-        viewModel.getThemeSettingsLiveData()
+
 
         binding.supportButton.setOnClickListener {
             viewModel.sendEmailToSupport()
@@ -44,10 +43,10 @@ class SettingsActivity : Fragment() {
             viewModel.showUserAgreement()
         }
 
-        viewModel.getThemeSettingsLiveData().observe(viewLifecycleOwner, Observer {
-            binding.themeSwitcher.isChecked = it.darkTheme
-        })
 
+        viewModel.getThemeSettingsLiveData().observe(viewLifecycleOwner, Observer{
+            (requireActivity().applicationContext as App).switchTheme(it.darkTheme)
+        })
 
         binding.themeSwitcher.setOnCheckedChangeListener { _, checked ->
             viewModel.switchTheme(checked)

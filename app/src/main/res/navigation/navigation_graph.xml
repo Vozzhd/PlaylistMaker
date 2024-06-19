@@ -10,7 +10,7 @@
         android:label="MediaLibraryFragment" />
     <fragment
         android:id="@+id/settingsActivity"
-        android:name="com.practicum.playlistmaker.settings.ui.SettingsActivity"
+        android:name="com.practicum.playlistmaker.settings.ui.SettingsFragment"
         android:label="SettingsActivity" />
     <fragment
         android:id="@+id/searchFragment"

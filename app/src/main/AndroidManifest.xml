@@ -23,7 +23,7 @@
             android:name=".search.ui.SearchFragment"
             android:exported="false" />
         <activity
-            android:name=".settings.ui.SettingsActivity"
+            android:name=".settings.ui.SettingsFragment"
             android:exported="false" />
         <activity
             android:name=".player.ui.PlayerActivity"
