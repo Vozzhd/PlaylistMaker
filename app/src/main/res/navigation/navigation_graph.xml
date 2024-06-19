@@ -12,4 +12,8 @@
         android:id="@+id/settingsActivity"
         android:name="com.practicum.playlistmaker.settings.ui.SettingsActivity"
         android:label="SettingsActivity" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.practicum.playlistmaker.search.ui.SearchFragment"
+        android:label="SearchFragment" />
 </navigation>

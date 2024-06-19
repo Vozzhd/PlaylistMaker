@@ -130,4 +130,13 @@
         <item name="android:textSize">@dimen/textSizeForTabLayout</item>
     </style>
 
+
+
+    <style name="bottomNavigationStyle" parent="Widget.Design.BottomNavigationView">
+
+
+
+    </style>
+
+
 </resources>

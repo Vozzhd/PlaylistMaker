@@ -2,16 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/searchFragment"
+        android:title="Поиск"
+        />
+    <item
         android:id="@+id/mediaLibraryFragment"
         android:title="Медиатека"
         />
-
-
     <item
         android:id="@+id/settingsActivity"
         android:title="Настройки"
-
     />
+
+
 
 
 </menu>

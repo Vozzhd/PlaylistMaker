@@ -1,57 +1,66 @@
 package com.practicum.playlistmaker.search.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.search.ui.presenters.TrackAdapter
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import com.practicum.playlistmaker.databinding.SearchFragmentBinding
 import com.practicum.playlistmaker.player.ui.PlayerActivity
-import com.practicum.playlistmaker.player.ui.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.models.TrackListState
 import com.practicum.playlistmaker.utilities.hideKeyboard
 import com.practicum.playlistmaker.utilities.DEFAULT_TEXT
 import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
     companion object {
         const val SAVED_TEXT_KEY = "Saved text in input field"
     }
 
-    private lateinit var binding: ActivitySearchBinding
+    private lateinit var binding: SearchFragmentBinding
     private var inputInSearchView = DEFAULT_TEXT
 
     private lateinit var placeholderMessage: TextView
-    private lateinit var recyclerView: RecyclerView
+    //private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var trackListAdapter: TrackAdapter
+    private val viewModel by viewModel<SearchViewModel>()
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        val viewModel by viewModel<SearchViewModel>()
-        progressBar = findViewById(R.id.progressBarAtView)
-        recyclerView = findViewById(R.id.recyclerViewTracks)
-        placeholderMessage = findViewById(R.id.placeholderErrorMessage)
+
+        binding = SearchFragmentBinding.inflate(layoutInflater)
+        return binding.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.inputField.setText(savedInstanceState?.getString(SAVED_TEXT_KEY))
+
 
         trackListAdapter = TrackAdapter { viewModel.onTrackClick(it) }
+        binding.recyclerViewTracks.layoutManager = LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false)
+        binding.recyclerViewTracks.adapter = trackListAdapter
 
-        recyclerView.adapter = trackListAdapter
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         binding.clearButton.setOnClickListener {
             binding.inputField.setText(DEFAULT_TEXT)
@@ -68,8 +77,10 @@ class SearchActivity : AppCompatActivity() {
             binding.clearHistoryButton.setTransitionVisibility(View.GONE)
         }
 
-        viewModel.getScreenState().observe(this) { renderScreen(it) }
-        viewModel.getClickEvent().observe(this) { openPlayerActivity(it) }
+
+        viewModel.getScreenState().observe(viewLifecycleOwner) { renderScreen(it) }
+        viewModel.getClickEvent().observe(viewLifecycleOwner) { openPlayerActivity(it) }
+
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -96,6 +107,7 @@ class SearchActivity : AppCompatActivity() {
         binding.inputField.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 viewModel.showHistory()
+
             }
         }
 
@@ -118,7 +130,6 @@ class SearchActivity : AppCompatActivity() {
             is TrackListState.Empty -> showEmpty(state.message)
         }
     }
-
     private fun showLoading() {
         binding.clearHistoryButton.visibility = View.GONE
         binding.historyViewTitle.visibility = View.GONE
@@ -127,6 +138,7 @@ class SearchActivity : AppCompatActivity() {
         binding.placeholderRefreshButton.visibility = View.GONE
         binding.progressBarAtView.visibility = View.VISIBLE
     }
+
     private fun showContent(movies: List<Track>) {
         binding.progressBarAtView.visibility = View.GONE
         binding.recyclerViewTracks.visibility = View.VISIBLE
@@ -134,6 +146,7 @@ class SearchActivity : AppCompatActivity() {
         trackListAdapter.trackList.addAll(movies)
         trackListAdapter.notifyDataSetChanged()
     }
+
     private fun showHistory(movies: List<Track>) {
         if (movies.isEmpty()) {
             trackListAdapter.trackList.clear()
@@ -149,9 +162,10 @@ class SearchActivity : AppCompatActivity() {
             binding.clearHistoryButton.visibility = View.VISIBLE
         }
     }
+
     private fun showError(errorMessage: String) {
         progressBar.visibility = View.GONE
-        recyclerView.visibility = View.GONE
+        binding.recyclerViewTracks.visibility = View.GONE
 
         binding.placeholderErrorLayout.visibility = View.VISIBLE
         placeholderMessage.visibility = View.VISIBLE
@@ -160,9 +174,10 @@ class SearchActivity : AppCompatActivity() {
         binding.placeholderErrorImage.setImageResource(R.drawable.connection_error)
         placeholderMessage.text = errorMessage
     }
+
     private fun showEmpty(emptyMessage: String) {
         progressBar.visibility = View.GONE
-        recyclerView.visibility = View.GONE
+        binding.recyclerViewTracks.visibility = View.GONE
 
         binding.placeholderErrorLayout.visibility = View.VISIBLE
         placeholderMessage.visibility = View.VISIBLE
@@ -172,7 +187,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun openPlayerActivity(track: Track) {
-        val intent = Intent(this, PlayerActivity::class.java)
+        val intent = Intent(this.activity, PlayerActivity::class.java)
         intent.putExtra(KEY_FOR_TRACK, track)
         startActivity(intent)
     }
@@ -184,7 +199,6 @@ class SearchActivity : AppCompatActivity() {
             View.VISIBLE
         }
     }
-
     override fun onResume() {
         super.onResume()
         binding.inputField.setSelection(binding.inputField.length())
@@ -193,11 +207,5 @@ class SearchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SAVED_TEXT_KEY, inputInSearchView)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        inputInSearchView = savedInstanceState.getString(SAVED_TEXT_KEY, DEFAULT_TEXT)
-        binding.inputField.setText(inputInSearchView)
     }
 }
