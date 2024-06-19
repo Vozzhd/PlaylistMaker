@@ -42,4 +42,7 @@
     <string name="mediaLibraryText">Медиатека</string>
     <string name="favoriteTracks">Избранные треки</string>
     <string name="Playlists">Плейлисты</string>
+    <string name="searchTextBottomView">Поиск</string>
+    <string name="mediaLibraryRextBottomView">Медиатека</string>
+    <string name="settingsTextBottomView">Настройки</string>
 </resources>
