@@ -4,17 +4,16 @@
     <item
         android:id="@+id/searchFragment"
         android:title="Поиск"
+        android:icon="@drawable/ic_search"
         />
     <item
         android:id="@+id/mediaLibraryFragment"
         android:title="Медиатека"
+        android:icon="@drawable/ic_media_library"
         />
     <item
         android:id="@+id/settingsActivity"
         android:title="Настройки"
+        android:icon="@drawable/ic_settings"
     />
-
-
-
-
 </menu>
