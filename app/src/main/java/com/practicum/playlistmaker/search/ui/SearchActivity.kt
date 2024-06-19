@@ -68,8 +68,6 @@ class SearchActivity : AppCompatActivity() {
             binding.clearHistoryButton.setTransitionVisibility(View.GONE)
         }
 
-        binding.backButton.setOnClickListener { finish() }
-
         viewModel.getScreenState().observe(this) { renderScreen(it) }
         viewModel.getClickEvent().observe(this) { openPlayerActivity(it) }
 

@@ -43,6 +43,9 @@
         android:text="@string/textOfSettingsButton"
         app:icon="@drawable/gearicon" />
 
+
+
+
 </LinearLayout>
 
 

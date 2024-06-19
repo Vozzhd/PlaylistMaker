@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/media_library_navigation_graph.xml"
+    app:startDestination="@id/mediaLibraryFragment">
+
+    <fragment
+        android:id="@+id/mediaLibraryFragment"
+        android:name="com.practicum.playlistmaker.mediaLibrary.ui.MediaLibraryFragment"
+        android:label="MediaLibraryFragment" />
+    <fragment
+        android:id="@+id/settingsActivity"
+        android:name="com.practicum.playlistmaker.settings.ui.SettingsActivity"
+        android:label="SettingsActivity" />
+</navigation>
