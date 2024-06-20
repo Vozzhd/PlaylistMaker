@@ -8,11 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.search.ui.presenters.TrackAdapter
@@ -163,6 +160,9 @@ class SearchFragment : Fragment() {
     private fun showError(errorMessage: String) {
         binding.progressBarAtView.visibility = View.GONE
         binding.recyclerViewTracks.visibility = View.GONE
+
+        binding.historyViewTitle.visibility = View.GONE
+        binding.clearHistoryButton.visibility = View.GONE
 
         binding.placeholderErrorLayout.visibility = View.VISIBLE
         binding.placeholderErrorMessage.visibility = View.VISIBLE
