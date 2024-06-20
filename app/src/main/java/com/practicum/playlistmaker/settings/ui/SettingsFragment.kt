@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.practicum.playlistmaker.databinding.SettingsFragmentBinding
 import com.practicum.playlistmaker.utilities.App
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -44,9 +43,9 @@ class SettingsFragment : Fragment() {
         }
 
 
-        viewModel.getThemeSettingsLiveData().observe(viewLifecycleOwner, Observer{
+        viewModel.getThemeSettingsLiveData().observe(viewLifecycleOwner) {
             (requireActivity().applicationContext as App).switchTheme(it.darkTheme)
-        })
+        }
 
         binding.themeSwitcher.setOnCheckedChangeListener { _, checked ->
             viewModel.switchTheme(checked)
