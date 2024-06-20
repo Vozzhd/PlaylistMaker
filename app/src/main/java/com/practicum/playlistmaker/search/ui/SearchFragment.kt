@@ -32,9 +32,6 @@ class SearchFragment : Fragment() {
     private lateinit var binding: SearchFragmentBinding
     private var inputInSearchView = DEFAULT_TEXT
 
-    private lateinit var placeholderMessage: TextView
-    //private lateinit var recyclerView: RecyclerView
-    private lateinit var progressBar: ProgressBar
     private lateinit var trackListAdapter: TrackAdapter
     private val viewModel by viewModel<SearchViewModel>()
 
@@ -164,26 +161,26 @@ class SearchFragment : Fragment() {
     }
 
     private fun showError(errorMessage: String) {
-        progressBar.visibility = View.GONE
+        binding.progressBarAtView.visibility = View.GONE
         binding.recyclerViewTracks.visibility = View.GONE
 
         binding.placeholderErrorLayout.visibility = View.VISIBLE
-        placeholderMessage.visibility = View.VISIBLE
+        binding.placeholderErrorMessage.visibility = View.VISIBLE
         binding.placeholderRefreshButton.visibility = View.VISIBLE
 
         binding.placeholderErrorImage.setImageResource(R.drawable.connection_error)
-        placeholderMessage.text = errorMessage
+        binding.placeholderErrorMessage.text = errorMessage
     }
 
     private fun showEmpty(emptyMessage: String) {
-        progressBar.visibility = View.GONE
+        binding.progressBarAtView.visibility = View.GONE
         binding.recyclerViewTracks.visibility = View.GONE
 
         binding.placeholderErrorLayout.visibility = View.VISIBLE
-        placeholderMessage.visibility = View.VISIBLE
+        binding.placeholderErrorMessage.visibility = View.VISIBLE
 
         binding.placeholderErrorImage.setImageResource(R.drawable.search_error)
-        placeholderMessage.text = emptyMessage
+        binding.placeholderErrorMessage.text = emptyMessage
     }
 
     private fun openPlayerActivity(track: Track) {
