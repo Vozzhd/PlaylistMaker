@@ -15,17 +15,25 @@ class FavoriteFragment : Fragment() {
         fun newInstance() = FavoriteFragment().apply { }
     }
 
+    private var _binding: FavoriteFragmentBinding? = null
+    private val binding get() = _binding!!
+
     private val viewModel: FavoriteFragmentViewModel by viewModel()
 
-    private lateinit var binding: FavoriteFragmentBinding
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FavoriteFragmentBinding.inflate(inflater, container, false)
+        _binding = FavoriteFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
 }

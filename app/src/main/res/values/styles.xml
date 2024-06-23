@@ -130,6 +130,7 @@
     </style>
 
     <style name="bottomNavigationStyle" parent="Widget.Design.BottomNavigationView">
+        <item name="background">@drawable/bottom_background</item>
         <item name="itemTextColor">@color/bottom_navigation_switch</item>
         <item name="iconTint">?attr/colorOnPrimary</item>
         <item name="itemIconTint">@color/bottom_navigation_switch</item>
