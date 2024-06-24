@@ -71,7 +71,7 @@ class PlayerActivity : AppCompatActivity() {
 
             PlayerState.PREPARED -> {
                 binding.playButton.setImageResource(R.drawable.play_button)
-                binding.elapsedTrackTime.text = getString(R.string.defaultElapsedTrackTimeVisu)
+
             }
 
             PlayerState.PLAYING -> {
@@ -79,7 +79,10 @@ class PlayerActivity : AppCompatActivity() {
                 binding.playButton.setImageResource(R.drawable.pause_button)
             }
             PlayerState.PAUSED -> binding.playButton.setImageResource(R.drawable.play_button)
-            PlayerState.COMPLETED -> { binding.playButton.setImageResource(R.drawable.play_button) }
+            PlayerState.COMPLETED -> {
+                binding.playButton.setImageResource(R.drawable.play_button)
+                binding.elapsedTrackTime.text = getString(R.string.defaultElapsedTrackTimeVisu)
+            }
         }
 
     }

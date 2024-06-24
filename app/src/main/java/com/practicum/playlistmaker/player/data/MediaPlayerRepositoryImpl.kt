@@ -13,7 +13,7 @@ class MediaPlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : MediaPla
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener { playerState = PlayerState.PREPARED }
-        mediaPlayer.setOnCompletionListener { playerState = PlayerState.PREPARED }
+        mediaPlayer.setOnCompletionListener { playerState = PlayerState.COMPLETED }
     }
 
 override fun playbackControl() {
