@@ -3,8 +3,6 @@ package com.practicum.playlistmaker.di
 import android.content.Context
 import android.media.MediaPlayer
 import com.google.gson.Gson
-import com.practicum.playlistmaker.main.data.MainMenuRepositoryImpl
-import com.practicum.playlistmaker.main.domain.api.MainMenuRepository
 import com.practicum.playlistmaker.player.data.GetTrackRepositoryImpl
 import com.practicum.playlistmaker.player.data.MediaPlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.api.GetTrackRepository
@@ -32,7 +30,6 @@ val repositoryModule = module {
     single <HistoryRepository> { HistoryRepositoryImplementation(get())}
     single <SharingRepository> { SharingRepositoryImpl(androidContext()) }
     single <SettingsRepository>{SettingsRepositoryImpl(get())}
-    single <MainMenuRepository> {MainMenuRepositoryImpl(androidContext())}
     single <MediaPlayer>{ MediaPlayer() }
     factory { Gson() }
 }

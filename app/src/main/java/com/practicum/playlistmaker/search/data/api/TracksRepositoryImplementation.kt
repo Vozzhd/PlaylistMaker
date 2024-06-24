@@ -1,7 +1,4 @@
 package com.practicum.playlistmaker.search.data.api
-
-import android.app.Application
-import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.utilities.Resource
 import com.practicum.playlistmaker.search.data.dto.TrackSearchRequest
@@ -15,7 +12,7 @@ class TracksRepositoryImplementation(private val networkClient: NetworkClient) :
         val response = networkClient.doRequest(TrackSearchRequest(expression))
         return when (response.resultCode) {
             -1 -> {
-                Resource.Error(Application().resources.getString(R.string.checkInternetConnection))
+                Resource.Error("Internet error")
             }
             200 -> {
                 Resource.Success((response as TrackSearchResponse).results.map {
@@ -34,7 +31,7 @@ class TracksRepositoryImplementation(private val networkClient: NetworkClient) :
                 })
             }
             else -> {
-                Resource.Error(Application().resources.getString(R.string.internetError))
+                Resource.Error("Internet error")
             }
         }
     }

@@ -44,7 +44,7 @@ class PlayerActivity : AppCompatActivity() {
 
         viewModel.getPlayerState().observe(this) {
             changeButtonImage(it)
-            trackingElapsedTime(it)
+
         }
         viewModel.getCurrentTimeLiveData().observe(this) {
             binding.elapsedTrackTime.text = it.toString()
@@ -63,11 +63,6 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun trackingElapsedTime(playerState: PlayerState?) {
-        if (playerState == PlayerState.PLAYING) viewModel.updatingElapsedTrackTime()
-        if (playerState == PlayerState.PREPARED) binding.elapsedTrackTime.text = "00:00"
-    }
-
     private fun changeButtonImage(playerState: PlayerState) {
         when (playerState) {
             PlayerState.DEFAULT -> {
@@ -76,14 +71,20 @@ class PlayerActivity : AppCompatActivity() {
 
             PlayerState.PREPARED -> {
                 binding.playButton.setImageResource(R.drawable.play_button)
+
             }
 
-            PlayerState.PLAYING -> binding.playButton.setImageResource(R.drawable.pause_button)
+            PlayerState.PLAYING -> {
+                viewModel.updatingElapsedTrackTime()
+                binding.playButton.setImageResource(R.drawable.pause_button)
+            }
             PlayerState.PAUSED -> binding.playButton.setImageResource(R.drawable.play_button)
             PlayerState.COMPLETED -> {
                 binding.playButton.setImageResource(R.drawable.play_button)
+                binding.elapsedTrackTime.text = getString(R.string.defaultElapsedTrackTimeVisu)
             }
         }
+
     }
 
     override fun onPause() {
