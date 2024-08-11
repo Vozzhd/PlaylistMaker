@@ -23,19 +23,13 @@ class SearchViewModel(
 
 ) : ViewModel() {
     companion object {
-        private val SEARCH_REQUEST_TOKEN = Any()
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
-
-    private val handler = Handler(Looper.getMainLooper())
 
     private val clickEvent = SingleEventLiveData<Track>()
     private val stateLiveData = MutableLiveData<TrackListState>()
     private var latestSearchText: String? = null
-    private val trackSearchDebounce =
-        debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
-            searchRequest(changedText)
-        }
+    private val trackSearchDebounce = debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText -> searchRequest(changedText) }
 
     fun getScreenState(): LiveData<TrackListState> = stateLiveData
     fun getClickEvent(): LiveData<Track> = clickEvent
@@ -90,12 +84,13 @@ class SearchViewModel(
     }
 
     private fun renderState(state: TrackListState) = stateLiveData.postValue(state)
+
     fun showHistory() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         stateLiveData.postValue(TrackListState.ContentFromHistory(getHistoryList()))
     }
 
     private fun getHistoryList(): List<Track> = trackHistoryInteractor.getHistoryList()
+
     fun clearHistory() = trackHistoryInteractor.clearHistoryList()
 
     fun searchWithDebounce(changedText: String) {
@@ -103,9 +98,5 @@ class SearchViewModel(
             latestSearchText = changedText
             trackSearchDebounce(changedText)
         }
-    }
-
-    override fun onCleared() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
     }
 }

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.entity.Track
@@ -19,16 +20,18 @@ import com.practicum.playlistmaker.search.domain.models.TrackListState
 import com.practicum.playlistmaker.utilities.hideKeyboard
 import com.practicum.playlistmaker.utilities.DEFAULT_TEXT
 import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
+import com.practicum.playlistmaker.utilities.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
     companion object {
         const val SAVED_TEXT_KEY = "Saved text in input field"
+        const val CLICK_DEBOUNCE_DELAY = 300L
     }
 
     private lateinit var binding: SearchFragmentBinding
     private var inputInSearchView = DEFAULT_TEXT
-
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
     private lateinit var trackListAdapter: TrackAdapter
     private val viewModel by viewModel<SearchViewModel>()
 
@@ -50,9 +53,13 @@ class SearchFragment : Fragment() {
 
         binding.inputField.setText(savedInstanceState?.getString(SAVED_TEXT_KEY))
 
+        onTrackClickDebounce = debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
+                viewModel.onTrackClick(track)
+            }
 
-        trackListAdapter = TrackAdapter { viewModel.onTrackClick(it) }
-        binding.recyclerViewTracks.layoutManager = LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false)
+        trackListAdapter = TrackAdapter(onTrackClickDebounce)
+        binding.recyclerViewTracks.layoutManager =
+            LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewTracks.adapter = trackListAdapter
 
 
@@ -124,6 +131,7 @@ class SearchFragment : Fragment() {
             is TrackListState.Empty -> showEmpty(state.message)
         }
     }
+
     private fun showLoading() {
         binding.clearHistoryButton.visibility = View.GONE
         binding.historyViewTitle.visibility = View.GONE
@@ -196,6 +204,7 @@ class SearchFragment : Fragment() {
             View.VISIBLE
         }
     }
+
     override fun onResume() {
         super.onResume()
         binding.inputField.setSelection(binding.inputField.length())
