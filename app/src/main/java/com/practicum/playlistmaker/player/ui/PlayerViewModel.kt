@@ -1,15 +1,17 @@
 package com.practicum.playlistmaker.player.ui
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.player.domain.api.GetTrackUseCase
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.player.domain.model.TrackPresentation
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -23,9 +25,7 @@ class PlayerViewModel(
         mediaPlayer.preparePlayer(track.previewUrl)
     }
 
-
-
-    private val handler = Handler(Looper.getMainLooper())
+    private var timerJob: Job? = null
 
     companion object {
         private const val TIMER_DELAY_MILLS = 300L
@@ -38,18 +38,6 @@ class PlayerViewModel(
     private val currentTimeMutableLiveData = MutableLiveData<String>()
     fun getCurrentTimeLiveData(): LiveData<String> = currentTimeMutableLiveData
 
-    private val timeRunnable = Runnable {
-        currentTimeMutableLiveData.postValue(getTimeFromRepository())
-        updatingElapsedTrackTime()
-    }
-
-    fun updatingElapsedTrackTime() {
-        playBackMutableLiveData.postValue(mediaPlayer.playerState())
-
-        if (mediaPlayer.playerState() == PlayerState.PLAYING) {
-            handler.postDelayed(timeRunnable, TIMER_DELAY_MILLS)
-        }
-    }
 
     private fun getTimeFromRepository(): String {
         return dateFormat.format(mediaPlayer.showCurrentPosition())
@@ -62,10 +50,6 @@ class PlayerViewModel(
         playBackMutableLiveData.postValue(mediaPlayer.playerState())
     }
 
-    fun removeUpdatingTimeCallbacks() {
-        handler.removeCallbacks(timeRunnable)
-    }
-
     fun pause() {
         mediaPlayer.pause()
     }
@@ -73,6 +57,18 @@ class PlayerViewModel(
     fun release() {
         mediaPlayer.release()
     }
+
+    fun getCurrentTime() {
+        timerJob = viewModelScope.launch {
+            while (mediaPlayer.playerState() == PlayerState.PLAYING) {
+                delay(TIMER_DELAY_MILLS)
+                currentTimeMutableLiveData.postValue(getTimeFromRepository())
+                playBackMutableLiveData.postValue(mediaPlayer.playerState())
+            }
+        }
+    }
+
+
     fun map(track: Track): TrackPresentation {
         return TrackPresentation(
             trackName = track.trackName,
