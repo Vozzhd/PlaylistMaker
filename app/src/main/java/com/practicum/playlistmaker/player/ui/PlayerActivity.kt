@@ -58,7 +58,6 @@ class PlayerActivity : AppCompatActivity() {
 
 
         binding.backButton.setOnClickListener {
-            viewModel.removeUpdatingTimeCallbacks()
             finish()
         }
     }
@@ -67,6 +66,7 @@ class PlayerActivity : AppCompatActivity() {
         when (playerState) {
             PlayerState.DEFAULT -> {
                 binding.playButton.setImageResource(R.drawable.play_button)
+                binding.elapsedTrackTime.text = getString(R.string.defaultElapsedTrackTimeVisu)
             }
 
             PlayerState.PREPARED -> {
@@ -75,9 +75,10 @@ class PlayerActivity : AppCompatActivity() {
             }
 
             PlayerState.PLAYING -> {
-                viewModel.updatingElapsedTrackTime()
+                viewModel.getCurrentTime()
                 binding.playButton.setImageResource(R.drawable.pause_button)
             }
+
             PlayerState.PAUSED -> binding.playButton.setImageResource(R.drawable.play_button)
             PlayerState.COMPLETED -> {
                 binding.playButton.setImageResource(R.drawable.play_button)
@@ -88,7 +89,6 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
-        viewModel.removeUpdatingTimeCallbacks()
         viewModel.pause()
         super.onPause()
     }
