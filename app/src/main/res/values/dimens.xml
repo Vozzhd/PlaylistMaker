@@ -25,5 +25,6 @@
     <dimen name="placeholderSquareIconSize">120dp</dimen>
     <dimen name="marginTopIconInFragment">104dp</dimen>
     <dimen name="marginTopTextInFragment">240dp</dimen>
+    <dimen name="marginTopForFavoriteFragmentText">16dp</dimen>
 
 </resources>

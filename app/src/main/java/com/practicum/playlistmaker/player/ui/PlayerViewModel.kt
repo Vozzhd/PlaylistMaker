@@ -74,11 +74,6 @@ class PlayerViewModel(
 
     fun favoriteButtonClicked(track: Track) {
         viewModelScope.launch {
-//            if (!track.isFavorite) {
-//                favoriteTrackInteractor.addToFavorite(track)
-//            } else {
-//                favoriteTrackInteractor.deleteFromFavorite(track)
-//            }
             when (track.isFavorite) {
                 true -> favoriteTrackInteractor.deleteFromFavorite(track)
                 false -> favoriteTrackInteractor.addToFavorite(track)

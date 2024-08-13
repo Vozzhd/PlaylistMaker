@@ -79,7 +79,7 @@ class SearchFragment : Fragment() {
         }
 
 
-        viewModel.getScreenState().observe(viewLifecycleOwner) { renderScreen(it) }
+        viewModel.observeScreenState().observe(viewLifecycleOwner) { renderScreen(it) }
         viewModel.getClickEvent().observe(viewLifecycleOwner) { openPlayerActivity(it) }
 
 

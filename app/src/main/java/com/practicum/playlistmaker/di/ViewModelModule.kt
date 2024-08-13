@@ -23,6 +23,6 @@ val viewModelModule = module {
         MainViewModel(get())
     }
     viewModel {
-        FavoriteFragmentViewModel(get())
+        FavoriteFragmentViewModel(get(),get())
     }
 }

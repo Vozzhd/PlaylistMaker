@@ -1,8 +1,6 @@
 package com.practicum.playlistmaker.search.ui
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,7 +29,7 @@ class SearchViewModel(
     private var latestSearchText: String? = null
     private val trackSearchDebounce = debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText -> searchRequest(changedText) }
 
-    fun getScreenState(): LiveData<TrackListState> = stateLiveData
+    fun observeScreenState(): LiveData<TrackListState> = stateLiveData
     fun getClickEvent(): LiveData<Track> = clickEvent
     fun onTrackClick(track: Track) {
         trackHistoryInteractor.addToHistoryList(track)
