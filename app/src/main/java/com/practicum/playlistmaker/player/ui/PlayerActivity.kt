@@ -42,12 +42,23 @@ class PlayerActivity : AppCompatActivity() {
             viewModel.playBackControl()
         }
 
+        binding.likeButton.setOnClickListener{
+            viewModel.favoriteButtonClicked(track)
+            //После этого нужно обновить статус кнопки, чтобы сразу поменялось отображение лайка
+        }
+
         viewModel.getPlayerState().observe(this) {
             changeButtonImage(it)
-
         }
         viewModel.getCurrentTimeLiveData().observe(this) {
             binding.elapsedTrackTime.text = it.toString()
+        }
+        viewModel.getFavoriteState().observe(this) {
+            when(it) {
+                true -> binding.likeButton.setImageResource(R.drawable.likebutton)
+                false -> binding.likeButton.setImageResource(R.drawable.addbutton)
+                //Для проверки нарисовал другую картинку - в макете проверю и выставлю корректное значение
+            }
         }
 
         Glide.with(this)

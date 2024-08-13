@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.mediaLibrary.domain.api.FavoriteTrackInteractor
 import com.practicum.playlistmaker.player.domain.api.GetTrackUseCase
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.entity.Track
@@ -17,7 +18,8 @@ import java.util.Locale
 
 class PlayerViewModel(
     private val getTrackUseCase: GetTrackUseCase,
-    private val mediaPlayer: MediaPlayerInteractor
+    private val mediaPlayer: MediaPlayerInteractor,
+    private val favoriteTrackInteractor: FavoriteTrackInteractor
 ) : ViewModel() {
 
     fun initPlayer(json: Track) {
@@ -32,6 +34,7 @@ class PlayerViewModel(
     }
 
     private val playBackMutableLiveData = MutableLiveData<PlayerState>()
+    private val isFavorite = MutableLiveData<Boolean>()
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
@@ -44,6 +47,7 @@ class PlayerViewModel(
     }
 
     fun getPlayerState(): LiveData<PlayerState> = playBackMutableLiveData
+    fun getFavoriteState(): LiveData<Boolean> = isFavorite
 
     fun playBackControl() {
         mediaPlayer.playbackControl()
@@ -68,6 +72,23 @@ class PlayerViewModel(
         }
     }
 
+    fun favoriteButtonClicked(track: Track) {
+        viewModelScope.launch {
+//            if (!track.isFavorite) {
+//                favoriteTrackInteractor.addToFavorite(track)
+//            } else {
+//                favoriteTrackInteractor.deleteFromFavorite(track)
+//            }
+            when (track.isFavorite) {
+                true -> favoriteTrackInteractor.deleteFromFavorite(track)
+                false -> favoriteTrackInteractor.addToFavorite(track)
+            }
+            isFavorite.postValue(track.isFavorite)
+        }
+        //Нужно доделать - чтобы обновлялось и удалялось значение
+        // необходимо на вход функции подавать уже трек с добавленным актуальным полем isFavorite
+        //Сейчас оно добавляется но не удаляется,т.к. по умолчанию эта переменная false
+    }
 
     fun map(track: Track): TrackPresentation {
         return TrackPresentation(
@@ -81,7 +102,8 @@ class PlayerViewModel(
             primaryGenreName = track.primaryGenreName,
             country = track.country,
             previewUrl = track.previewUrl,
-            artworkUrl512 =  track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+            artworkUrl512 = track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"),
+            isFavorite = track.isFavorite
         )
     }
 }

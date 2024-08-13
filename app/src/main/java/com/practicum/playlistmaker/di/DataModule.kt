@@ -2,7 +2,10 @@ package com.practicum.playlistmaker.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.google.gson.Gson
+import com.practicum.playlistmaker.mediaLibrary.data.db.AppDatabase
 import com.practicum.playlistmaker.search.data.network.NetworkClient
 import com.practicum.playlistmaker.search.data.network.retrofit.ItunesApiService
 import com.practicum.playlistmaker.search.data.network.retrofit.RetrofitNetworkClient
@@ -15,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val dataModule = module {
 
-    single <SharedPreferences> {
+    single<SharedPreferences> {
         androidContext().getSharedPreferences("PlaylistMaker shared prefs", Context.MODE_PRIVATE)
     }
 
@@ -27,9 +30,18 @@ val dataModule = module {
             .create(ItunesApiService::class.java)
     }
 
-    single<NetworkClient> { RetrofitNetworkClient(androidContext(),get()) }
+    single<NetworkClient> { RetrofitNetworkClient(androidContext(), get()) }
 
-    single <ExternalNavigator> { ExternalNavigatorImpl(androidContext()) }
+    single<ExternalNavigator> { ExternalNavigatorImpl(androidContext()) }
+
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            AppDatabase::class.java,
+            "database.db"
+        )
+            .build()
+    }
 
     factory { Gson() }
 }

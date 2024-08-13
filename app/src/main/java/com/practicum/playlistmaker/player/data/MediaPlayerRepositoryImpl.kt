@@ -8,7 +8,6 @@ class MediaPlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : MediaPla
 
     private var playerState = PlayerState.DEFAULT
     override fun preparePlayer(url: String) {
-
         mediaPlayer = MediaPlayer()
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
