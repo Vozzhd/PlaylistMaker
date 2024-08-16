@@ -30,7 +30,7 @@ class SearchViewModel(
     private val trackSearchDebounce = debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText -> searchRequest(changedText) }
 
     fun observeScreenState(): LiveData<TrackListState> = stateLiveData
-    fun getClickEvent(): LiveData<Track> = clickEvent
+    fun observeClickEvent(): LiveData<Track> = clickEvent
     fun onTrackClick(track: Track) {
         trackHistoryInteractor.addToHistoryList(track)
         clickEvent.postValue(track)

@@ -10,6 +10,7 @@ import com.practicum.playlistmaker.mediaLibrary.domain.api.FavoriteTrackInteract
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.ui.model.FavoriteListState
 import com.practicum.playlistmaker.utilities.SingleEventLiveData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FavoriteFragmentViewModel(
@@ -18,7 +19,19 @@ class FavoriteFragmentViewModel(
 ) : ViewModel() {
 
     init {
-        viewModelScope.launch {
+        updateFavoriteList()
+    }
+
+    private val clickEvent = SingleEventLiveData<Track>()
+    private val stateLiveData = MutableLiveData<FavoriteListState>()
+
+    fun observeScreenState(): LiveData<FavoriteListState> = stateLiveData
+    fun observeClickEvent(): LiveData<Track> = clickEvent
+    fun onTrackClick(track: Track) = clickEvent.postValue(track)
+
+
+    fun updateFavoriteList() {
+        viewModelScope.launch(Dispatchers.IO) {
             favoriteTrackInteractor
                 .getFavoriteTrackList()
                 .collect { tracks ->
@@ -32,51 +45,12 @@ class FavoriteFragmentViewModel(
             renderState(FavoriteListState.Empty(context.getString(R.string.mediaLibraryIsEmpty)))
         } else {
             renderState(FavoriteListState.Content(tracks))
-            actualFavoriteListLiveData.postValue(tracks)
         }
     }
 
-    private fun renderState(state: FavoriteListState) {
-        stateLiveData.postValue(state)
-    }
+    private fun renderState(state: FavoriteListState) = stateLiveData.postValue(state)
 
-    private val stateLiveData = MutableLiveData<FavoriteListState>()
     private val actualFavoriteListLiveData = MutableLiveData<List<Track>>()
-
-    fun observeState(): LiveData<FavoriteListState> = stateLiveData
     fun observeActualFavoriteListLiveData(): LiveData<List<Track>> = actualFavoriteListLiveData
-    private val clickEvent = SingleEventLiveData<Track>()
 
-
-    fun getClickEvent(): LiveData<Track> = clickEvent
-    suspend fun onTrackClick(track: Track) {
-        clickEvent.postValue(track)
-        toggleFavorite(track)
-    }
-
-
-      suspend fun toggleFavorite(track: Track) {
-        if (track.isFavorite) {
-            favoriteTrackInteractor.deleteFromFavorite(track)
-        } else {
-            favoriteTrackInteractor.addToFavorite(track)
-        }
-        updateFavoriteListContent(track.trackId, track.copy(isFavorite = !track.isFavorite))
-    }
-
-    fun updateFavoriteListContent(trackId: String, newTrack: Track) {
-
-        val currentState = stateLiveData.value
-
-        if (currentState is FavoriteListState.Content) {
-            val trackIndex = currentState.favoriteList.indexOfFirst { it.trackId == trackId }
-            if (trackIndex != -1) {
-                stateLiveData.value = FavoriteListState.Content(
-                    currentState.favoriteList.toMutableList().also {
-                        it[trackIndex] = newTrack
-                    }
-                )
-            }
-        }
-    }
 }

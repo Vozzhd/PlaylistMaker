@@ -35,11 +35,15 @@ class TracksRepositoryImplementation(
                             it.releaseDate,
                             it.primaryGenreName,
                             it.country,
-                            it.previewUrl
+                            it.previewUrl,
+                            isFavorite = false
                         )
                     }
-                    //Нужно сравнить два листа - полученный и смапленный data и вытащенный из базы с помощью реализации в репозитории.
-                    //Если ID элементов в этих листах совпадают - то вызвать функцию лайк которая выставит бит
+                    val trackFavoriteIDs = appDatabase.trackDao().getFavoriteIDs()
+                    for (track in data) {
+                        if (trackFavoriteIDs.contains(track.trackId))
+                            track.isFavorite = true
+                    }
                     emit(Resource.Success(data))
                 }
             }

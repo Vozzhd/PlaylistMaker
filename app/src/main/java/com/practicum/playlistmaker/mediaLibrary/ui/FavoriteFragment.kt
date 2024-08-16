@@ -42,14 +42,20 @@ class FavoriteFragment : Fragment() {
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.updateFavoriteList()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.mediaLibraryEmptyText.text = getText(R.string.mediaLibraryIsEmpty)
 
-        onTrackClickDebounce = debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.onTrackClick(track)
+        onTrackClickDebounce =
+            debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.onTrackClick(track)
                 }
             }
         favoriteTrackListAdapter = TrackAdapter(onTrackClickDebounce)
@@ -58,25 +64,27 @@ class FavoriteFragment : Fragment() {
             LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, true)
         binding.recyclerViewFavoriteTracks.adapter = favoriteTrackListAdapter
 
-        viewModel.observeState().observe(viewLifecycleOwner) { renderScreen(it) }
-        viewModel.getClickEvent().observe(viewLifecycleOwner) { openPlayerActivity(it) }
+        viewModel.observeScreenState().observe(viewLifecycleOwner) { renderScreen(it) }
+        viewModel.observeClickEvent().observe(viewLifecycleOwner) { openPlayerActivity(it) }
         viewModel.observeActualFavoriteListLiveData().observe(viewLifecycleOwner) {
             showContent(it)
         }
     }
 
     private fun openPlayerActivity(track: Track?) {
-        val intent = Intent(this.activity, PlayerActivity::class.java)
+        val intent = Intent(requireContext(), PlayerActivity::class.java)
         intent.putExtra(KEY_FOR_TRACK, track)
         startActivity(intent)
     }
 
     private fun renderScreen(state: FavoriteListState) {
         when (state) {
-            is FavoriteListState.Content -> showContent(state.favoriteList)
+            is FavoriteListState.Content -> {
+                showContent(state.favoriteList)
+            }
+
             is FavoriteListState.Empty -> showMessage(state.message)
         }
-
     }
 
     private fun showContent(favoriteList: List<Track>) {

@@ -80,7 +80,7 @@ class SearchFragment : Fragment() {
 
 
         viewModel.observeScreenState().observe(viewLifecycleOwner) { renderScreen(it) }
-        viewModel.getClickEvent().observe(viewLifecycleOwner) { openPlayerActivity(it) }
+        viewModel.observeClickEvent().observe(viewLifecycleOwner) { openPlayerActivity(it) }
 
 
         val textWatcher = object : TextWatcher {

@@ -2,7 +2,6 @@ package com.practicum.playlistmaker.mediaLibrary.data.converters
 
 import com.practicum.playlistmaker.mediaLibrary.data.db.entity.TrackEntity
 import com.practicum.playlistmaker.player.domain.entity.Track
-import com.practicum.playlistmaker.search.data.dto.TrackDto
 
 class TrackDbConverter {
     fun map(track: Track): TrackEntity {
@@ -31,7 +30,8 @@ fun map (track: TrackEntity) : Track {
         track.releaseDate,
         track.primaryGenreName,
         track.country,
-        track.previewUrl
+        track.previewUrl,
+        false
     )
 }
 }

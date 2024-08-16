@@ -9,7 +9,7 @@ import com.practicum.playlistmaker.player.domain.api.GetTrackUseCase
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
-import com.practicum.playlistmaker.player.domain.model.TrackPresentation
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -25,8 +25,10 @@ class PlayerViewModel(
     fun initPlayer(json: Track) {
         val track = getTrackUseCase.execute(json)
         mediaPlayer.preparePlayer(track.previewUrl)
+        isInFavorite(track)
     }
 
+    var isFavorite = false
     private var timerJob: Job? = null
 
     companion object {
@@ -34,7 +36,7 @@ class PlayerViewModel(
     }
 
     private val playBackMutableLiveData = MutableLiveData<PlayerState>()
-    private val isFavorite = MutableLiveData<Boolean>()
+    private val isFavoriteMutableLiveData = MutableLiveData<Boolean>()
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
@@ -46,8 +48,8 @@ class PlayerViewModel(
         return dateFormat.format(mediaPlayer.showCurrentPosition())
     }
 
-    fun getPlayerState(): LiveData<PlayerState> = playBackMutableLiveData
-    fun getFavoriteState(): LiveData<Boolean> = isFavorite
+    fun observePlayerState(): LiveData<PlayerState> = playBackMutableLiveData
+    fun observeIsFavorite(): LiveData<Boolean> = isFavoriteMutableLiveData
 
     fun playBackControl() {
         mediaPlayer.playbackControl()
@@ -74,31 +76,28 @@ class PlayerViewModel(
 
     fun favoriteButtonClicked(track: Track) {
         viewModelScope.launch {
+
             when (track.isFavorite) {
-                true -> favoriteTrackInteractor.deleteFromFavorite(track)
-                false -> favoriteTrackInteractor.addToFavorite(track)
+                true -> {
+                    favoriteTrackInteractor.deleteFromFavorite(track)
+                    track.isFavorite = false
+                }
+                false -> {
+                    favoriteTrackInteractor.addToFavorite(track)
+                    track.isFavorite = true
+                }
             }
-            isFavorite.postValue(track.isFavorite)
+            isFavoriteMutableLiveData.postValue(track.isFavorite)
         }
-        //Нужно доделать - чтобы обновлялось и удалялось значение
-        // необходимо на вход функции подавать уже трек с добавленным актуальным полем isFavorite
-        //Сейчас оно добавляется но не удаляется,т.к. по умолчанию эта переменная false
     }
 
-    fun map(track: Track): TrackPresentation {
-        return TrackPresentation(
-            trackName = track.trackName,
-            artistName = track.artistName,
-            trackDuration = dateFormat.format(track.trackTimeMillis.toInt()),
-            artworkUrl100 = track.artworkUrl100,
-            trackId = track.trackId,
-            collectionName = track.collectionName,
-            releaseDate = track.releaseDate.substring(0, 4),
-            primaryGenreName = track.primaryGenreName,
-            country = track.country,
-            previewUrl = track.previewUrl,
-            artworkUrl512 = track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"),
-            isFavorite = track.isFavorite
-        )
+    private fun isInFavorite(track: Track) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoriteTrackInteractor.getFavoriteTrackList()
+                .collect { ids ->
+                    isFavorite = ids.contains(track)
+                    isFavoriteMutableLiveData.postValue(isFavorite)
+                }
+        }
     }
 }
