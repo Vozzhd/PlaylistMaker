@@ -4,32 +4,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.button.MaterialButton
 
-        android:id="@+id/newPlaylist"
-        style="@style/SmallButton"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/marginFromTopForTitle"
-        android:text="@string/newPlaylist"
-
-        />
-
-    <ImageView
-        android:layout_width="@dimen/placeholderSquareIconSize"
-        android:layout_height="@dimen/placeholderSquareIconSize"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/marginTopIconInFragment"
-        android:src="@drawable/search_error" />
-
-    <TextView
-        style="@style/TitleText"
+    <FrameLayout
+        android:id="@+id/newPlaylistPlaceholder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/marginTopTextInFragment"
-        android:gravity="center"
-        android:text="@string/PlaylistsAreEmpty"
-        android:textSize="@dimen/texSizeFragmentsPlaceholder"/>
+        android:layout_gravity="center_horizontal">
 
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/newPlaylist"
+            style="@style/SmallButton"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/marginFromTopForTitle"
+            android:text="@string/newPlaylist"
+            />
+
+        <ImageView
+            android:layout_width="@dimen/placeholderSquareIconSize"
+            android:layout_height="@dimen/placeholderSquareIconSize"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/marginTopIconInFragment"
+            android:src="@drawable/search_error"
+            />
+
+        <TextView
+            style="@style/TitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/marginTopTextInFragment"
+            android:gravity="center"
+            android:text="@string/PlaylistsAreEmpty"
+            android:textSize="@dimen/texSizeFragmentsPlaceholder"
+            />
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/playlistRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="76dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        />
 
 </FrameLayout>
