@@ -4,11 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.mediaLibrary.domain.api.FavoriteTrackInteractor
 import com.practicum.playlistmaker.player.domain.api.GetTrackUseCase
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
-import com.practicum.playlistmaker.player.domain.model.TrackPresentation
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -17,14 +18,17 @@ import java.util.Locale
 
 class PlayerViewModel(
     private val getTrackUseCase: GetTrackUseCase,
-    private val mediaPlayer: MediaPlayerInteractor
+    private val mediaPlayer: MediaPlayerInteractor,
+    private val favoriteTrackInteractor: FavoriteTrackInteractor
 ) : ViewModel() {
 
     fun initPlayer(json: Track) {
         val track = getTrackUseCase.execute(json)
         mediaPlayer.preparePlayer(track.previewUrl)
+        isInFavorite(track)
     }
 
+    var isFavorite = false
     private var timerJob: Job? = null
 
     companion object {
@@ -32,6 +36,7 @@ class PlayerViewModel(
     }
 
     private val playBackMutableLiveData = MutableLiveData<PlayerState>()
+    private val isFavoriteMutableLiveData = MutableLiveData<Boolean>()
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
@@ -43,7 +48,8 @@ class PlayerViewModel(
         return dateFormat.format(mediaPlayer.showCurrentPosition())
     }
 
-    fun getPlayerState(): LiveData<PlayerState> = playBackMutableLiveData
+    fun observePlayerState(): LiveData<PlayerState> = playBackMutableLiveData
+    fun observeIsFavorite(): LiveData<Boolean> = isFavoriteMutableLiveData
 
     fun playBackControl() {
         mediaPlayer.playbackControl()
@@ -68,20 +74,30 @@ class PlayerViewModel(
         }
     }
 
+    fun favoriteButtonClicked(track: Track) {
+        viewModelScope.launch {
 
-    fun map(track: Track): TrackPresentation {
-        return TrackPresentation(
-            trackName = track.trackName,
-            artistName = track.artistName,
-            trackDuration = dateFormat.format(track.trackTimeMillis.toInt()),
-            artworkUrl100 = track.artworkUrl100,
-            trackId = track.trackId,
-            collectionName = track.collectionName,
-            releaseDate = track.releaseDate.substring(0, 4),
-            primaryGenreName = track.primaryGenreName,
-            country = track.country,
-            previewUrl = track.previewUrl,
-            artworkUrl512 =  track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
-        )
+            when (isFavorite) {
+                true -> {
+                    favoriteTrackInteractor.deleteFromFavorite(track)
+                    track.isFavorite = false
+                }
+                false -> {
+                    favoriteTrackInteractor.addToFavorite(track)
+                    track.isFavorite = true
+                }
+            }
+            isFavoriteMutableLiveData.postValue(track.isFavorite)
+        }
+    }
+
+    private fun isInFavorite(track: Track) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoriteTrackInteractor.getFavoriteTrackList()
+                .collect { ids ->
+                    isFavorite = ids.contains(track)
+                    isFavoriteMutableLiveData.postValue(isFavorite)
+                }
+        }
     }
 }

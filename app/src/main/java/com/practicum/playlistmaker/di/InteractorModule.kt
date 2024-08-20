@@ -2,6 +2,8 @@ package com.practicum.playlistmaker.di
 
 import com.practicum.playlistmaker.main.domain.api.MainMenuInteractor
 import com.practicum.playlistmaker.main.domain.useCase.MainMenuInteractorImpl
+import com.practicum.playlistmaker.mediaLibrary.domain.api.FavoriteTrackInteractor
+import com.practicum.playlistmaker.mediaLibrary.domain.impl.FavoriteTrackInteractorImpl
 import com.practicum.playlistmaker.player.domain.api.GetTrackUseCase
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.interactor.GetTrackUseCaseImpl
@@ -21,8 +23,9 @@ val interactorModule = module {
     single<MediaPlayerInteractor> { MediaPlayerInteractorImpl(get()) }
     single<GetTrackUseCase> { GetTrackUseCaseImpl(get()) }
     single<TracksInteractor> { TracksInteractorImplementation(get()) }
-    single <HistoryInteractor> {HistoryInteractorImplementation(get())}
-    single <SharingInteractor> {SharingInteractorImpl(get(),get())}
-    single <SettingsInteractor> {SettingsInteractorImpl(get())}
-    single<MainMenuInteractor>{MainMenuInteractorImpl(get())}
+    single<HistoryInteractor> { HistoryInteractorImplementation(get()) }
+    single<SharingInteractor> { SharingInteractorImpl(get(), get()) }
+    single<SettingsInteractor> { SettingsInteractorImpl(get()) }
+    single<MainMenuInteractor> { MainMenuInteractorImpl(get()) }
+    single<FavoriteTrackInteractor> { FavoriteTrackInteractorImpl(get()) }
 }

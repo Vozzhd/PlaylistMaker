@@ -10,6 +10,8 @@ import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -25,40 +27,53 @@ class PlayerActivity : AppCompatActivity() {
         val track = (intent.getSerializableExtra(KEY_FOR_TRACK) as Track)
         viewModel.initPlayer(track)
 
-        val trackPresentation = viewModel.map(track)
-
+        val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
         with(binding) {
             elapsedTrackTime.text = getString(R.string.defaultElapsedTrackTimeVisu)
-            trackDuration.text = trackPresentation.trackDuration
-            trackReleaseCountry.text = trackPresentation.country
-            trackAlbumName.text = trackPresentation.collectionName
-            trackReleaseYear.text = trackPresentation.releaseDate
-            trackGenre.text = trackPresentation.primaryGenreName
-            trackNameInPlayer.text = trackPresentation.trackName
-            artistNameInPlayer.text = trackPresentation.artistName
+            trackDuration.text = dateFormat.format(track.trackTimeMillis.toInt())
+            trackReleaseCountry.text = track.country
+            trackAlbumName.text = track.collectionName
+            trackReleaseYear.text = track.releaseDate.substring(0, 4)
+            trackGenre.text = track.primaryGenreName
+            trackNameInPlayer.text = track.trackName
+            artistNameInPlayer.text = track.artistName
         }
+
 
         binding.playButton.setOnClickListener {
             viewModel.playBackControl()
         }
 
-        viewModel.getPlayerState().observe(this) {
-            changeButtonImage(it)
+        binding.likeButton.setOnClickListener {
+            viewModel.favoriteButtonClicked(track)
+        }
 
+        viewModel.observePlayerState().observe(this) {
+            changeButtonImage(it)
+        }
+        viewModel.observeIsFavorite().observe(this) {
+            changeLikeImage(it)
         }
         viewModel.getCurrentTimeLiveData().observe(this) {
             binding.elapsedTrackTime.text = it.toString()
         }
 
         Glide.with(this)
-            .load(trackPresentation.artworkUrl512)
+            .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .transform(RoundedCorners(bigRoundForCorner))
             .placeholder(R.drawable.placeholder_album_cover)
             .into(binding.albumCoverImageInPlayer)
 
-
         binding.backButton.setOnClickListener {
             finish()
+        }
+
+    }
+
+    private fun changeLikeImage(it: Boolean) {
+        when (it) {
+            true -> binding.likeButton.setImageResource((R.drawable.liked_button))
+            false -> binding.likeButton.setImageResource((R.drawable.unliked_button))
         }
     }
 
@@ -85,7 +100,6 @@ class PlayerActivity : AppCompatActivity() {
                 binding.elapsedTrackTime.text = getString(R.string.defaultElapsedTrackTimeVisu)
             }
         }
-
     }
 
     override fun onPause() {

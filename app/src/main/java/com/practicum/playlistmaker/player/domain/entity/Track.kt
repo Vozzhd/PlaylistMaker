@@ -6,10 +6,12 @@ data class Track(
     val artistName: String,
     val trackTimeMillis: String,
     val artworkUrl100: String,
-    val trackId: Int,
+    val trackId: String,
     val collectionName: String,
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String,
-    val previewUrl: String
-) : Serializable
+    val previewUrl: String,
+    var isFavorite: Boolean
+) : Serializable {
+}

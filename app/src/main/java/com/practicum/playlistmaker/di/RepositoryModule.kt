@@ -3,6 +3,9 @@ package com.practicum.playlistmaker.di
 import android.content.Context
 import android.media.MediaPlayer
 import com.google.gson.Gson
+import com.practicum.playlistmaker.mediaLibrary.data.converters.TrackDbConverter
+import com.practicum.playlistmaker.mediaLibrary.domain.api.FavoriteTrackRepository
+import com.practicum.playlistmaker.mediaLibrary.domain.impl.FavoriteTrackRepositoryImpl
 import com.practicum.playlistmaker.player.data.GetTrackRepositoryImpl
 import com.practicum.playlistmaker.player.data.MediaPlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.api.GetTrackRepository
@@ -25,11 +28,15 @@ val repositoryModule = module {
     }
 
     single<MediaPlayerRepository> { MediaPlayerRepositoryImpl(get()) }
-    single <GetTrackRepository> {GetTrackRepositoryImpl()}
-    single <TracksRepository> { TracksRepositoryImplementation(get()) }
-    single <HistoryRepository> { HistoryRepositoryImplementation(get())}
-    single <SharingRepository> { SharingRepositoryImpl(androidContext()) }
-    single <SettingsRepository>{SettingsRepositoryImpl(get())}
-    single <MediaPlayer>{ MediaPlayer() }
+    single<GetTrackRepository> { GetTrackRepositoryImpl() }
+    single<TracksRepository> { TracksRepositoryImplementation(get(),get()) }
+    single<HistoryRepository> { HistoryRepositoryImplementation(get()) }
+    single<SharingRepository> { SharingRepositoryImpl(androidContext()) }
+    single<SettingsRepository> { SettingsRepositoryImpl(get()) }
+    single<MediaPlayer> { MediaPlayer() }
+    single<FavoriteTrackRepository> { FavoriteTrackRepositoryImpl(get(), get()) }
+
     factory { Gson() }
+    factory { TrackDbConverter() }
+
 }
