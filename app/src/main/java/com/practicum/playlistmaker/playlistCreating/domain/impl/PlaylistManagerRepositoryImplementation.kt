@@ -9,7 +9,7 @@ import androidx.core.net.toUri
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.playlistCreating.data.db.converters.PlaylistDbConverter
 import com.practicum.playlistmaker.playlistCreating.data.db.converters.TrackDbConverterForPlaylist
-import com.practicum.playlistmaker.playlistCreating.domain.api.NewPlaylistRepository
+import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerRepository
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.AppDatabase
 import kotlinx.coroutines.flow.Flow
@@ -17,12 +17,12 @@ import kotlinx.coroutines.flow.flow
 import java.io.File
 import java.io.FileOutputStream
 
-class NewPlaylistRepositoryImplementation(
+class PlaylistManagerRepositoryImplementation(
     private val appDatabase: AppDatabase,
     private val context: Context,
     private val trackDbConverterForPlaylist: TrackDbConverterForPlaylist,
     private val playlistDbConverter: PlaylistDbConverter
-) : NewPlaylistRepository {
+) : PlaylistManagerRepository {
 
     override fun getPlaylistsFromTable(): Flow<List<Playlist>> = flow {
         val playlists = appDatabase.daoInterface().getPlaylists()
@@ -45,7 +45,7 @@ class NewPlaylistRepositoryImplementation(
         }
 
         val file = File(filePath, "${playlist.name}.jpg")
-        val inputStream = playlist.SourceOfPlaylistCoverImage?.let {
+        val inputStream = playlist.sourceOfPlaylistCoverImage?.let {
             context.contentResolver.openInputStream(it)
         }
         val outputStream = FileOutputStream(file)

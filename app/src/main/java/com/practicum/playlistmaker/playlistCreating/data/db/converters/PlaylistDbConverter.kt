@@ -12,7 +12,7 @@ class PlaylistDbConverter {
             playlist.description,
             playlist.trackQuantity,
             playlist.listOfTrackIDs,
-            playlist.SourceOfPlaylistCoverImage.toString()
+            playlist.sourceOfPlaylistCoverImage.toString()
         )
     }
 

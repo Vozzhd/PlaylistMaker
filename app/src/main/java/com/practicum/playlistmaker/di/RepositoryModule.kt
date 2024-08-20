@@ -12,8 +12,8 @@ import com.practicum.playlistmaker.player.domain.api.GetTrackRepository
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerRepository
 import com.practicum.playlistmaker.playlistCreating.data.db.converters.PlaylistDbConverter
 import com.practicum.playlistmaker.playlistCreating.data.db.converters.TrackDbConverterForPlaylist
-import com.practicum.playlistmaker.playlistCreating.domain.api.NewPlaylistRepository
-import com.practicum.playlistmaker.playlistCreating.domain.impl.NewPlaylistRepositoryImplementation
+import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerRepository
+import com.practicum.playlistmaker.playlistCreating.domain.impl.PlaylistManagerRepositoryImplementation
 import com.practicum.playlistmaker.search.data.api.TracksRepositoryImplementation
 import com.practicum.playlistmaker.search.data.local.HistoryRepositoryImplementation
 import com.practicum.playlistmaker.search.domain.api.HistoryRepository
@@ -39,7 +39,7 @@ val repositoryModule = module {
     single<SettingsRepository> { SettingsRepositoryImpl(get()) }
     single<MediaPlayer> { MediaPlayer() }
     single<FavoriteTrackRepository> { FavoriteTrackRepositoryImpl(get(), get()) }
-    single<NewPlaylistRepository> { NewPlaylistRepositoryImplementation(get(), androidContext(),get(),get()) }
+    single<PlaylistManagerRepository> { PlaylistManagerRepositoryImplementation(get(), androidContext(),get(),get()) }
     factory { Gson() }
     factory { TrackDbConverter() }
     factory { TrackDbConverterForPlaylist() }

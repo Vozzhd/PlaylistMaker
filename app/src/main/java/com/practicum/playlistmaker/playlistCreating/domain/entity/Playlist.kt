@@ -8,5 +8,5 @@ class Playlist (
     val description: String,
     val trackQuantity:Int,
     val listOfTrackIDs : String,
-    val SourceOfPlaylistCoverImage : Uri? = Uri.EMPTY
+    val sourceOfPlaylistCoverImage : Uri? = Uri.EMPTY
 )

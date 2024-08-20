@@ -148,4 +148,28 @@
         <item name="android:textSize">@dimen/textSizeForArtistName</item>
         <item name="android:textColor">?attr/colorSecondary</item>
     </style>
+
+    <style name="MatrialAlertText" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialogText</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/MaterialAlertBodyText</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveMaterialAlertButtonText</item>
+        <item name="buttonBarNegativeButtonStyle">@style/MaterialAlertButtonText</item>
+    </style>
+
+    <style name="MaterialAlertDialogText" parent="@style/MaterialAlertDialog.MaterialComponents.Title.Text.CenterStacked">
+        <item name="android:textColor">@color/YP_blue</item>
+    </style>
+
+    <style name="MaterialAlertBodyText" parent="MaterialAlertDialog.Material3.Body.Text.CenterStacked">
+        <item name="android:textColor">@color/YP_blue</item>
+        <item name="android:textSize">@dimen/defaultTextSizeSmall</item>
+        <item name="android:maxEms">25</item>
+    </style>
+
+    <style name="MaterialAlertButtonText" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/YP_blue</item>
+    </style>
+    <style name="PositiveMaterialAlertButtonText" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/YP_blue</item>
+    </style>
 </resources>

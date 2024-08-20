@@ -32,15 +32,7 @@ val dataModule = module {
     }
     single<NetworkClient> { RetrofitNetworkClient(androidContext(), get()) }
     single<ExternalNavigator> { ExternalNavigatorImpl(androidContext()) }
-    single {
-        Room.databaseBuilder(
-            androidContext(),
-            AppDatabase::class.java,
-            "database.db"
-        )
-            .build()
-    }
-
+    single { Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db").build() }
 
     factory { Gson() }
 }

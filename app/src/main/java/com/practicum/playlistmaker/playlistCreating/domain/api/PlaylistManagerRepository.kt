@@ -5,7 +5,7 @@ import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import kotlinx.coroutines.flow.Flow
 
 
-interface NewPlaylistRepository {
+interface PlaylistManagerRepository {
     fun getPlaylistsFromTable(): Flow<List<Playlist>>
 
     suspend fun addPlaylist(playlist: Playlist) : Long
