@@ -26,5 +26,9 @@
     <dimen name="marginTopIconInFragment">104dp</dimen>
     <dimen name="marginTopTextInFragment">240dp</dimen>
     <dimen name="marginTopForFavoriteFragmentText">16dp</dimen>
+    <dimen name="playlist_image_height_and_width">312dp</dimen>
+    <dimen name="margin_top_from_playlist_image">32dp</dimen>
+    <dimen name="default_height_for_input_fields">56dp</dimen>
+    <dimen name="default_stroke">1dp</dimen>
 
 </resources>

@@ -21,18 +21,18 @@
         android:layout_height="48dp"
         android:gravity="center"
         android:paddingStart="12dp"
-        android:text="Новый плейлист"
+        android:text="@string/new_playlist_frame_title"
 
         app:layout_constraintStart_toEndOf="@+id/backButton"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/shapeableImageView"
+        android:id="@+id/shapableImageView"
 
-        android:layout_width="312dp"
-        android:layout_height="312dp"
+        android:layout_width="@dimen/playlist_image_height_and_width"
+        android:layout_height="@dimen/playlist_image_height_and_width"
         android:layout_gravity="center"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="@dimen/marginFromTopForTitle"
         android:background="@drawable/new_album_image_placeholder"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,18 +43,18 @@
         android:id="@+id/albumNameFrame"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:hint="Название"
+        android:layout_height="@dimen/default_height_for_input_fields"
+        android:layout_marginStart="@dimen/defaultMargin"
+        android:layout_marginTop="@dimen/margin_top_from_playlist_image"
+        android:layout_marginEnd="@dimen/defaultMargin"
+        android:hint="@string/playlist_name"
         android:textColorHint="@color/YP_text_gray"
         app:boxStrokeColor="@color/frame_focused_color"
-        app:boxStrokeWidth="1dp"
-        app:boxStrokeWidthFocused="1dp"
+        app:boxStrokeWidth="@dimen/default_stroke"
+        app:boxStrokeWidthFocused="@dimen/default_stroke"
         app:cursorColor="@color/YP_blue"
         app:hintTextColor="@color/YP_blue"
-        app:layout_constraintTop_toBottomOf="@+id/shapeableImageView">
+        app:layout_constraintTop_toBottomOf="@+id/shapableImageView">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/name"
@@ -62,23 +62,23 @@
             android:layout_height="match_parent"
             android:fontFamily="@font/ys_display_regular"
             android:maxLines="1"
-            android:textSize="16sp" />
+            android:textSize="@dimen/defaultTextSize" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/DescriptionNameFrame"
+        android:id="@+id/descriptionNameFrame"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:hint="Описание"
+        android:layout_height="@dimen/default_height_for_input_fields"
+        android:layout_marginStart="@dimen/defaultMargin"
+        android:layout_marginTop="@dimen/defaultMargin"
+        android:layout_marginEnd="@dimen/defaultMargin"
+        android:hint="@string/playlist_description"
         android:textColorHint="@color/YP_text_gray"
         app:boxStrokeColor="@color/frame_focused_color"
-        app:boxStrokeWidth="1dp"
-        app:boxStrokeWidthFocused="1dp"
+        app:boxStrokeWidth="@dimen/default_stroke"
+        app:boxStrokeWidthFocused="@dimen/default_stroke"
         app:cursorColor="@color/YP_blue"
         app:hintTextColor="@color/YP_blue"
         app:layout_constraintTop_toBottomOf="@+id/albumNameFrame">
@@ -89,7 +89,7 @@
             android:layout_height="match_parent"
             android:fontFamily="@font/ys_display_regular"
             android:maxLines="1"
-            android:textSize="16sp" />
+            android:textSize="@dimen/defaultTextSize" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -99,8 +99,8 @@
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="@dimen/defaultMargin"
+        android:layout_marginEnd="@dimen/defaultMargin"
         android:layout_marginBottom="32dp"
         android:enabled="false"
         android:fontFamily="@font/ys_display_medium"
@@ -109,12 +109,11 @@
         android:insetRight="0dp"
         android:insetBottom="0dp"
         android:letterSpacing="0"
-        android:text="Создать"
+        android:text="@string/create"
         android:textAllCaps="false"
-        android:textSize="16sp"
+        android:textSize="@dimen/defaultTextSize"
         app:backgroundTint="@color/button_state"
         app:layout_constraintBottom_toBottomOf="parent"
-
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

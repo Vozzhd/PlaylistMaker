@@ -53,4 +53,10 @@
     <string name="unsavedDataWillBeLost">Все несохранённые данные будут потеряны</string>
     <string name="cancel">Отмена</string>
     <string name="complete">Завершить\\отмена</string>
+    <string name="playlist">Плейлист</string>
+    <string name="created">создан</string>
+    <string name="playlist_name">Название*</string>
+    <string name="new_playlist_frame_title">Новый плейлист</string>
+    <string name="playlist_description">Описание</string>
+    <string name="create">Создать</string>
 </resources>
