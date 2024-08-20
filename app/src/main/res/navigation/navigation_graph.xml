@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mediaLibraryFragment"
-        android:name="com.practicum.playlistmaker.mediaLibrary.ui.MediaLibraryFragment"
+        android:name="com.practicum.playlistmaker.mediaLibrary.mediaLibraryRoot.MediaLibraryFragment"
         android:label="MediaLibraryFragment">
         <action
             android:id="@+id/action_mediaLibraryFragment_to_playerActivity"

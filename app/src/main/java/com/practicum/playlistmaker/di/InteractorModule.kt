@@ -2,8 +2,8 @@ package com.practicum.playlistmaker.di
 
 import com.practicum.playlistmaker.main.domain.api.MainMenuInteractor
 import com.practicum.playlistmaker.main.domain.useCase.MainMenuInteractorImpl
-import com.practicum.playlistmaker.mediaLibrary.domain.api.FavoriteTrackInteractor
-import com.practicum.playlistmaker.mediaLibrary.domain.impl.FavoriteTrackInteractorImpl
+import com.practicum.playlistmaker.mediaLibrary.favorite.domain.api.FavoriteTrackInteractor
+import com.practicum.playlistmaker.mediaLibrary.favorite.domain.impl.FavoriteTrackInteractorImpl
 import com.practicum.playlistmaker.player.domain.api.GetTrackUseCase
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.interactor.GetTrackUseCaseImpl

@@ -59,4 +59,7 @@
     <string name="new_playlist_frame_title">Новый плейлист</string>
     <string name="playlist_description">Описание</string>
     <string name="create">Создать</string>
+    <string name="singleTrackEnding">трек</string>
+    <string name="fromTwoToFourTrackEnding">трека</string>
+    <string name="severalTrackEnding">треков</string>
 </resources>

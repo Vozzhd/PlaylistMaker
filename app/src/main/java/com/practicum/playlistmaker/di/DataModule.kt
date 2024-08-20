@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.google.gson.Gson
-import com.practicum.playlistmaker.playlistCreating.data.db.converters.PlaylistDbConverter
+import com.practicum.playlistmaker.playlistCreating.data.converters.PlaylistDbConverter
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.AppDatabase
 import com.practicum.playlistmaker.search.data.network.NetworkClient

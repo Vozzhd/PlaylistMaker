@@ -30,5 +30,6 @@
     <dimen name="margin_top_from_playlist_image">32dp</dimen>
     <dimen name="default_height_for_input_fields">56dp</dimen>
     <dimen name="default_stroke">1dp</dimen>
+    <dimen name="album_corner_radius">8dp</dimen>
 
 </resources>

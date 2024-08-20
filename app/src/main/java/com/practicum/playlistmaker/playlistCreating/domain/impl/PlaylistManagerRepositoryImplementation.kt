@@ -7,8 +7,8 @@ import android.net.Uri
 import android.os.Environment
 import androidx.core.net.toUri
 import com.practicum.playlistmaker.player.domain.entity.Track
-import com.practicum.playlistmaker.playlistCreating.data.db.converters.PlaylistDbConverter
-import com.practicum.playlistmaker.playlistCreating.data.db.converters.TrackDbConverterForPlaylist
+import com.practicum.playlistmaker.playlistCreating.data.converters.PlaylistDbConverter
+import com.practicum.playlistmaker.playlistCreating.data.converters.TrackDbConverterForPlaylist
 import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerRepository
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.AppDatabase
