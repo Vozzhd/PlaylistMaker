@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.mediaLibrary.data.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+
     @Entity(tableName = "favorite_table")
     data class TrackEntity(
         @PrimaryKey

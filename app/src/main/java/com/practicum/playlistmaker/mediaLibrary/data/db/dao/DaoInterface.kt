@@ -6,6 +6,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.practicum.playlistmaker.mediaLibrary.data.db.entity.TrackEntity
+import com.practicum.playlistmaker.playlistCreating.data.db.entity.PlaylistDbEntity
+import com.practicum.playlistmaker.playlistCreating.data.db.entity.TrackInPlaylistEntity
 
 @Dao
 interface DaoInterface {
@@ -26,18 +28,29 @@ interface DaoInterface {
 
     //Manage playlist's
 
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun insertPlaylist(playlistEntity: PlaylistEntity): Long
-//
-//    @Query("SELECT * FROM playlists_table")
-//    suspend fun getPlaylists(): List<PlaylistEntity>
-//
-//    @Query("UPDATE playlists_table SET trackQuantity = :trackQuantity WHERE id = :playlistId")
-//    suspend fun updateTracksQuantityInPlaylist(trackQuantity: Int, playlistId: Int)
-//
-//    @Delete(entity = PlaylistEntity::class)
-//    suspend fun deletePlaylist(playlistEntity: PlaylistEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPlaylist(playlistDbEntity: PlaylistDbEntity): Long
+
+    @Query("SELECT * FROM playlists_table")
+    suspend fun getPlaylists(): List<PlaylistDbEntity>
+
+    @Query("UPDATE playlists_table SET trackQuantity = :trackQuantity WHERE id = :playlistId")
+    suspend fun updateTracksQuantityInPlaylist(trackQuantity: Int, playlistId: Int)
+
+    @Delete(entity = PlaylistDbEntity::class)
+    suspend fun deletePlaylist(playlistDbEntity: PlaylistDbEntity)
 
     //Manage tracks inside playlist
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertTrackToPlaylist(track:TrackInPlaylistEntity) : Long
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertTrackToPlaylistNew(track:TrackEntity) : Long
+
+    @Delete(entity = TrackEntity::class)
+    suspend fun deleteTrackFromPlaylist(trackEntity: TrackEntity)
+
+    @Query("SELECT * FROM tracks_in_playlist_table WHERE albumId =:albumId")
+    suspend fun getTracksFromPlaylist(albumId : Int) : List<TrackInPlaylistEntity>
 
 }
