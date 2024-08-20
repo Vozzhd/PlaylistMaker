@@ -11,7 +11,7 @@ class PlaylistFragmentViewModel(
     val playlistManagerInteractor : PlaylistManagerInteractor
 ) : ViewModel() {
     private val listOfPlaylistMutableLiveData = MutableLiveData<List<Playlist>>()
-    private val observeListOfPlaylistMutableLiveData = listOfPlaylistMutableLiveData
+    val observeListOfPlaylistMutableLiveData = listOfPlaylistMutableLiveData
 
     fun updateListOfPlaylist() {
         viewModelScope.launch {

@@ -11,6 +11,9 @@ class PlaylistAdapter(
     private val clickListener: PlaylistClickListener
 ) : RecyclerView.Adapter<PlaylistViewHolder>() {
 
+    companion object {
+        const val CLICK_DEBOUNCE_DELAY = 1000L
+    }
 
     fun interface PlaylistClickListener {
         fun onTrackClick(playlist: Playlist)
@@ -31,6 +34,7 @@ class PlaylistAdapter(
     }
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
+        holder.bind(listOfPlaylist[position])
         holder.itemView.setOnClickListener {
             clickListener.onTrackClick(listOfPlaylist[position])
         }
