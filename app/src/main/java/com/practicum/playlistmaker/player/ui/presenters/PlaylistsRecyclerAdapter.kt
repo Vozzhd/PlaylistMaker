@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.player.ui.presenters
 
-import android.provider.MediaStore.Audio.Playlists
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -14,9 +13,6 @@ class PlaylistRecyclerAdapter(
 ) :
     RecyclerView.Adapter<PlaylistsRecyclerViewHolder>() {
 
-    fun interface TrackClickListener {
-        fun onTrackClick(playlist: Playlist)
-    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistsRecyclerViewHolder {
         return PlaylistsRecyclerViewHolder(PlaylistViewBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
@@ -26,11 +22,11 @@ class PlaylistRecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: PlaylistsRecyclerViewHolder, position: Int) {
-        val itemView = list[position]
-        holder.bind(itemView)
+        val item = list[position]
+        holder.bind(item)
 
         holder.itemView.setOnClickListener {
-            clickListener.onTrackClick(itemView)
+            clickListener.onTrackClick(item)
         }
     }
 }

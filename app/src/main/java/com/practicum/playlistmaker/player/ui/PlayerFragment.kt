@@ -32,6 +32,7 @@ class PlayerFragment() : Fragment() {
     private val viewModel by viewModel<PlayerViewModel>()
     private val playlists = mutableListOf<Playlist>()
     private lateinit var bottomSheet: BottomSheetBehavior<LinearLayout>
+    private lateinit var playlistRecyclerAdapter: PlaylistRecyclerAdapter
     companion object {
         const val CLICK_DEBOUNCE_DELAY = 2000L
 
@@ -134,6 +135,7 @@ class PlayerFragment() : Fragment() {
         viewModel.observeListWithPlaylists().observe(viewLifecycleOwner) {
             updatePlaylistsRecyclerView(it)
         }
+        
 
         Glide.with(this)
             .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
@@ -146,16 +148,24 @@ class PlayerFragment() : Fragment() {
         }
 
 
-        viewModel.addTrackStatus.observe(viewLifecycleOwner){
-            when(it.success){
+        viewModel.addTrackStatus.observe(viewLifecycleOwner) {
+            when (it.success) {
                 true -> {
                     bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
-                    Toast.makeText(requireContext(),"${requireContext().getString(R.string.track_added)} ${it.playlistName}.",
-                        Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "${requireContext().getString(R.string.track_added)} ${it.playlistName}.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
+
                 false -> {
-                    Toast.makeText(requireContext(),"${requireContext().getString(R.string.track_added_yet)} ${it.playlistName}.",
-                        Toast.LENGTH_SHORT).show()}
+                    Toast.makeText(
+                        requireContext(),
+                        "${requireContext().getString(R.string.track_added_yet)} ${it.playlistName}.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }

@@ -53,11 +53,9 @@ class PlayerViewModel(
     private val currentTimeMutableLiveData = MutableLiveData<String>()
     fun getCurrentTimeLiveData(): LiveData<String> = currentTimeMutableLiveData
 
-
     private fun getTimeFromRepository(): String {
         return dateFormat.format(mediaPlayer.showCurrentPosition())
     }
-
 
     fun playBackControl() {
         mediaPlayer.playbackControl()
