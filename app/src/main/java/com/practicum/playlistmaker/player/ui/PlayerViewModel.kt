@@ -111,6 +111,7 @@ class PlayerViewModel(
         }
     }
 
+
     fun updateListOfPlaylists() {
         viewModelScope.launch {
             playlistManagerInteractor.getPlaylistsFromTable().collect() {

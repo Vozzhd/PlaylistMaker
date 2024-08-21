@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -66,6 +67,9 @@ class PlayerActivity : AppCompatActivity() {
 
         binding.addButton.setOnClickListener {
             bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        binding.createPlayList.setOnClickListener {
+            findNavController()
         }
         bottomSheet.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
