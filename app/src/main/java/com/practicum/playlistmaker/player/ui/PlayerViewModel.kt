@@ -8,7 +8,10 @@ import com.practicum.playlistmaker.mediaLibrary.favorite.domain.api.FavoriteTrac
 import com.practicum.playlistmaker.player.domain.api.GetTrackUseCase
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.entity.Track
+import com.practicum.playlistmaker.player.domain.model.OperationResult
 import com.practicum.playlistmaker.player.domain.model.PlayerState
+import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerInteractor
+import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -19,7 +22,8 @@ import java.util.Locale
 class PlayerViewModel(
     private val getTrackUseCase: GetTrackUseCase,
     private val mediaPlayer: MediaPlayerInteractor,
-    private val favoriteTrackInteractor: FavoriteTrackInteractor
+    private val favoriteTrackInteractor: FavoriteTrackInteractor,
+    private val playlistManagerInteractor: PlaylistManagerInteractor
 ) : ViewModel() {
 
     fun initPlayer(json: Track) {
@@ -37,6 +41,13 @@ class PlayerViewModel(
 
     private val playBackMutableLiveData = MutableLiveData<PlayerState>()
     private val isFavoriteMutableLiveData = MutableLiveData<Boolean>()
+    private val listWithPlaylists = MutableLiveData<List<Playlist>>()
+    private val addTrackResultOfOperation = MutableLiveData<Boolean>()
+
+    fun observePlayerState(): LiveData<PlayerState> = playBackMutableLiveData
+    fun observeIsFavorite(): LiveData<Boolean> = isFavoriteMutableLiveData
+    fun observeListWithPlaylists() : LiveData<List<Playlist>> = listWithPlaylists
+
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
@@ -48,8 +59,6 @@ class PlayerViewModel(
         return dateFormat.format(mediaPlayer.showCurrentPosition())
     }
 
-    fun observePlayerState(): LiveData<PlayerState> = playBackMutableLiveData
-    fun observeIsFavorite(): LiveData<Boolean> = isFavoriteMutableLiveData
 
     fun playBackControl() {
         mediaPlayer.playbackControl()
@@ -99,6 +108,14 @@ class PlayerViewModel(
                     isFavorite = ids.contains(track)
                     isFavoriteMutableLiveData.postValue(isFavorite)
                 }
+        }
+    }
+
+    fun updateListOfPlaylists() {
+        viewModelScope.launch {
+            playlistManagerInteractor.getPlaylistsFromTable().collect() {
+                listWithPlaylists.postValue(it)
+            }
         }
     }
 }

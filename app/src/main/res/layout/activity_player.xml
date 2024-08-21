@@ -261,7 +261,13 @@
             app:layout_constraintStart_toEndOf="@id/leftGuideline"
             app:layout_constraintTop_toTopOf="@id/trackReleaseCountry" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <FrameLayout
+        android:id="@+id/shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/YP_black"
+        android:alpha="0.5"
+        />
     <LinearLayout
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
@@ -291,11 +297,12 @@
             android:text="@string/new_album" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/playlistsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="12dp" />
+
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
