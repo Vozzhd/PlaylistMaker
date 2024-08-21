@@ -8,11 +8,9 @@ import com.practicum.playlistmaker.mediaLibrary.favorite.domain.api.FavoriteTrac
 import com.practicum.playlistmaker.player.domain.api.GetTrackUseCase
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.entity.Track
-import com.practicum.playlistmaker.player.domain.model.OperationResult
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerInteractor
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
-import com.practicum.playlistmaker.utilities.SingleEventLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -43,11 +41,13 @@ class PlayerViewModel(
     private val playBackMutableLiveData = MutableLiveData<PlayerState>()
     private val isFavoriteMutableLiveData = MutableLiveData<Boolean>()
     private val listWithPlaylists = MutableLiveData<List<Playlist>>()
+    private val trackData = MutableLiveData<Track>()
+    val addTrackStatus = MutableLiveData<AddTrackStatus>()
 
     fun observePlayerState(): LiveData<PlayerState> = playBackMutableLiveData
     fun observeIsFavorite(): LiveData<Boolean> = isFavoriteMutableLiveData
     fun observeListWithPlaylists(): LiveData<List<Playlist>> = listWithPlaylists
-
+    val trackLiveData: LiveData<Track> = trackData
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     private val currentTimeMutableLiveData = MutableLiveData<String>()
@@ -110,7 +110,6 @@ class PlayerViewModel(
         }
     }
 
-
     fun updateListOfPlaylists() {
         viewModelScope.launch {
             playlistManagerInteractor.getPlaylistsFromTable().collect() {
@@ -118,4 +117,25 @@ class PlayerViewModel(
             }
         }
     }
+
+    fun addTrack(playlist: Playlist) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (trackData.value != null && playlist.id != null) {
+                val track = trackData.value as Track
+                addTrackStatus.postValue(AddTrackStatus(playlistManagerInteractor.addTrackToPlaylist(track, playlist.id) > 0, playlist.name))
+            }
+            updateList()
+        }
+    }
+    fun updateList() {
+        viewModelScope.launch {
+            playlistManagerInteractor.getPlaylistsFromTable().collect() {
+                listWithPlaylists.value = it
+            }
+        }
+    }
+}
+
+class AddTrackStatus(var success: Boolean, var playlistName: String) {
+
 }

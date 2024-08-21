@@ -5,10 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -16,10 +17,10 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
+import com.practicum.playlistmaker.player.ui.presenters.PlaylistRecyclerAdapter
+import com.practicum.playlistmaker.player.ui.presenters.PlaylistsRecyclerViewHolder
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
-import com.practicum.playlistmaker.utilities.debounce
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -31,7 +32,6 @@ class PlayerFragment() : Fragment() {
     private val viewModel by viewModel<PlayerViewModel>()
     private val playlists = mutableListOf<Playlist>()
     private lateinit var bottomSheet: BottomSheetBehavior<LinearLayout>
-    private lateinit var likeClickDebounce: (Boolean) -> Unit
     companion object {
         const val CLICK_DEBOUNCE_DELAY = 2000L
 
@@ -56,12 +56,12 @@ class PlayerFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val track = requireArguments().get(KEY_FOR_TRACK) as Track
         val bigRoundForCorner = resources.getDimension(R.dimen.corner_radius_for_big_cover).toInt()
+
         viewModel.initPlayer(track)
         val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
         bottomSheet = BottomSheetBehavior.from(binding.bottomSheet)
         bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
-
         binding.shadow.visibility = View.GONE
 
         with(binding) {
@@ -75,6 +75,13 @@ class PlayerFragment() : Fragment() {
             artistNameInPlayer.text = track.artistName
         }
 
+        binding.playlistsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.playlistsRecyclerView.adapter = PlaylistRecyclerAdapter(playlists) {
+            viewModel.addTrack(it)
+            binding.playlistsRecyclerView.adapter?.notifyDataSetChanged()
+        }
+
+
         binding.playButton.setOnClickListener {
             viewModel.playBackControl()
         }
@@ -87,8 +94,9 @@ class PlayerFragment() : Fragment() {
             bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
         }
         binding.createPlayList.setOnClickListener {
-
+            findNavController().navigate(R.id.action_playerFragment_to_newPlaylistFragment)
         }
+
         bottomSheet.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
@@ -138,6 +146,18 @@ class PlayerFragment() : Fragment() {
         }
 
 
+        viewModel.addTrackStatus.observe(viewLifecycleOwner){
+            when(it.success){
+                true -> {
+                    bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
+                    Toast.makeText(requireContext(),"${requireContext().getString(R.string.track_added)} ${it.playlistName}.",
+                        Toast.LENGTH_SHORT).show()
+                }
+                false -> {
+                    Toast.makeText(requireContext(),"${requireContext().getString(R.string.track_added_yet)} ${it.playlistName}.",
+                        Toast.LENGTH_SHORT).show()}
+            }
+        }
     }
 
     private fun changeLikeImage(it: Boolean) {
