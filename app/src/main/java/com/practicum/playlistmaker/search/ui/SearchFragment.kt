@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.search.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,18 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.search.ui.presenters.TrackAdapter
 import com.practicum.playlistmaker.databinding.SearchFragmentBinding
-import com.practicum.playlistmaker.player.ui.PlayerActivity
+import com.practicum.playlistmaker.player.ui.PlayerFragment
 import com.practicum.playlistmaker.search.domain.models.TrackListState
 import com.practicum.playlistmaker.utilities.hideKeyboard
 import com.practicum.playlistmaker.utilities.DEFAULT_TEXT
-import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
 import com.practicum.playlistmaker.utilities.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -53,7 +53,8 @@ class SearchFragment : Fragment() {
 
         binding.inputField.setText(savedInstanceState?.getString(SAVED_TEXT_KEY))
 
-        onTrackClickDebounce = debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
+        onTrackClickDebounce =
+            debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
                 viewModel.onTrackClick(track)
             }
 
@@ -80,7 +81,7 @@ class SearchFragment : Fragment() {
 
 
         viewModel.observeScreenState().observe(viewLifecycleOwner) { renderScreen(it) }
-        viewModel.observeClickEvent().observe(viewLifecycleOwner) { openPlayerActivity(it) }
+        viewModel.observeClickEvent().observe(viewLifecycleOwner) { openPlayerFragment(it) }
 
 
         val textWatcher = object : TextWatcher {
@@ -191,10 +192,10 @@ class SearchFragment : Fragment() {
         binding.placeholderErrorMessage.text = emptyMessage
     }
 
-    private fun openPlayerActivity(track: Track) {
-        val intent = Intent(this.activity, PlayerActivity::class.java)
-        intent.putExtra(KEY_FOR_TRACK, track)
-        startActivity(intent)
+    private fun openPlayerFragment(track: Track) {
+        findNavController().navigate(
+            R.id.action_searchFragment_to_playerFragment,
+            PlayerFragment.createArgs(track))
     }
 
     private fun getClearButtonVisibility(textInView: CharSequence?): Int {

@@ -12,6 +12,7 @@ import com.practicum.playlistmaker.player.domain.model.OperationResult
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerInteractor
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
+import com.practicum.playlistmaker.utilities.SingleEventLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -32,7 +33,7 @@ class PlayerViewModel(
         isInFavorite(track)
     }
 
-    var isFavorite = false
+    private var isFavorite = false
     private var timerJob: Job? = null
 
     companion object {
@@ -42,12 +43,10 @@ class PlayerViewModel(
     private val playBackMutableLiveData = MutableLiveData<PlayerState>()
     private val isFavoriteMutableLiveData = MutableLiveData<Boolean>()
     private val listWithPlaylists = MutableLiveData<List<Playlist>>()
-    private val addTrackResultOfOperation = MutableLiveData<Boolean>()
 
     fun observePlayerState(): LiveData<PlayerState> = playBackMutableLiveData
     fun observeIsFavorite(): LiveData<Boolean> = isFavoriteMutableLiveData
-    fun observeListWithPlaylists() : LiveData<List<Playlist>> = listWithPlaylists
-
+    fun observeListWithPlaylists(): LiveData<List<Playlist>> = listWithPlaylists
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 

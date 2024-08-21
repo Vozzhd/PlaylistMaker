@@ -27,6 +27,7 @@ class FavoriteFragmentViewModel(
 
     fun observeScreenState(): LiveData<FavoriteListState> = stateLiveData
     fun observeClickEvent(): LiveData<Track> = clickEvent
+
     fun onTrackClick(track: Track) = clickEvent.postValue(track)
 
 

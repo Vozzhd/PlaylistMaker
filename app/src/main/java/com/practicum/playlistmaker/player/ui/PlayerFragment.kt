@@ -1,10 +1,14 @@
 package com.practicum.playlistmaker.player.ui
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -14,32 +18,47 @@ import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
+import com.practicum.playlistmaker.utilities.debounce
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerActivity : AppCompatActivity() {
+
+class PlayerFragment() : Fragment() {
 
     private lateinit var binding: ActivityPlayerBinding
     private val viewModel by viewModel<PlayerViewModel>()
     private val playlists = mutableListOf<Playlist>()
     private lateinit var bottomSheet: BottomSheetBehavior<LinearLayout>
-
-
+    private lateinit var likeClickDebounce: (Boolean) -> Unit
     companion object {
         const val CLICK_DEBOUNCE_DELAY = 2000L
+
+        fun createArgs(track: Track): Bundle {
+            return bundleOf(
+                KEY_FOR_TRACK to track
+            )
+        }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = ActivityPlayerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val track = requireArguments().get(KEY_FOR_TRACK) as Track
         val bigRoundForCorner = resources.getDimension(R.dimen.corner_radius_for_big_cover).toInt()
-        val track = (intent.getSerializableExtra(KEY_FOR_TRACK) as Track)
         viewModel.initPlayer(track)
-
         val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+
         bottomSheet = BottomSheetBehavior.from(binding.bottomSheet)
         bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
 
@@ -56,7 +75,6 @@ class PlayerActivity : AppCompatActivity() {
             artistNameInPlayer.text = track.artistName
         }
 
-
         binding.playButton.setOnClickListener {
             viewModel.playBackControl()
         }
@@ -69,7 +87,7 @@ class PlayerActivity : AppCompatActivity() {
             bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
         }
         binding.createPlayList.setOnClickListener {
-            findNavController()
+
         }
         bottomSheet.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -92,20 +110,20 @@ class PlayerActivity : AppCompatActivity() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 //Do nothing
             }
-
         })
 
-        viewModel.observePlayerState().observe(this) {
+        viewModel.observePlayerState().observe(viewLifecycleOwner) {
             changeButtonImage(it)
         }
-        viewModel.observeIsFavorite().observe(this) {
+        viewModel.observeIsFavorite().observe(viewLifecycleOwner) {
             changeLikeImage(it)
         }
-        viewModel.getCurrentTimeLiveData().observe(this) {
+
+        viewModel.getCurrentTimeLiveData().observe(viewLifecycleOwner) {
             binding.elapsedTrackTime.text = it.toString()
         }
 
-        viewModel.observeListWithPlaylists().observe(this) {
+        viewModel.observeListWithPlaylists().observe(viewLifecycleOwner) {
             updatePlaylistsRecyclerView(it)
         }
 
@@ -116,8 +134,9 @@ class PlayerActivity : AppCompatActivity() {
             .into(binding.albumCoverImageInPlayer)
 
         binding.backButton.setOnClickListener {
-            finish()
+            findNavController().popBackStack()
         }
+
 
     }
 
