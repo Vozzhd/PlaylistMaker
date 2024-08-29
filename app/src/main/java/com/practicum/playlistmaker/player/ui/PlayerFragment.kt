@@ -18,7 +18,6 @@ import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.player.ui.presenters.PlaylistRecyclerAdapter
-import com.practicum.playlistmaker.player.ui.presenters.PlaylistsRecyclerViewHolder
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -34,6 +33,7 @@ class PlayerFragment() : Fragment() {
     private lateinit var bottomSheet: BottomSheetBehavior<LinearLayout>
     private lateinit var playlistRecyclerAdapter: PlaylistRecyclerAdapter
     companion object {
+
         const val CLICK_DEBOUNCE_DELAY = 2000L
 
         fun createArgs(track: Track): Bundle {
@@ -135,7 +135,9 @@ class PlayerFragment() : Fragment() {
         viewModel.observeListWithPlaylists().observe(viewLifecycleOwner) {
             updatePlaylistsRecyclerView(it)
         }
-        
+
+        viewModel.saveTrackInBuffer(track)
+
 
         Glide.with(this)
             .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))

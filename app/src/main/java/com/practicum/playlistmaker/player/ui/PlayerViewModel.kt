@@ -41,13 +41,13 @@ class PlayerViewModel(
     private val playBackMutableLiveData = MutableLiveData<PlayerState>()
     private val isFavoriteMutableLiveData = MutableLiveData<Boolean>()
     private val listWithPlaylists = MutableLiveData<List<Playlist>>()
-    private val trackData = MutableLiveData<Track>()
+    private val trackBuffer = MutableLiveData<Track>()
     val addTrackStatus = MutableLiveData<AddTrackStatus>()
 
     fun observePlayerState(): LiveData<PlayerState> = playBackMutableLiveData
     fun observeIsFavorite(): LiveData<Boolean> = isFavoriteMutableLiveData
     fun observeListWithPlaylists(): LiveData<List<Playlist>> = listWithPlaylists
-    val trackLiveData: LiveData<Track> = trackData
+    val trackLiveData: LiveData<Track> = trackBuffer
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     private val currentTimeMutableLiveData = MutableLiveData<String>()
@@ -108,6 +108,10 @@ class PlayerViewModel(
         }
     }
 
+    fun saveTrackInBuffer(track: Track) {
+        trackBuffer.value = track
+    }
+
     fun updateListOfPlaylists() {
         viewModelScope.launch {
             playlistManagerInteractor.getPlaylistsFromTable().collect() {
@@ -115,11 +119,10 @@ class PlayerViewModel(
             }
         }
     }
-
-    fun addTrack(playlist: Playlist) {
+    fun addTrack(playlist: Playlist)  {
         viewModelScope.launch(Dispatchers.IO) {
-            if (trackData.value != null && playlist.id != null) {
-                val track = trackData.value as Track
+            if (trackBuffer.value != null && playlist.id != null) {
+                val track = trackBuffer.value as Track
                 addTrackStatus.postValue(AddTrackStatus(playlistManagerInteractor.addTrackToPlaylist(track, playlist.id) > 0, playlist.name))
             }
             updateList()

@@ -56,8 +56,7 @@ class PlaylistManagerRepositoryImplementation(
     }
 
     override suspend fun addTrackToPlaylist(track: Track, playlistId: Int): Long {
-        val operationStatus = appDatabase.daoInterface()
-            .insertTrackToPlaylist(trackDbConverterForPlaylist.map(track, playlistId))
+        val operationStatus = appDatabase.daoInterface().insertTrackToPlaylist(trackDbConverterForPlaylist.map(track, playlistId))
         return operationStatus
     }
 }

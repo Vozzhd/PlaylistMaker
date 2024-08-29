@@ -13,6 +13,10 @@ class PlaylistFragmentViewModel(
     private val listOfPlaylistMutableLiveData = MutableLiveData<List<Playlist>>()
     val observeListOfPlaylistMutableLiveData = listOfPlaylistMutableLiveData
 
+    init {
+        updateListOfPlaylist()
+    }
+
     fun updateListOfPlaylist() {
         viewModelScope.launch {
             playlistManagerInteractor.getPlaylistsFromTable().collect {

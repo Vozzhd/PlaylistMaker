@@ -47,14 +47,9 @@ class PlaylistFragment : Fragment() {
             view.findNavController()
                 .navigate(R.id.action_mediaLibraryFragment_to_newPlaylistFragment)
         }
-
-        onPlaylistClickDebounce =
-            debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
-                isClickAllowed
-            }
+        onPlaylistClickDebounce = debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track -> isClickAllowed }
         observeInit()
         recyclerViewInit()
-
     }
 
 
