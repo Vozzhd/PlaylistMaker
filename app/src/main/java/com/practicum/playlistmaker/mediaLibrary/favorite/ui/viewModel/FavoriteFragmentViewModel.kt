@@ -1,20 +1,17 @@
 package com.practicum.playlistmaker.mediaLibrary.favorite.ui.viewModel
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.mediaLibrary.favorite.domain.api.FavoriteTrackInteractor
 import com.practicum.playlistmaker.player.domain.entity.Track
-import com.practicum.playlistmaker.player.ui.model.FavoriteListState
+import com.practicum.playlistmaker.mediaLibrary.favorite.ui.model.FavoriteListState
 import com.practicum.playlistmaker.utilities.SingleEventLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FavoriteFragmentViewModel(
-    private val context: Context,
     private val favoriteTrackInteractor: FavoriteTrackInteractor
 ) : ViewModel() {
 
@@ -43,7 +40,7 @@ class FavoriteFragmentViewModel(
 
     private fun processResult(tracks: List<Track>) {
         if (tracks.isEmpty()) {
-            renderState(FavoriteListState.Empty(context.getString(R.string.mediaLibraryIsEmpty)))
+            renderState(FavoriteListState.Empty)
         } else {
             renderState(FavoriteListState.Content(tracks))
         }

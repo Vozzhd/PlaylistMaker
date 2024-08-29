@@ -7,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.PlaylistFragmentBinding
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.search.ui.presenters.TrackAdapter
 import com.practicum.playlistmaker.databinding.SearchFragmentBinding
@@ -29,7 +29,8 @@ class SearchFragment : Fragment() {
         const val CLICK_DEBOUNCE_DELAY = 300L
     }
 
-    private lateinit var binding: SearchFragmentBinding
+    private var _binding: SearchFragmentBinding? = null
+    private val binding get() = _binding!!
     private var inputInSearchView = DEFAULT_TEXT
     private lateinit var onTrackClickDebounce: (Track) -> Unit
     private lateinit var trackListAdapter: TrackAdapter
@@ -41,9 +42,7 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
-        binding = SearchFragmentBinding.inflate(layoutInflater)
+        _binding = SearchFragmentBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -195,7 +194,8 @@ class SearchFragment : Fragment() {
     private fun openPlayerFragment(track: Track) {
         findNavController().navigate(
             R.id.action_searchFragment_to_playerFragment,
-            PlayerFragment.createArgs(track))
+            PlayerFragment.createArgs(track)
+        )
     }
 
     private fun getClearButtonVisibility(textInView: CharSequence?): Int {

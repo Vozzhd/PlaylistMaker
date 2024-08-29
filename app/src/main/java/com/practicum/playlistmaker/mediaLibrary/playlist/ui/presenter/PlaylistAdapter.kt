@@ -7,13 +7,10 @@ import com.practicum.playlistmaker.databinding.PlaylistCardViewBinding
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 
 class PlaylistAdapter(
-    private val listOfPlaylist: List<Playlist>,
     private val clickListener: PlaylistClickListener
 ) : RecyclerView.Adapter<PlaylistViewHolder>() {
 
-    companion object {
-        const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
+    val listOfPlaylist: MutableList<Playlist> = mutableListOf()
 
     fun interface PlaylistClickListener {
         fun onTrackClick(playlist: Playlist)

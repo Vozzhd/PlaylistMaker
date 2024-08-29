@@ -1,27 +1,53 @@
 package com.practicum.playlistmaker.mediaLibrary.playlist.ui.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.mediaLibrary.playlist.ui.presenter.PlaylistsFragmentScreenState
 import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerInteractor
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
+import com.practicum.playlistmaker.utilities.SingleEventLiveData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class PlaylistFragmentViewModel(
-    val playlistManagerInteractor : PlaylistManagerInteractor
+    val playlistManagerInteractor: PlaylistManagerInteractor
 ) : ViewModel() {
-    private val listOfPlaylistMutableLiveData = MutableLiveData<List<Playlist>>()
-    val observeListOfPlaylistMutableLiveData = listOfPlaylistMutableLiveData
+
+    private val playlistsMutableLiveData = MutableLiveData<List<Playlist>>()
+    private val playlistsFragmentScreenStateMutableLiveData = MutableLiveData<PlaylistsFragmentScreenState>()
+    private val clickEvent = SingleEventLiveData<Playlist>()
+
+    fun observePlaylistsLiveData(): LiveData<List<Playlist>> = playlistsMutableLiveData
+    fun observeScreenState(): LiveData<PlaylistsFragmentScreenState> = playlistsFragmentScreenStateMutableLiveData
 
     init {
         updateListOfPlaylist()
     }
 
     fun updateListOfPlaylist() {
-        viewModelScope.launch {
-            playlistManagerInteractor.getPlaylistsFromTable().collect {
-                listOfPlaylistMutableLiveData.value = it.reversed()
+        viewModelScope.launch (Dispatchers.IO) {
+            playlistManagerInteractor
+                .getPlaylistsFromTable()
+                .collect { playlists ->
+                    processResult(playlists)
             }
         }
     }
+
+    private fun processResult(playlists: List<Playlist>) {
+        if (playlists.isEmpty()) {
+            renderState(PlaylistsFragmentScreenState.Empty)
+        } else {
+            renderState(PlaylistsFragmentScreenState.Content(playlists.reversed()))
+        }
+    }
+
+    private fun renderState(screenState: PlaylistsFragmentScreenState) = playlistsFragmentScreenStateMutableLiveData.postValue(screenState)
+
+    fun onPlaylistClick(playlist: Playlist) {
+        clickEvent.postValue(playlist)
+    }
+
 }

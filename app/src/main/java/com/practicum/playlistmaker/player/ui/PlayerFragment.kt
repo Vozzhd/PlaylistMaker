@@ -17,7 +17,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
-import com.practicum.playlistmaker.player.ui.presenters.PlaylistRecyclerAdapter
+import com.practicum.playlistmaker.player.ui.presenters.PlaylistsRecyclerAdapter
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -31,7 +31,7 @@ class PlayerFragment() : Fragment() {
     private val viewModel by viewModel<PlayerViewModel>()
     private val playlists = mutableListOf<Playlist>()
     private lateinit var bottomSheet: BottomSheetBehavior<LinearLayout>
-    private lateinit var playlistRecyclerAdapter: PlaylistRecyclerAdapter
+
     companion object {
 
         const val CLICK_DEBOUNCE_DELAY = 2000L
@@ -59,6 +59,7 @@ class PlayerFragment() : Fragment() {
         val bigRoundForCorner = resources.getDimension(R.dimen.corner_radius_for_big_cover).toInt()
 
         viewModel.initPlayer(track)
+
         val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
         bottomSheet = BottomSheetBehavior.from(binding.bottomSheet)
@@ -76,11 +77,13 @@ class PlayerFragment() : Fragment() {
             artistNameInPlayer.text = track.artistName
         }
 
-        binding.playlistsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.playlistsRecyclerView.adapter = PlaylistRecyclerAdapter(playlists) {
-            viewModel.addTrack(it)
+        val playlistsRecyclerAdapter = PlaylistsRecyclerAdapter(playlists) {
+            viewModel.addTrackToPlaylist(it)
             binding.playlistsRecyclerView.adapter?.notifyDataSetChanged()
         }
+
+        binding.playlistsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.playlistsRecyclerView.adapter = playlistsRecyclerAdapter
 
 
         binding.playButton.setOnClickListener {
@@ -135,9 +138,6 @@ class PlayerFragment() : Fragment() {
         viewModel.observeListWithPlaylists().observe(viewLifecycleOwner) {
             updatePlaylistsRecyclerView(it)
         }
-
-        viewModel.saveTrackInBuffer(track)
-
 
         Glide.with(this)
             .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))

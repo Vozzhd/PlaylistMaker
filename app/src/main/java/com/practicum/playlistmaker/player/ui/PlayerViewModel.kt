@@ -24,11 +24,11 @@ class PlayerViewModel(
     private val favoriteTrackInteractor: FavoriteTrackInteractor,
     private val playlistManagerInteractor: PlaylistManagerInteractor
 ) : ViewModel() {
-
     fun initPlayer(json: Track) {
         val track = getTrackUseCase.execute(json)
         mediaPlayer.preparePlayer(track.previewUrl)
         isInFavorite(track)
+        saveTrackInBuffer(track)
     }
 
     private var isFavorite = false
@@ -47,7 +47,7 @@ class PlayerViewModel(
     fun observePlayerState(): LiveData<PlayerState> = playBackMutableLiveData
     fun observeIsFavorite(): LiveData<Boolean> = isFavoriteMutableLiveData
     fun observeListWithPlaylists(): LiveData<List<Playlist>> = listWithPlaylists
-    val trackLiveData: LiveData<Track> = trackBuffer
+    val trackInBufferLiveData: LiveData<Track> = trackBuffer
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     private val currentTimeMutableLiveData = MutableLiveData<String>()
@@ -108,7 +108,7 @@ class PlayerViewModel(
         }
     }
 
-    fun saveTrackInBuffer(track: Track) {
+    private fun saveTrackInBuffer(track: Track) {
         trackBuffer.value = track
     }
 
@@ -119,15 +119,24 @@ class PlayerViewModel(
             }
         }
     }
-    fun addTrack(playlist: Playlist)  {
+
+    fun addTrackToPlaylist(playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
             if (trackBuffer.value != null && playlist.id != null) {
                 val track = trackBuffer.value as Track
-                addTrackStatus.postValue(AddTrackStatus(playlistManagerInteractor.addTrackToPlaylist(track, playlist.id) > 0, playlist.name))
+                addTrackStatus.postValue(
+                    AddTrackStatus(
+                        playlistManagerInteractor.addTrackToPlaylist(
+                            track,
+                            playlist.id
+                        ) > 0, playlist.name
+                    )
+                )
             }
             updateList()
         }
     }
+
     fun updateList() {
         viewModelScope.launch {
             playlistManagerInteractor.getPlaylistsFromTable().collect() {

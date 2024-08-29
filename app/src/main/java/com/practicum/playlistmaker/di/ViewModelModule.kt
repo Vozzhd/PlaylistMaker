@@ -25,7 +25,7 @@ val viewModelModule = module {
         MainViewModel(get())
     }
     viewModel {
-        FavoriteFragmentViewModel(get(),get())
+        FavoriteFragmentViewModel(get())
     }
     viewModel {
         PlaylistManagerViewModel(get())

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.player.ui.model
+package com.practicum.playlistmaker.mediaLibrary.favorite.ui.model
 
 import com.practicum.playlistmaker.player.domain.entity.Track
 
@@ -7,7 +7,5 @@ sealed interface FavoriteListState {
         val favoriteList: List<Track>
     ) : FavoriteListState
 
-    data class Empty(
-        val message: String
-    ) : FavoriteListState
+    data object Empty : FavoriteListState
 }

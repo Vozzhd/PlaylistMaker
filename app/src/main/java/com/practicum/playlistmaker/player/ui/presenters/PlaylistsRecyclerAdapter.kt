@@ -7,11 +7,8 @@ import com.practicum.playlistmaker.databinding.PlaylistViewBinding
 import com.practicum.playlistmaker.mediaLibrary.playlist.ui.presenter.PlaylistAdapter
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 
-class PlaylistRecyclerAdapter(
-    private val list: List<Playlist>,
-    private val clickListener: PlaylistAdapter.PlaylistClickListener
-) :
-    RecyclerView.Adapter<PlaylistsRecyclerViewHolder>() {
+class PlaylistsRecyclerAdapter(private val list: List<Playlist>, private val clickListener: PlaylistAdapter.PlaylistClickListener)
+    : RecyclerView.Adapter<PlaylistsRecyclerViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistsRecyclerViewHolder {
         return PlaylistsRecyclerViewHolder(PlaylistViewBinding.inflate(LayoutInflater.from(parent.context), parent, false))

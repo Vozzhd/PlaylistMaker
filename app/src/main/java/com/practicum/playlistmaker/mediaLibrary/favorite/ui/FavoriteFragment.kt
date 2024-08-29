@@ -14,7 +14,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.practicum.playlistmaker.mediaLibrary.favorite.ui.viewModel.FavoriteFragmentViewModel
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.ui.PlayerFragment
-import com.practicum.playlistmaker.player.ui.model.FavoriteListState
+import com.practicum.playlistmaker.mediaLibrary.favorite.ui.model.FavoriteListState
 import com.practicum.playlistmaker.search.ui.SearchFragment.Companion.CLICK_DEBOUNCE_DELAY
 import com.practicum.playlistmaker.search.ui.presenters.TrackAdapter
 import com.practicum.playlistmaker.utilities.debounce
@@ -49,8 +49,6 @@ class FavoriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.mediaLibraryEmptyText.text = getText(R.string.mediaLibraryIsEmpty)
-
         onTrackClickDebounce =
             debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
                 viewLifecycleOwner.lifecycleScope.launch {
@@ -82,7 +80,7 @@ class FavoriteFragment : Fragment() {
                 showContent(state.favoriteList)
             }
 
-            is FavoriteListState.Empty -> showMessage(state.message)
+            is FavoriteListState.Empty -> showMessage()
         }
     }
 
@@ -95,7 +93,7 @@ class FavoriteFragment : Fragment() {
         favoriteTrackListAdapter.notifyDataSetChanged()
     }
 
-    private fun showMessage(message: String) {
+    private fun showMessage() {
         binding.recyclerViewFavoriteTracks.visibility = View.GONE
         binding.mediaLibraryEmptyImage.visibility = View.VISIBLE
         binding.mediaLibraryEmptyText.visibility = View.VISIBLE
