@@ -5,20 +5,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.PlaylistViewBinding
+import com.practicum.playlistmaker.databinding.PlaylistCardBigBinding
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 
-class PlaylistsRecyclerViewHolder(private val binding: PlaylistViewBinding) :
+class PlaylistsViewHolderSmallCard(private val binding: PlaylistCardBigBinding) :
     RecyclerView.ViewHolder(binding.root) {
     private val corner by lazy { itemView.resources.getDimension(R.dimen.corner_radius).toInt() }
 
 
     fun bind(playlist: Playlist) {
-        binding.albumName.text = playlist.name
+        binding.playlistNameBigCard.text = playlist.name
 
         val trackQuantityFormat =
             "${playlist.trackQuantity} ${trackQuantityEndingFormat(playlist.trackQuantity, itemView.context)}"
-        binding.tracksQuantity.text = trackQuantityFormat
+        binding.playlistTracksQuantityBigCard.text = trackQuantityFormat
 
         Glide
             .with(itemView)
@@ -26,7 +26,7 @@ class PlaylistsRecyclerViewHolder(private val binding: PlaylistViewBinding) :
             .fitCenter()
             .placeholder(R.drawable.placeholder_album_cover)
             .transform(RoundedCorners(corner))
-            .into(binding.trackImage)
+            .into(binding.playlistImageBigCard)
     }
 
     private fun trackQuantityEndingFormat(size: Int, context: Context): String {

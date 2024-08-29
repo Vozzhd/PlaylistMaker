@@ -15,9 +15,10 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
+import com.practicum.playlistmaker.mediaLibrary.playlist.ui.presenter.PlaylistAdapterPlayerFragment
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
-import com.practicum.playlistmaker.player.ui.presenters.PlaylistsRecyclerAdapter
+import com.practicum.playlistmaker.player.ui.presenters.PlaylistAdapterPlaylistFragment
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,20 +30,15 @@ class PlayerFragment() : Fragment() {
 
     private lateinit var binding: ActivityPlayerBinding
     private val viewModel by viewModel<PlayerViewModel>()
-    private val playlists = mutableListOf<Playlist>()
     private lateinit var bottomSheet: BottomSheetBehavior<LinearLayout>
 
     companion object {
-
-        const val CLICK_DEBOUNCE_DELAY = 2000L
-
         fun createArgs(track: Track): Bundle {
             return bundleOf(
                 KEY_FOR_TRACK to track
             )
         }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,6 +47,11 @@ class PlayerFragment() : Fragment() {
     ): View? {
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.updateListOfPlaylists()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,14 +78,13 @@ class PlayerFragment() : Fragment() {
             artistNameInPlayer.text = track.artistName
         }
 
-        val playlistsRecyclerAdapter = PlaylistsRecyclerAdapter(playlists) {
+        val playlistAdapterPlaylistFragment = PlaylistAdapterPlayerFragment() {
             viewModel.addTrackToPlaylist(it)
             binding.playlistsRecyclerView.adapter?.notifyDataSetChanged()
         }
 
-        binding.playlistsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.playlistsRecyclerView.adapter = playlistsRecyclerAdapter
-
+        binding.playlistsRecyclerView.layoutManager = LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, true)
+        binding.playlistsRecyclerView.adapter = playlistAdapterPlaylistFragment
 
         binding.playButton.setOnClickListener {
             viewModel.playBackControl()
@@ -136,7 +136,9 @@ class PlayerFragment() : Fragment() {
         }
 
         viewModel.observeListWithPlaylists().observe(viewLifecycleOwner) {
-            updatePlaylistsRecyclerView(it)
+            playlistAdapterPlaylistFragment.listOfPlaylist.clear()
+            playlistAdapterPlaylistFragment.listOfPlaylist.addAll(it)
+            binding.playlistsRecyclerView.adapter?.notifyDataSetChanged()
         }
 
         Glide.with(this)
@@ -148,7 +150,6 @@ class PlayerFragment() : Fragment() {
         binding.backButton.setOnClickListener {
             findNavController().popBackStack()
         }
-
 
         viewModel.addTrackStatus.observe(viewLifecycleOwner) {
             when (it.success) {
@@ -202,12 +203,6 @@ class PlayerFragment() : Fragment() {
                 binding.elapsedTrackTime.text = getString(R.string.defaultElapsedTrackTimeVisu)
             }
         }
-    }
-
-    private fun updatePlaylistsRecyclerView(newList: List<Playlist>) {
-        playlists.clear()
-        playlists.addAll(newList)
-        binding.playlistsRecyclerView.adapter?.notifyDataSetChanged()
     }
 
     override fun onPause() {

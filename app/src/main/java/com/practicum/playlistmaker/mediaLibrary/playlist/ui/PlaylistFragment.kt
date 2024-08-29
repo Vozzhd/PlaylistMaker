@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.mediaLibrary.playlist.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +10,9 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistFragmentBinding
-import com.practicum.playlistmaker.mediaLibrary.playlist.ui.presenter.PlaylistAdapter
 import com.practicum.playlistmaker.mediaLibrary.playlist.ui.viewModel.PlaylistFragmentViewModel
 import com.practicum.playlistmaker.mediaLibrary.playlist.ui.presenter.PlaylistsFragmentScreenState
+import com.practicum.playlistmaker.player.ui.presenters.PlaylistAdapterPlaylistFragment
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,7 +28,7 @@ class PlaylistFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var onPlaylistClickDebounce: (Playlist) -> Unit
-    private lateinit var playlistsAdapter: PlaylistAdapter
+    private lateinit var playlistsAdapter: PlaylistAdapterPlaylistFragment
     private val viewModel: PlaylistFragmentViewModel by viewModel()
 
     override fun onCreateView(
@@ -55,7 +54,7 @@ class PlaylistFragment : Fragment() {
         onPlaylistClickDebounce = debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { playlist ->
             viewModel.onPlaylistClick(playlist) }
 
-        playlistsAdapter = PlaylistAdapter(onPlaylistClickDebounce)
+        playlistsAdapter = PlaylistAdapterPlaylistFragment(onPlaylistClickDebounce)
         binding.playlistRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.playlistRecyclerView.adapter = playlistsAdapter
 

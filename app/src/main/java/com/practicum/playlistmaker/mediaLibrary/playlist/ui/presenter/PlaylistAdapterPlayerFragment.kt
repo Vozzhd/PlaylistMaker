@@ -3,12 +3,12 @@ package com.practicum.playlistmaker.mediaLibrary.playlist.ui.presenter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.databinding.PlaylistCardViewBinding
+import com.practicum.playlistmaker.databinding.PlaylistCardSmallBinding
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 
-class PlaylistAdapter(
+class PlaylistAdapterPlayerFragment(
     private val clickListener: PlaylistClickListener
-) : RecyclerView.Adapter<PlaylistViewHolder>() {
+) : RecyclerView.Adapter<PlaylistViewHolderBigCard>() {
 
     val listOfPlaylist: MutableList<Playlist> = mutableListOf()
 
@@ -16,9 +16,9 @@ class PlaylistAdapter(
         fun onTrackClick(playlist: Playlist)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
-        return PlaylistViewHolder(
-            PlaylistCardViewBinding.inflate(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolderBigCard {
+        return PlaylistViewHolderBigCard(
+            PlaylistCardSmallBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -30,7 +30,7 @@ class PlaylistAdapter(
         return listOfPlaylist.size
     }
 
-    override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PlaylistViewHolderBigCard, position: Int) {
         val item = listOfPlaylist[position]
         holder.bind(item)
 

@@ -124,12 +124,7 @@ class PlayerViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             if (trackBuffer.value != null && playlist.id != null) {
                 val track = trackBuffer.value as Track
-                addTrackStatus.postValue(
-                    AddTrackStatus(
-                        playlistManagerInteractor.addTrackToPlaylist(
-                            track,
-                            playlist.id
-                        ) > 0, playlist.name
+                addTrackStatus.postValue(AddTrackStatus(playlistManagerInteractor.addTrackToPlaylist(track, playlist.id) > 0, playlist.name
                     )
                 )
             }
