@@ -29,7 +29,7 @@ class PlaylistManagerViewModel(
                     playlistStateMutableLiveData.value?.playlistName as String,
                     playlistStateMutableLiveData.value?.playlistDescription as String,
                     0,
-                    mutableListOf<String>().toString(),
+                    mutableListOf<String>(),
                     playlistStateMutableLiveData.value?.sourceForImageCover
                 )
             )

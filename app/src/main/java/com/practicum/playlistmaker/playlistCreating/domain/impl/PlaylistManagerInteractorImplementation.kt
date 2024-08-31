@@ -21,7 +21,7 @@ class PlaylistManagerInteractorImplementation(private val playlistManagerReposit
         return playlistManagerRepository.getPlaylistsFromTable()
     }
 
-    override suspend fun addTrackToPlaylist(track: Track, playlistId: Int): Long {
+    override suspend fun addTrackToPlaylist(track: Track, playlistId: Int?): Long {
         return playlistManagerRepository.addTrackToPlaylist(track, playlistId)
     }
 }

@@ -9,6 +9,7 @@ import com.practicum.playlistmaker.player.domain.api.GetTrackUseCase
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
+import com.practicum.playlistmaker.player.ui.presenters.AddTrackToPlaylistRequestResult
 import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerInteractor
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import kotlinx.coroutines.Dispatchers
@@ -24,11 +25,13 @@ class PlayerViewModel(
     private val favoriteTrackInteractor: FavoriteTrackInteractor,
     private val playlistManagerInteractor: PlaylistManagerInteractor
 ) : ViewModel() {
+
+    private lateinit var track: Track
+
     fun initPlayer(json: Track) {
-        val track = getTrackUseCase.execute(json)
+        track = getTrackUseCase.execute(json)
         mediaPlayer.preparePlayer(track.previewUrl)
         isInFavorite(track)
-        saveTrackInBuffer(track)
     }
 
     private var isFavorite = false
@@ -42,16 +45,16 @@ class PlayerViewModel(
     private val isFavoriteMutableLiveData = MutableLiveData<Boolean>()
     private val listWithPlaylists = MutableLiveData<List<Playlist>>()
     private val trackBuffer = MutableLiveData<Track>()
-    val addTrackStatus = MutableLiveData<AddTrackStatus>()
+    private val addTrackStatus = MutableLiveData<AddTrackToPlaylistRequestResult>()
+    private val currentTimeMutableLiveData = MutableLiveData<String>()
 
     fun observePlayerState(): LiveData<PlayerState> = playBackMutableLiveData
     fun observeIsFavorite(): LiveData<Boolean> = isFavoriteMutableLiveData
     fun observeListWithPlaylists(): LiveData<List<Playlist>> = listWithPlaylists
-    val trackInBufferLiveData: LiveData<Track> = trackBuffer
-    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+    fun observeAddTrackStatus() = addTrackStatus
+    fun observeCurrentTimeLiveData(): LiveData<String> = currentTimeMutableLiveData
 
-    private val currentTimeMutableLiveData = MutableLiveData<String>()
-    fun getCurrentTimeLiveData(): LiveData<String> = currentTimeMutableLiveData
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     private fun getTimeFromRepository(): String {
         return dateFormat.format(mediaPlayer.showCurrentPosition())
@@ -108,10 +111,6 @@ class PlayerViewModel(
         }
     }
 
-    private fun saveTrackInBuffer(track: Track) {
-        trackBuffer.value = track
-    }
-
     fun updateListOfPlaylists() {
         viewModelScope.launch {
             playlistManagerInteractor.getPlaylistsFromTable().collect() {
@@ -120,27 +119,46 @@ class PlayerViewModel(
         }
     }
 
-    fun addTrackToPlaylist(playlist: Playlist) {
-        viewModelScope.launch(Dispatchers.IO) {
-            if (trackBuffer.value != null && playlist.id != null) {
-                val track = trackBuffer.value as Track
-                addTrackStatus.postValue(AddTrackStatus(playlistManagerInteractor.addTrackToPlaylist(track, playlist.id) > 0, playlist.name
-                    )
-                )
+//        viewModelScope.launch(Dispatchers.IO) {
+//            if (trackBuffer.value != null && playlist.id != null) {
+//                val track = trackBuffer.value as Track
+//                addTrackStatus.postValue(
+//                    AddTrackStatus(
+//                        playlistManagerInteractor.addTrackToPlaylist(track, playlist.id) > 0,
+//                        playlist.name
+//                    )
+//                )
+//            }
+//            updateList()
+//        }
+
+
+    fun addRequestTrackToPlaylist(track: Track, playlist: Playlist) {
+        if (playlist.listOfTrackIDs.contains(track.trackId)) {
+                addTrackStatus.postValue(AddTrackToPlaylistRequestResult.Error)
+        } else {
+            viewModelScope.launch(Dispatchers.IO) {
+                playlistManagerInteractor.addTrackToPlaylist(track, playlist.id)
+                updateList()
+                addTrackStatus.postValue(AddTrackToPlaylistRequestResult.Success(playlist.name))
             }
-            updateList()
         }
+    }
+
+    private fun checkDuplicates(track: Track): Boolean {
+        val data = listWithPlaylists.value as List<Playlist>
+        var result = false
+        for (playlist in data) {
+            result = playlist.listOfTrackIDs.contains(track.trackId)
+        }
+        return result
     }
 
     fun updateList() {
         viewModelScope.launch {
             playlistManagerInteractor.getPlaylistsFromTable().collect() {
-                listWithPlaylists.value = it
+                listWithPlaylists.postValue(it)
             }
         }
     }
-}
-
-class AddTrackStatus(var success: Boolean, var playlistName: String) {
-
 }

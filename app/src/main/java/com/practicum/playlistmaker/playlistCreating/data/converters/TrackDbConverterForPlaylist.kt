@@ -5,10 +5,8 @@ import com.practicum.playlistmaker.playlistCreating.data.entity.TrackInPlaylistE
 
 class TrackDbConverterForPlaylist {
 
-
-    fun map(track: Track, albumId: Int): TrackInPlaylistEntity {
+    fun map(track: Track): TrackInPlaylistEntity {
         return TrackInPlaylistEntity(
-            albumId,
             track.trackId,
             track.artworkUrl100,
             track.trackName,

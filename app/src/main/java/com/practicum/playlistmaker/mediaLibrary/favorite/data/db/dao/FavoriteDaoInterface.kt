@@ -10,7 +10,7 @@ import com.practicum.playlistmaker.playlistCreating.data.entity.PlaylistDbEntity
 import com.practicum.playlistmaker.playlistCreating.data.entity.TrackInPlaylistEntity
 
 @Dao
-interface DaoInterface {
+interface FavoriteDaoInterface {
 
     //Manage favorite tracks
 
@@ -50,7 +50,7 @@ interface DaoInterface {
     @Delete(entity = TrackEntity::class)
     suspend fun deleteTrackFromPlaylist(trackEntity: TrackEntity)
 
-    @Query("SELECT * FROM tracks_in_playlist_table WHERE albumId =:albumId")
-    suspend fun getTracksFromPlaylist(albumId : Int) : List<TrackInPlaylistEntity>
+//    @Query("SELECT * FROM tracks_in_playlist_table")
+//    suspend fun getIDsFromTracksInPlaylists(albumId : Int) : List<TrackInPlaylistEntity>
 
 }
