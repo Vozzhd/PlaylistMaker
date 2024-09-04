@@ -62,7 +62,6 @@ class PlayerFragment() : Fragment() {
         val bigRoundForCorner = resources.getDimension(R.dimen.corner_radius_for_big_cover).toInt()
 
         viewModel.initPlayer(track)
-        viewModel.isInFavorite(track)
 
         val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
@@ -94,7 +93,7 @@ class PlayerFragment() : Fragment() {
         }
 
         binding.likeButton.setOnClickListener {
-            viewModel.favoriteButtonClicked()
+            viewModel.favoriteButtonClicked(track)
         }
 
         binding.addButton.setOnClickListener {

@@ -33,13 +33,11 @@ class PlayerViewModel(
     private val playlistManagerInteractor: PlaylistManagerInteractor
 ) : ViewModel() {
 
-    private lateinit var track: Track
-
     fun initPlayer(track: Track) {
-        this.track = getTrackUseCase.execute(track)
-        isInFavorite(track)
-        mediaPlayer.preparePlayer(this.track.previewUrl)
+        isInFavorite(getTrackUseCase.execute(track))
+        mediaPlayer.preparePlayer(track.previewUrl)
     }
+
 
     private var isFavorite = false
     private var timerJob: Job? = null
@@ -88,24 +86,24 @@ class PlayerViewModel(
         }
     }
 
-    fun favoriteButtonClicked() {
+    fun favoriteButtonClicked(track: Track) {
 
-        when (track.isFavorite) {
+        when (isFavorite) {
             true -> {
                 viewModelScope.launch {
                     favoriteTrackInteractor.deleteFromFavorite(track)
                 }
-                track.isFavorite = false
+                isFavorite = false
             }
 
             false -> {
                 viewModelScope.launch {
                     favoriteTrackInteractor.addToFavorite(track)
                 }
-                track.isFavorite = true
+                isFavorite = true
             }
         }
-        isFavoriteMutableLiveData.postValue(track.isFavorite)
+        isFavoriteMutableLiveData.postValue(isFavorite)
     }
 
     fun isInFavorite(track: Track) {
@@ -115,7 +113,7 @@ class PlayerViewModel(
                 isFavoriteMutableLiveData.postValue(isFavorite)
             }
         }
-        this.track.isFavorite = track.isFavorite
+        track.isFavorite = isFavorite
     }
 
 
