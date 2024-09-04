@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.player.ui
 
-import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -166,7 +165,8 @@ class PlayerFragment() : Fragment() {
                     requireContext(),
                     "${requireContext().getString(R.string.track_added_yet)} ${addingStatus.message}.",
                     Toast.LENGTH_SHORT
-                ).show()
+                )
+                    .show()
             }
         }
     }

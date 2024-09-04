@@ -4,7 +4,6 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -62,8 +60,7 @@ class PlaylistManagerFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
         }
 
-        val pickMedia =
-            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
                     binding.shapableImageView.setImageURI(uri)
                     viewModel.setUri(uri)
@@ -115,13 +112,11 @@ class PlaylistManagerFragment : Fragment() {
     }
 
     fun dialog() {
-        MaterialAlertDialogBuilder(requireContext(), R.style.MatrialAlertText)
+        MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertText)
             .setTitle(requireContext().getString(R.string.finishCreatingPlaylist))
             .setMessage(requireContext().getString(R.string.unsavedDataWillBeLost))
             .setNegativeButton(requireContext().getString(R.string.cancel)) { _, _ -> }
-            .setPositiveButton(requireContext().getString(R.string.complete)) { _, _ ->
-                findNavController().popBackStack()
-            }
+            .setPositiveButton(requireContext().getString(R.string.complete)) { _, _ -> findNavController().popBackStack() }
             .show()
     }
 

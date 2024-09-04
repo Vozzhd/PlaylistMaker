@@ -1,23 +1,16 @@
 package com.practicum.playlistmaker.player.ui
 
-import android.app.Application
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.mediaLibrary.favorite.domain.api.FavoriteTrackInteractor
 import com.practicum.playlistmaker.player.domain.api.GetTrackUseCase
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
-import com.practicum.playlistmaker.player.ui.presenters.AddTrackToPlaylistRequestResult
 import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerInteractor
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
-import com.practicum.playlistmaker.utilities.Resource
 import com.practicum.playlistmaker.utilities.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -136,25 +129,4 @@ class PlayerViewModel(
             }
         }
     }
-
-//    private fun renderToast(addingStatus: AddTrackToPlaylistRequestResult): Resource {
-//        when (addingStatus) {
-//            is AddTrackToPlaylistRequestResult.Success -> {
-//                bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
-//                Toast.makeText(
-//                    requireContext(Application),
-//                    "${requireContext().getString(R.string.track_added)} ${"Name playlist good"}.",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            }
-//
-//            is AddTrackToPlaylistRequestResult.Error -> {
-//                Toast.makeText(
-//                    requireContext(),
-//                    "${requireContext().getString(R.string.track_added_yet)} ${"Name playlist bad"}.",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            }
-//        }
-//    }
 }
