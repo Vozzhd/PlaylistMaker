@@ -6,7 +6,7 @@ class Playlist(
     val id: Int?,
     val name: String,
     val description: String,
-    val trackQuantity:Int,
-    val listOfTrackIDs: List<String>,
+    var trackQuantity:Int,
+    var listOfTrackIDs: List<String>,
     val sourceOfPlaylistCoverImage: Uri? = Uri.EMPTY
 )

@@ -1,25 +1,20 @@
 package com.practicum.playlistmaker.playlistCreating.domain.impl
 
 import  android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
-import android.os.Environment
-import androidx.core.net.toUri
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.playlistCreating.data.converters.PlaylistDbConverter
 import com.practicum.playlistmaker.playlistCreating.data.converters.TrackDbConverterForPlaylist
 import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerRepository
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.AppDatabase
+import com.practicum.playlistmaker.utilities.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.io.File
-import java.io.FileOutputStream
 
 class PlaylistManagerRepositoryImplementation(
     private val appDatabase: AppDatabase,
-    private val context: Context,
     private val trackDbConverterForPlaylist: TrackDbConverterForPlaylist,
     private val playlistDbConverter: PlaylistDbConverter
 ) : PlaylistManagerRepository {
@@ -38,25 +33,19 @@ class PlaylistManagerRepositoryImplementation(
         appDatabase.daoInterface().deletePlaylist(playlistDbConverter.map(playlist))
     }
 
-    private fun savePlaylistCoverImage(playlist: Playlist): Uri {
-        val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "playlist")
-        if (!filePath.exists()) {
-            filePath.mkdirs()
-        }
+    override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist)  {
 
-        val file = File(filePath, "${playlist.name}.jpg")
-        val inputStream = playlist.sourceOfPlaylistCoverImage?.let {
-            context.contentResolver.openInputStream(it)
-        }
-        val outputStream = FileOutputStream(file)
-        BitmapFactory
-            .decodeStream(inputStream)
-            .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
-        return file.toUri()
-    }
+        val updatedTrackList = playlist.listOfTrackIDs + track.trackId
+        val updatedQuantity = playlist.trackQuantity + 1
 
-    override suspend fun addTrackToPlaylist(track: Track, playlistId: Int?): Long {
-        val operationStatus = appDatabase.daoInterface().insertTrackToPlaylist(trackDbConverterForPlaylist.map(track))
-        return operationStatus
+        val gsonBuilder = GsonBuilder()
+        val gson: Gson = gsonBuilder.create()
+
+        val listOfTrackIDs = gson.toJson(updatedTrackList)
+
+        appDatabase.daoInterface().updateListOfTrackIDs(listOfTrackIDs, playlist.id)
+        appDatabase.daoInterface().updateTracksQuantityInPlaylist(updatedQuantity, playlist.id)
+        appDatabase.daoInterface().insertTrackToPlaylist(trackDbConverterForPlaylist.map(track))
+
     }
 }

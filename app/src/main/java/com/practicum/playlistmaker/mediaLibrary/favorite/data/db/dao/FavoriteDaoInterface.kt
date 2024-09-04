@@ -35,17 +35,20 @@ interface FavoriteDaoInterface {
     suspend fun getPlaylists(): List<PlaylistDbEntity>
 
     @Query("UPDATE playlists_table SET trackQuantity = :trackQuantity WHERE id = :playlistId")
-    suspend fun updateTracksQuantityInPlaylist(trackQuantity: Int, playlistId: Int)
+    suspend fun updateTracksQuantityInPlaylist(trackQuantity: Int, playlistId: Int?)
+
+    @Query("UPDATE playlists_table SET listOfTrackIDs =:listOfTrackIDs WHERE id =:playlistId")
+    suspend fun updateListOfTrackIDs(listOfTrackIDs: String, playlistId: Int?)
 
     @Delete(entity = PlaylistDbEntity::class)
     suspend fun deletePlaylist(playlistDbEntity: PlaylistDbEntity)
 
     //Manage tracks inside playlist
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertTrackToPlaylist(track: TrackInPlaylistEntity) : Long
+    suspend fun insertTrackToPlaylist(track: TrackInPlaylistEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertTrackToPlaylistNew(track: TrackEntity) : Long
+    suspend fun insertTrackToPlaylistNew(track: TrackEntity): Long
 
     @Delete(entity = TrackEntity::class)
     suspend fun deleteTrackFromPlaylist(trackEntity: TrackEntity)

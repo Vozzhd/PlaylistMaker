@@ -39,7 +39,7 @@ val repositoryModule = module {
     single<SettingsRepository> { SettingsRepositoryImpl(get()) }
     single<MediaPlayer> { MediaPlayer() }
     single<FavoriteTrackRepository> { FavoriteTrackRepositoryImpl(get(), get()) }
-    single<PlaylistManagerRepository> { PlaylistManagerRepositoryImplementation(get(), androidContext(),get(),get()) }
+    single<PlaylistManagerRepository> { PlaylistManagerRepositoryImplementation(get(),get(),get()) }
     factory { Gson() }
     factory { TrackDbConverter() }
     factory { TrackDbConverterForPlaylist() }

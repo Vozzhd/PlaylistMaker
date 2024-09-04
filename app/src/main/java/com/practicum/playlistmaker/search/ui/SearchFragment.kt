@@ -194,8 +194,7 @@ class SearchFragment : Fragment() {
     private fun openPlayerFragment(track: Track) {
         findNavController().navigate(
             R.id.action_searchFragment_to_playerFragment,
-            PlayerFragment.createArgs(track)
-        )
+            PlayerFragment.createArgs(track))
     }
 
     private fun getClearButtonVisibility(textInView: CharSequence?): Int {

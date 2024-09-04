@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.player.ui
 
+import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,9 +19,9 @@ import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.mediaLibrary.playlist.ui.presenter.PlaylistAdapterPlayerFragment
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
-import com.practicum.playlistmaker.player.ui.presenters.AddTrackToPlaylistRequestResult
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
+import com.practicum.playlistmaker.utilities.Result
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -51,15 +52,17 @@ class PlayerFragment() : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.updateListOfPlaylists()
+        viewModel.updateList()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val track = requireArguments().get(KEY_FOR_TRACK) as Track
         val bigRoundForCorner = resources.getDimension(R.dimen.corner_radius_for_big_cover).toInt()
 
-        //viewModel.initPlayer(track)
+        viewModel.initPlayer(track)
+        viewModel.isInFavorite(track)
 
         val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
@@ -79,10 +82,11 @@ class PlayerFragment() : Fragment() {
         }
 
         val playlistAdapterPlaylistFragment = PlaylistAdapterPlayerFragment() {
-            addTrackToPlaylist(track,it)
+            addTrackToPlaylist(track, it)
         }
 
-        binding.playlistsRecyclerView.layoutManager = LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, true)
+        binding.playlistsRecyclerView.layoutManager =
+            LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, true)
         binding.playlistsRecyclerView.adapter = playlistAdapterPlaylistFragment
 
         binding.playButton.setOnClickListener {
@@ -90,7 +94,7 @@ class PlayerFragment() : Fragment() {
         }
 
         binding.likeButton.setOnClickListener {
-            viewModel.favoriteButtonClicked(track)
+            viewModel.favoriteButtonClicked()
         }
 
         binding.addButton.setOnClickListener {
@@ -105,7 +109,7 @@ class PlayerFragment() : Fragment() {
                 when (newState) {
 
                     BottomSheetBehavior.STATE_COLLAPSED -> {
-                        viewModel.updateListOfPlaylists()
+                        viewModel.updateList()
                     }
 
                     BottomSheetBehavior.STATE_HIDDEN -> {
@@ -123,27 +127,18 @@ class PlayerFragment() : Fragment() {
             }
         })
 
-        with(viewModel) {
-            initPlayer(track)
-            observePlayerState().observe(viewLifecycleOwner) { changeButtonImage(it) }
-            observeIsFavorite().observe(viewLifecycleOwner) { changeLikeImage(it) }
-            observeCurrentTimeLiveData().observe(viewLifecycleOwner) { binding.elapsedTrackTime.text = it.toString() }
-            observeAddTrackStatus().observe(viewLifecycleOwner) { renderToast(it) }
-            observeListWithPlaylists().observe(viewLifecycleOwner) {
-                playlistAdapterPlaylistFragment.listOfPlaylist.clear()
-                playlistAdapterPlaylistFragment.listOfPlaylist.addAll(it)
-                binding.playlistsRecyclerView.adapter?.notifyDataSetChanged()
-            }
+
+        viewModel.observePlayerState().observe(viewLifecycleOwner) { changeButtonImage(it) }
+        viewModel.observeIsFavorite().observe(viewLifecycleOwner) { changeLikeImage(it) }
+        viewModel.observeCurrentTimeLiveData()
+            .observe(viewLifecycleOwner) { binding.elapsedTrackTime.text = it.toString() }
+        viewModel.observeAddTrackStatus().observe(viewLifecycleOwner) { renderToast(it) }
+        viewModel.observeListWithPlaylists().observe(viewLifecycleOwner) {
+            playlistAdapterPlaylistFragment.listOfPlaylist.clear()
+            playlistAdapterPlaylistFragment.listOfPlaylist.addAll(it)
+            binding.playlistsRecyclerView.adapter?.notifyDataSetChanged()
         }
-//        viewModel.initPlayer(track)
-//        viewModel.observePlayerState().observe(viewLifecycleOwner) { changeButtonImage(it) }
-//        viewModel.observeIsFavorite().observe(viewLifecycleOwner) { changeLikeImage(it) }
-//        viewModel.getCurrentTimeLiveData().observe(viewLifecycleOwner) { binding.elapsedTrackTime.text = it.toString() }
-//        viewModel.observeListWithPlaylists().observe(viewLifecycleOwner) {
-//            playlistAdapterPlaylistFragment.listOfPlaylist.clear()
-//            playlistAdapterPlaylistFragment.listOfPlaylist.addAll(it)
-//            binding.playlistsRecyclerView.atrackdaTrackpter?.notifyDataSetChanged()
-//        }
+
 
         Glide.with(this)
             .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
@@ -156,28 +151,30 @@ class PlayerFragment() : Fragment() {
         }
     }
 
-    private fun renderToast(addingStatus: AddTrackToPlaylistRequestResult) {
-        when (addingStatus) {
-            is AddTrackToPlaylistRequestResult.Success -> {
+    private fun renderToast(addingStatus: Result) {
+        when (addingStatus.result) {
+            true -> {
                 bottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
                 Toast.makeText(
                     requireContext(),
-                    "${requireContext().getString(R.string.track_added)} ${"Name playlist good"}.",
+                    "${requireContext().getString(R.string.track_added)} ${addingStatus.message}.",
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            is AddTrackToPlaylistRequestResult.Error -> {
+
+            false -> {
                 Toast.makeText(
                     requireContext(),
-                    "${requireContext().getString(R.string.track_added_yet)} ${"Name playlist bad"}.",
+                    "${requireContext().getString(R.string.track_added_yet)} ${addingStatus.message}.",
                     Toast.LENGTH_SHORT
                 ).show()
             }
         }
     }
 
+
     private fun addTrackToPlaylist(track: Track, playlist: Playlist) {
-        viewModel.addRequestTrackToPlaylist(track,playlist)
+        viewModel.addRequestTrackToPlaylist(track, playlist)
         binding.playlistsRecyclerView.adapter?.notifyDataSetChanged()
     }
 

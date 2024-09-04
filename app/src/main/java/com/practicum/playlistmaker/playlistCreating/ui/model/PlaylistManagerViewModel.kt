@@ -12,42 +12,29 @@ class PlaylistManagerViewModel(
     private val playlistManagerInteractor: PlaylistManagerInteractor
 ) : ViewModel() {
 
-
-    private val playlistStateMutableLiveData = MutableLiveData<PlaylistState>(
-
-    )
+    private val playlistStateMutableLiveData = MutableLiveData<PlaylistState>()
 
     init {
         playlistStateMutableLiveData.value = PlaylistState()
     }
 
     fun createPlaylist() {
-        viewModelScope.launch {
-            playlistManagerInteractor.addPlaylist(
+        viewModelScope.launch { playlistManagerInteractor.addPlaylist(
                 Playlist(
                     null,
                     playlistStateMutableLiveData.value?.playlistName as String,
                     playlistStateMutableLiveData.value?.playlistDescription as String,
                     0,
-                    mutableListOf<String>(),
+                    mutableListOf(),
                     playlistStateMutableLiveData.value?.sourceForImageCover
                 )
             )
         }
     }
 
-    fun setUri(uri: Uri) {
-        playlistStateMutableLiveData.value?.sourceForImageCover = uri
-    }
-
-    fun setPlaylistName(name: CharSequence?) {
-        playlistStateMutableLiveData.value?.playlistName = name.toString()
-    }
-
-    fun setPlaylistDescription(description: CharSequence?) {
-        playlistStateMutableLiveData.value?.playlistDescription = description.toString()
-    }
-
+    fun setUri(uri: Uri) { playlistStateMutableLiveData.value?.sourceForImageCover = uri }
+    fun setPlaylistName(name: CharSequence?) { playlistStateMutableLiveData.value?.playlistName = name.toString() }
+    fun setPlaylistDescription(description: CharSequence?) { playlistStateMutableLiveData.value?.playlistDescription = description.toString() }
     fun emptyCheck(): Boolean {
         return if (playlistStateMutableLiveData.value?.playlistName?.isEmpty() == false) {
             false
@@ -60,6 +47,5 @@ class PlaylistManagerViewModel(
         } else {
             true
         }
-
     }
 }
