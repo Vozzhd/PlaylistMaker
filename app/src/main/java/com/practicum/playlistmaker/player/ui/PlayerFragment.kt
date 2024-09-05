@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
+import com.practicum.playlistmaker.databinding.PlayerFragmentBinding
 import com.practicum.playlistmaker.mediaLibrary.playlist.ui.presenter.PlaylistAdapterPlayerFragment
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
@@ -28,7 +28,7 @@ import java.util.Locale
 
 class PlayerFragment() : Fragment() {
 
-    private lateinit var binding: ActivityPlayerBinding
+    private lateinit var binding: PlayerFragmentBinding
     private val viewModel by viewModel<PlayerViewModel>()
     private lateinit var bottomSheet: BottomSheetBehavior<LinearLayout>
 
@@ -45,7 +45,7 @@ class PlayerFragment() : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = ActivityPlayerBinding.inflate(layoutInflater)
+        binding = PlayerFragmentBinding.inflate(layoutInflater)
         return binding.root
     }
 

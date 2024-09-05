@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/playlist_manager_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.04" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.96" />
 
     <ImageButton
         android:id="@+id/backButton"
@@ -17,6 +32,7 @@
 
     <TextView
         android:id="@+id/textView"
+
         style="@style/TitleText"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
@@ -27,18 +43,28 @@
         app:layout_constraintStart_toEndOf="@+id/backButton"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/shapableImageView"
 
-        android:layout_width="@dimen/playlist_image_height_and_width"
-        android:layout_height="@dimen/playlist_image_height_and_width"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/marginFromTopForTitle"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/shapeableImageView"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/new_album_image_placeholder"
+
         android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+
+        app:layout_constraintBottom_toTopOf="@+id/albumNameFrame"
+        app:layout_constraintEnd_toEndOf="@id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@id/leftGuideline"
+
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/albumNameFrame"
@@ -46,8 +72,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/default_height_for_input_fields"
         android:layout_marginStart="@dimen/defaultMargin"
-        android:layout_marginTop="@dimen/margin_top_from_playlist_image"
         android:layout_marginEnd="@dimen/defaultMargin"
+        android:layout_marginBottom="16dp"
         android:hint="@string/playlist_name"
         android:textColorHint="@color/YP_text_gray"
         app:boxStrokeColor="@color/frame_focused_color"
@@ -55,7 +81,10 @@
         app:boxStrokeWidthFocused="@dimen/default_stroke"
         app:cursorColor="@color/YP_blue"
         app:hintTextColor="@color/YP_blue"
-        app:layout_constraintTop_toBottomOf="@+id/shapableImageView">
+
+        app:layout_constraintBottom_toTopOf="@+id/descriptionNameFrame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/name"
@@ -73,16 +102,18 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/default_height_for_input_fields"
         android:layout_marginStart="@dimen/defaultMargin"
-        android:layout_marginTop="@dimen/defaultMargin"
         android:layout_marginEnd="@dimen/defaultMargin"
+        android:layout_marginBottom="168dp"
         android:hint="@string/playlist_description"
         android:textColorHint="@color/YP_text_gray"
         app:boxStrokeColor="@color/frame_focused_color"
         app:boxStrokeWidth="@dimen/default_stroke"
+
         app:boxStrokeWidthFocused="@dimen/default_stroke"
         app:cursorColor="@color/YP_blue"
         app:hintTextColor="@color/YP_blue"
-        app:layout_constraintTop_toBottomOf="@+id/albumNameFrame">
+        app:layout_constraintBottom_toTopOf="@+id/create_button"
+        tools:layout_editor_absoluteX="16dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/description"
@@ -111,11 +142,11 @@
         android:insetBottom="0dp"
         android:letterSpacing="0"
         android:text="@string/create"
+        android:textColor="@color/YP_white"
         android:textAllCaps="false"
         android:textSize="@dimen/defaultTextSize"
         app:backgroundTint="@color/button_state"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

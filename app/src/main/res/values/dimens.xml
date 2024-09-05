@@ -31,5 +31,6 @@
     <dimen name="default_height_for_input_fields">56dp</dimen>
     <dimen name="default_stroke">1dp</dimen>
     <dimen name="album_corner_radius">8dp</dimen>
+    <dimen name="zero_dp">0dp</dimen>
 
 </resources>

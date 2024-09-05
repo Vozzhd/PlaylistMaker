@@ -62,11 +62,11 @@ class PlaylistManagerFragment : Fragment() {
 
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
-                    binding.shapableImageView.setImageURI(uri)
+                    binding.shapeableImageView.setImageURI(uri)
                     viewModel.setUri(uri)
                 }
             }
-        binding.shapableImageView.setOnClickListener {
+        binding.shapeableImageView.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
         binding.name.addTextChangedListener(albumNameTextWatcher)

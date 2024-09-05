@@ -31,8 +31,8 @@ class SearchFragment : Fragment() {
     private var _binding: SearchFragmentBinding? = null
     private val binding get() = _binding!!
     private var inputInSearchView = DEFAULT_TEXT
-    private lateinit var onTrackClickDebounce: (Track) -> Unit
-    private lateinit var trackListAdapter: TrackAdapter
+    private var onTrackClickDebounce: ((Track) -> Unit)? = null
+    private var trackListAdapter: TrackAdapter? = null
     private val viewModel by viewModel<SearchViewModel>()
 
 
@@ -56,7 +56,7 @@ class SearchFragment : Fragment() {
                 viewModel.onTrackClick(track)
             }
 
-        trackListAdapter = TrackAdapter(onTrackClickDebounce)
+        trackListAdapter = TrackAdapter(onTrackClickDebounce!!)
         binding.recyclerViewTracks.layoutManager =
             LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewTracks.adapter = trackListAdapter
@@ -65,14 +65,14 @@ class SearchFragment : Fragment() {
         binding.clearButton.setOnClickListener {
             binding.inputField.setText(DEFAULT_TEXT)
             binding.inputField.hideKeyboard()
-            trackListAdapter.notifyDataSetChanged()
+            trackListAdapter?.notifyDataSetChanged()
             binding.placeholderErrorLayout.visibility = View.GONE
         }
 
         binding.clearHistoryButton.setOnClickListener {
             viewModel.clearHistory()
-            trackListAdapter.trackList.clear()
-            trackListAdapter.notifyDataSetChanged()
+            trackListAdapter?.trackList?.clear()
+            trackListAdapter?.notifyDataSetChanged()
             binding.historyViewTitle.setTransitionVisibility(View.GONE)
             binding.clearHistoryButton.setTransitionVisibility(View.GONE)
         }
@@ -86,7 +86,7 @@ class SearchFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(textInView: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                trackListAdapter.trackList.clear()
+                trackListAdapter?.trackList?.clear()
                 viewModel.searchWithDebounce(changedText = textInView?.toString() ?: "")
 
                 binding.clearButton.visibility = getClearButtonVisibility(textInView)
@@ -143,19 +143,19 @@ class SearchFragment : Fragment() {
     private fun showContent(movies: List<Track>) {
         binding.progressBarAtView.visibility = View.GONE
         binding.recyclerViewTracks.visibility = View.VISIBLE
-        trackListAdapter.trackList.clear()
-        trackListAdapter.trackList.addAll(movies)
-        trackListAdapter.notifyDataSetChanged()
+        trackListAdapter?.trackList?.clear()
+        trackListAdapter?.trackList?.addAll(movies)
+        trackListAdapter?.notifyDataSetChanged()
     }
 
     private fun showHistory(movies: List<Track>) {
         if (movies.isEmpty()) {
-            trackListAdapter.trackList.clear()
+            trackListAdapter?.trackList?.clear()
             binding.recyclerViewTracks.visibility = View.GONE
         } else {
-            trackListAdapter.trackList.clear()
-            trackListAdapter.trackList.addAll(movies)
-            trackListAdapter.notifyDataSetChanged()
+            trackListAdapter?.trackList?.clear()
+            trackListAdapter?.trackList?.addAll(movies)
+            trackListAdapter?.notifyDataSetChanged()
             binding.progressBarAtView.visibility = View.GONE
             binding.placeholderErrorLayout.visibility = View.GONE
             binding.recyclerViewTracks.visibility = View.VISIBLE
