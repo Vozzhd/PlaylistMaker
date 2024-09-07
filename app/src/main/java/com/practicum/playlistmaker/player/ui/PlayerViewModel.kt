@@ -4,11 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.mediaLibrary.domain.api.FavoriteTrackInteractor
+import com.practicum.playlistmaker.mediaLibrary.favorite.domain.api.FavoriteTrackInteractor
 import com.practicum.playlistmaker.player.domain.api.GetTrackUseCase
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
+import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerInteractor
+import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
+import com.practicum.playlistmaker.utilities.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -19,16 +22,17 @@ import java.util.Locale
 class PlayerViewModel(
     private val getTrackUseCase: GetTrackUseCase,
     private val mediaPlayer: MediaPlayerInteractor,
-    private val favoriteTrackInteractor: FavoriteTrackInteractor
+    private val favoriteTrackInteractor: FavoriteTrackInteractor,
+    private val playlistManagerInteractor: PlaylistManagerInteractor
 ) : ViewModel() {
 
-    fun initPlayer(json: Track) {
-        val track = getTrackUseCase.execute(json)
+    fun initPlayer(track: Track) {
+        isInFavorite(getTrackUseCase.execute(track))
         mediaPlayer.preparePlayer(track.previewUrl)
-        isInFavorite(track)
     }
 
-    var isFavorite = false
+
+    private var isFavorite = false
     private var timerJob: Job? = null
 
     companion object {
@@ -37,19 +41,20 @@ class PlayerViewModel(
 
     private val playBackMutableLiveData = MutableLiveData<PlayerState>()
     private val isFavoriteMutableLiveData = MutableLiveData<Boolean>()
-
-    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
-
+    private val listWithPlaylists = MutableLiveData<List<Playlist>>()
+    private val addTrackStatus = MutableLiveData<Result>()
     private val currentTimeMutableLiveData = MutableLiveData<String>()
-    fun getCurrentTimeLiveData(): LiveData<String> = currentTimeMutableLiveData
 
+    fun observePlayerState(): LiveData<PlayerState> = playBackMutableLiveData
+    fun observeIsFavorite(): LiveData<Boolean> = isFavoriteMutableLiveData
+    fun observeListWithPlaylists(): LiveData<List<Playlist>> = listWithPlaylists
+    fun observeCurrentTimeLiveData(): LiveData<String> = currentTimeMutableLiveData
+    fun observeAddTrackStatus(): MutableLiveData<Result> = addTrackStatus
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     private fun getTimeFromRepository(): String {
         return dateFormat.format(mediaPlayer.showCurrentPosition())
     }
-
-    fun observePlayerState(): LiveData<PlayerState> = playBackMutableLiveData
-    fun observeIsFavorite(): LiveData<Boolean> = isFavoriteMutableLiveData
 
     fun playBackControl() {
         mediaPlayer.playbackControl()
@@ -75,29 +80,53 @@ class PlayerViewModel(
     }
 
     fun favoriteButtonClicked(track: Track) {
-        viewModelScope.launch {
 
-            when (isFavorite) {
-                true -> {
+        when (isFavorite) {
+            true -> {
+                viewModelScope.launch {
                     favoriteTrackInteractor.deleteFromFavorite(track)
-                    track.isFavorite = false
                 }
-                false -> {
-                    favoriteTrackInteractor.addToFavorite(track)
-                    track.isFavorite = true
-                }
+                isFavorite = false
             }
-            isFavoriteMutableLiveData.postValue(track.isFavorite)
+
+            false -> {
+                viewModelScope.launch {
+                    favoriteTrackInteractor.addToFavorite(track)
+                }
+                isFavorite = true
+            }
+        }
+        isFavoriteMutableLiveData.postValue(isFavorite)
+    }
+
+    fun isInFavorite(track: Track) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoriteTrackInteractor.getFavoriteTrackList().collect { ids ->
+                isFavorite = ids.contains(track)
+                isFavoriteMutableLiveData.postValue(isFavorite)
+            }
+        }
+        track.isFavorite = isFavorite
+    }
+
+
+    fun addRequestTrackToPlaylist(track: Track, playlist: Playlist) {
+        if (playlist.listOfTrackIDs.contains(track.trackId)) {
+            addTrackStatus.postValue(Result(false,playlist.name))
+        } else {
+            viewModelScope.launch(Dispatchers.IO) {
+                playlistManagerInteractor.addTrackToPlaylist(track, playlist)
+                addTrackStatus.postValue(Result(true,playlist.name))
+                updateList()
+            }
         }
     }
 
-    private fun isInFavorite(track: Track) {
-        viewModelScope.launch(Dispatchers.IO) {
-            favoriteTrackInteractor.getFavoriteTrackList()
-                .collect { ids ->
-                    isFavorite = ids.contains(track)
-                    isFavoriteMutableLiveData.postValue(isFavorite)
-                }
+    fun updateList() {
+        viewModelScope.launch {
+            playlistManagerInteractor.getPlaylistsFromTable().collect() {
+                listWithPlaylists.postValue(it)
+            }
         }
     }
 }

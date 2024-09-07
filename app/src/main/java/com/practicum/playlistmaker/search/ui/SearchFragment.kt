@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.search.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,16 +9,16 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.search.ui.presenters.TrackAdapter
 import com.practicum.playlistmaker.databinding.SearchFragmentBinding
-import com.practicum.playlistmaker.player.ui.PlayerActivity
+import com.practicum.playlistmaker.player.ui.PlayerFragment
 import com.practicum.playlistmaker.search.domain.models.TrackListState
 import com.practicum.playlistmaker.utilities.hideKeyboard
 import com.practicum.playlistmaker.utilities.DEFAULT_TEXT
-import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
 import com.practicum.playlistmaker.utilities.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -29,10 +28,11 @@ class SearchFragment : Fragment() {
         const val CLICK_DEBOUNCE_DELAY = 300L
     }
 
-    private lateinit var binding: SearchFragmentBinding
+    private var _binding: SearchFragmentBinding? = null
+    private val binding get() = _binding!!
     private var inputInSearchView = DEFAULT_TEXT
-    private lateinit var onTrackClickDebounce: (Track) -> Unit
-    private lateinit var trackListAdapter: TrackAdapter
+    private var onTrackClickDebounce: ((Track) -> Unit)? = null
+    private var trackListAdapter: TrackAdapter? = null
     private val viewModel by viewModel<SearchViewModel>()
 
 
@@ -41,9 +41,7 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
-        binding = SearchFragmentBinding.inflate(layoutInflater)
+        _binding = SearchFragmentBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -53,11 +51,12 @@ class SearchFragment : Fragment() {
 
         binding.inputField.setText(savedInstanceState?.getString(SAVED_TEXT_KEY))
 
-        onTrackClickDebounce = debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
+        onTrackClickDebounce =
+            debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
                 viewModel.onTrackClick(track)
             }
 
-        trackListAdapter = TrackAdapter(onTrackClickDebounce)
+        trackListAdapter = TrackAdapter(onTrackClickDebounce!!)
         binding.recyclerViewTracks.layoutManager =
             LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewTracks.adapter = trackListAdapter
@@ -66,28 +65,28 @@ class SearchFragment : Fragment() {
         binding.clearButton.setOnClickListener {
             binding.inputField.setText(DEFAULT_TEXT)
             binding.inputField.hideKeyboard()
-            trackListAdapter.notifyDataSetChanged()
+            trackListAdapter?.notifyDataSetChanged()
             binding.placeholderErrorLayout.visibility = View.GONE
         }
 
         binding.clearHistoryButton.setOnClickListener {
             viewModel.clearHistory()
-            trackListAdapter.trackList.clear()
-            trackListAdapter.notifyDataSetChanged()
+            trackListAdapter?.trackList?.clear()
+            trackListAdapter?.notifyDataSetChanged()
             binding.historyViewTitle.setTransitionVisibility(View.GONE)
             binding.clearHistoryButton.setTransitionVisibility(View.GONE)
         }
 
 
         viewModel.observeScreenState().observe(viewLifecycleOwner) { renderScreen(it) }
-        viewModel.observeClickEvent().observe(viewLifecycleOwner) { openPlayerActivity(it) }
+        viewModel.observeClickEvent().observe(viewLifecycleOwner) { openPlayerFragment(it) }
 
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(textInView: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                trackListAdapter.trackList.clear()
+                trackListAdapter?.trackList?.clear()
                 viewModel.searchWithDebounce(changedText = textInView?.toString() ?: "")
 
                 binding.clearButton.visibility = getClearButtonVisibility(textInView)
@@ -144,19 +143,19 @@ class SearchFragment : Fragment() {
     private fun showContent(movies: List<Track>) {
         binding.progressBarAtView.visibility = View.GONE
         binding.recyclerViewTracks.visibility = View.VISIBLE
-        trackListAdapter.trackList.clear()
-        trackListAdapter.trackList.addAll(movies)
-        trackListAdapter.notifyDataSetChanged()
+        trackListAdapter?.trackList?.clear()
+        trackListAdapter?.trackList?.addAll(movies)
+        trackListAdapter?.notifyDataSetChanged()
     }
 
     private fun showHistory(movies: List<Track>) {
         if (movies.isEmpty()) {
-            trackListAdapter.trackList.clear()
+            trackListAdapter?.trackList?.clear()
             binding.recyclerViewTracks.visibility = View.GONE
         } else {
-            trackListAdapter.trackList.clear()
-            trackListAdapter.trackList.addAll(movies)
-            trackListAdapter.notifyDataSetChanged()
+            trackListAdapter?.trackList?.clear()
+            trackListAdapter?.trackList?.addAll(movies)
+            trackListAdapter?.notifyDataSetChanged()
             binding.progressBarAtView.visibility = View.GONE
             binding.placeholderErrorLayout.visibility = View.GONE
             binding.recyclerViewTracks.visibility = View.VISIBLE
@@ -191,10 +190,10 @@ class SearchFragment : Fragment() {
         binding.placeholderErrorMessage.text = emptyMessage
     }
 
-    private fun openPlayerActivity(track: Track) {
-        val intent = Intent(this.activity, PlayerActivity::class.java)
-        intent.putExtra(KEY_FOR_TRACK, track)
-        startActivity(intent)
+    private fun openPlayerFragment(track: Track) {
+        findNavController().navigate(
+            R.id.action_searchFragment_to_playerFragment,
+            PlayerFragment.createArgs(track))
     }
 
     private fun getClearButtonVisibility(textInView: CharSequence?): Int {

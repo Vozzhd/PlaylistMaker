@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.search.data.api
 
-import com.practicum.playlistmaker.mediaLibrary.data.db.AppDatabase
+import com.practicum.playlistmaker.utilities.AppDatabase
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.utilities.Resource
 import com.practicum.playlistmaker.search.data.dto.TrackSearchRequest
@@ -39,7 +39,7 @@ class TracksRepositoryImplementation(
                             isFavorite = false
                         )
                     }
-                    val trackFavoriteIDs = appDatabase.trackDao().getFavoriteIDs()
+                    val trackFavoriteIDs = appDatabase.daoInterface().getFavoriteIDsFromFavoriteTable()
                     for (track in data) {
                         if (trackFavoriteIDs.contains(track.trackId))
                             track.isFavorite = true

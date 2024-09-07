@@ -3,9 +3,10 @@ package com.practicum.playlistmaker.di
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import com.google.gson.Gson
-import com.practicum.playlistmaker.mediaLibrary.data.db.AppDatabase
+import com.practicum.playlistmaker.playlistCreating.data.converters.PlaylistDbConverter
+import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
+import com.practicum.playlistmaker.utilities.AppDatabase
 import com.practicum.playlistmaker.search.data.network.NetworkClient
 import com.practicum.playlistmaker.search.data.network.retrofit.ItunesApiService
 import com.practicum.playlistmaker.search.data.network.retrofit.RetrofitNetworkClient
@@ -15,13 +16,13 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.math.sin
 
 val dataModule = module {
 
     single<SharedPreferences> {
         androidContext().getSharedPreferences("PlaylistMaker shared prefs", Context.MODE_PRIVATE)
     }
-
     single<ItunesApiService> {
         Retrofit.Builder()
             .baseUrl("https://itunes.apple.com")
@@ -29,19 +30,9 @@ val dataModule = module {
             .build()
             .create(ItunesApiService::class.java)
     }
-
     single<NetworkClient> { RetrofitNetworkClient(androidContext(), get()) }
-
     single<ExternalNavigator> { ExternalNavigatorImpl(androidContext()) }
-
-    single {
-        Room.databaseBuilder(
-            androidContext(),
-            AppDatabase::class.java,
-            "database.db"
-        )
-            .build()
-    }
+    single { Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db").build() }
 
     factory { Gson() }
 }

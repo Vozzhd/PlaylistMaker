@@ -8,7 +8,7 @@
         <item name="colorOnPrimary">@color/YP_white</item>  <!-- Day Black - Night White -->
         <item name="colorPrimaryInverse">@color/YP_white</item>
 
-        <item name="colorSecondary">@color/YP_white</item>
+        <item name="colorSecondary">@color/YP_white</item>  <!-- Day Grey - Night White -->
         <item name="colorSecondaryContainer">@color/YP_white</item>
 
         <item name="colorTertiary">@color/YP_black</item>
