@@ -4,10 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.databinding.PlaylistCardBigBinding
-import com.practicum.playlistmaker.mediaLibrary.playlist.ui.presenter.PlaylistAdapterPlayerFragment
+import com.practicum.playlistmaker.mediaLibrary.playlists.ui.presenter.PlaylistAdapterPlayerFragment
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 
-class PlaylistAdapterPlaylistFragment(private val clickListener: PlaylistAdapterPlayerFragment.PlaylistClickListener) :
+class PlaylistsAdapterPlaylistFragment(private val clickListener: PlaylistAdapterPlayerFragment.PlaylistClickListener) :
     RecyclerView.Adapter<PlaylistsViewHolderSmallCard>() {
     val listOfPlaylist: MutableList<Playlist> = mutableListOf()
 

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.mediaLibrary.playlist.ui.presenter
+package com.practicum.playlistmaker.mediaLibrary.playlists.ui.presenter
 
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 

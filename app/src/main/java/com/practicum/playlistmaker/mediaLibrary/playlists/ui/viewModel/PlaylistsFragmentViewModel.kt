@@ -1,17 +1,17 @@
-package com.practicum.playlistmaker.mediaLibrary.playlist.ui.viewModel
+package com.practicum.playlistmaker.mediaLibrary.playlists.ui.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.mediaLibrary.playlist.ui.presenter.PlaylistsFragmentScreenState
+import com.practicum.playlistmaker.mediaLibrary.playlists.ui.presenter.PlaylistsFragmentScreenState
 import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerInteractor
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.SingleEventLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PlaylistFragmentViewModel(
+class PlaylistsFragmentViewModel(
     val playlistManagerInteractor: PlaylistManagerInteractor
 ) : ViewModel() {
 
