@@ -18,6 +18,7 @@ import com.practicum.playlistmaker.databinding.PlayerFragmentBinding
 import com.practicum.playlistmaker.mediaLibrary.playlists.ui.presenter.PlaylistAdapterPlayerFragment
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
+import com.practicum.playlistmaker.player.ui.viewModel.PlayerViewModel
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
 import com.practicum.playlistmaker.utilities.Result
@@ -128,8 +129,7 @@ class PlayerFragment() : Fragment() {
 
         viewModel.observePlayerState().observe(viewLifecycleOwner) { changeButtonImage(it) }
         viewModel.observeIsFavorite().observe(viewLifecycleOwner) { changeLikeImage(it) }
-        viewModel.observeCurrentTimeLiveData()
-            .observe(viewLifecycleOwner) { binding.elapsedTrackTime.text = it.toString() }
+        viewModel.observeCurrentTimeLiveData().observe(viewLifecycleOwner) { binding.elapsedTrackTime.text = it.toString() }
         viewModel.observeAddTrackStatus().observe(viewLifecycleOwner) { renderToast(it) }
         viewModel.observeListWithPlaylists().observe(viewLifecycleOwner) {
             playlistAdapterPlaylistFragment.listOfPlaylist.clear()

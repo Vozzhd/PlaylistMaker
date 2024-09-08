@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.player.ui
+package com.practicum.playlistmaker.player.ui.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -31,7 +31,6 @@ class PlayerViewModel(
         mediaPlayer.preparePlayer(track.previewUrl)
     }
 
-
     private var isFavorite = false
     private var timerJob: Job? = null
 
@@ -50,6 +49,7 @@ class PlayerViewModel(
     fun observeListWithPlaylists(): LiveData<List<Playlist>> = listWithPlaylists
     fun observeCurrentTimeLiveData(): LiveData<String> = currentTimeMutableLiveData
     fun observeAddTrackStatus(): MutableLiveData<Result> = addTrackStatus
+
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     private fun getTimeFromRepository(): String {

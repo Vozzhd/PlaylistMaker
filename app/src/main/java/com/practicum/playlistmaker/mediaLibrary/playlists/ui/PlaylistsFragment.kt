@@ -7,11 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistsFragmentBinding
+import com.practicum.playlistmaker.mediaLibrary.playlist.ui.PlaylistFragment
 import com.practicum.playlistmaker.mediaLibrary.playlists.ui.presenter.PlaylistsFragmentScreenState
 import com.practicum.playlistmaker.mediaLibrary.playlists.ui.viewModel.PlaylistsFragmentViewModel
+import com.practicum.playlistmaker.player.ui.PlayerFragment
 import com.practicum.playlistmaker.player.ui.presenters.PlaylistsAdapterPlaylistFragment
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.debounce
@@ -54,9 +57,10 @@ class PlaylistsFragment : Fragment() {
                 .navigate(R.id.action_mediaLibraryFragment_to_newPlaylistFragment)
         }
 
-        onPlaylistClickDebounce = debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { playlist ->
-            view.findNavController().navigate(R.id.action_mediaLibraryFragment_to_playlistFragment)
-            viewModel.onPlaylistClick(playlist) }
+        onPlaylistClickDebounce =
+            debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { playlist ->
+                viewModel.onPlaylistClick(playlist)
+            }
 
         playlistsAdapter = PlaylistsAdapterPlaylistFragment(onPlaylistClickDebounce)
         binding.playlistRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -68,6 +72,13 @@ class PlaylistsFragment : Fragment() {
             binding.playlistRecyclerView.adapter?.notifyDataSetChanged()
         }
         viewModel.observeScreenState().observe(viewLifecycleOwner) { renderScreen(it) }
+        viewModel.observeClickEvent().observe(viewLifecycleOwner) { openPlaylistFragment(it) }
+    }
+
+    private fun openPlaylistFragment(playlist: Playlist) {
+        findNavController().navigate(
+            R.id.action_mediaLibraryFragment_to_playlistFragment,
+            PlaylistFragment.createArgs(playlist))
     }
 
     private fun renderScreen(screenstate: PlaylistsFragmentScreenState) {

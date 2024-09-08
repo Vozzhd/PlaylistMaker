@@ -21,6 +21,7 @@ class PlaylistsFragmentViewModel(
 
     fun observePlaylistsLiveData(): LiveData<List<Playlist>> = playlistsMutableLiveData
     fun observeScreenState(): LiveData<PlaylistsFragmentScreenState> = playlistsFragmentScreenStateMutableLiveData
+    fun observeClickEvent():LiveData<Playlist> = clickEvent
 
     init {
         updateListOfPlaylist()

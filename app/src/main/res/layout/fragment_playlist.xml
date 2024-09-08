@@ -4,15 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/YP_light_gray"
         tools:context=".mediaLibrary.playlist.ui.PlaylistFragment">
 
         <FrameLayout
-            android:id="@+id/frameLayout2"
+            android:id="@+id/imageAndBackButtonLayout"
             android:layout_width="match_parent"
             android:layout_height="360dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -20,11 +22,11 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:id="@+id/playlistCover"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/placeholder_album_cover">
-
-            </ImageView>
+                android:scaleType="centerCrop"
+                tools:src="@drawable/placeholder_playlist_cover" />
 
             <ImageButton
                 android:id="@+id/backButton"
@@ -38,59 +40,85 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/playlistName"
+            style="@style/BigBoldText"
             android:layout_width="wrap_content"
             android:layout_height="28dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/defaultMargin"
             android:layout_marginTop="24dp"
-            android:text="Playlist NAME"
+
             android:textAlignment="center"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
+            app:layout_constraintTop_toBottomOf="@+id/imageAndBackButtonLayout"
+            tools:text="Best songs 2021">
 
 
         </TextView>
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/playlistDescription"
+            style="@style/RegularBigText"
             android:layout_width="wrap_content"
             android:layout_height="28dp"
             android:layout_marginTop="8dp"
-            android:text="YEar"
-            android:textAlignment="center"
-            app:layout_constraintStart_toStartOf="@+id/textView3"
-            app:layout_constraintTop_toBottomOf="@+id/textView3">
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="@+id/playlistName"
+            app:layout_constraintTop_toBottomOf="@+id/playlistName"
+            tools:text="2022">
 
 
         </TextView>
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            app:layout_constraintStart_toStartOf="@+id/textView4"
-            app:layout_constraintTop_toBottomOf="@+id/textView4">
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/playlistDescription"
+            app:layout_constraintTop_toBottomOf="@+id/playlistDescription">
 
             <TextView
-                android:id="@+id/tracksSummeryDuration"
+                android:id="@+id/playlistDuration"
+                style="@style/RegularBigText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2 минуты">
-            </TextView>
+                android:gravity="center"
+                tools:text="2 минуты" />
 
             <ImageView
-                android:layout_width="13dp"
-                android:layout_height="13dp"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_dot" />
+                android:src="@drawable/ic_dot_black" />
 
             <TextView
                 android:id="@+id/tracksQuantity"
+                style="@style/RegularBigText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1 трек">
-            </TextView>
+                android:gravity="center"
+                tools:text="1 трек" />
+
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageView"
+            style="@style/RegularImageSmallView"
+            android:layout_marginTop="@dimen/defaultMargin"
+            android:src="@drawable/share_icon_black"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+        <ImageView
+            style="@style/RegularImageSmallView"
+            android:layout_marginStart="@dimen/defaultMargin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/defaultMargin"
+            android:src="@drawable/three_dots"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

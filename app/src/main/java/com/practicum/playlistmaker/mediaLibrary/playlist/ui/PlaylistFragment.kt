@@ -5,28 +5,29 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
+import com.practicum.playlistmaker.mediaLibrary.playlist.ui.viewModel.PlaylistViewModel
+import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
+import com.practicum.playlistmaker.utilities.KEY_FOR_PLAYLIST
+import com.practicum.playlistmaker.utilities.trackQuantityEndingFormat
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PlaylistFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PlaylistFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private var _binding: FragmentPlaylistBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel by viewModel<PlaylistViewModel>()
+
+    companion object {
+        fun createArgs(playlist: Playlist): Bundle {
+            return bundleOf(
+                KEY_FOR_PLAYLIST to playlist
+            )
         }
     }
 
@@ -34,27 +35,32 @@ class PlaylistFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_playlist, container, false)
+        _binding = FragmentPlaylistBinding.inflate(layoutInflater)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PlaylistFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PlaylistFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val playlist = requireArguments().get(KEY_FOR_PLAYLIST) as Playlist
+
+        binding.playlistName.text = playlist.name
+        binding.playlistDescription.text = playlist.description
+        val trackQuantityFormattedText = "${playlist.trackQuantity} ${
+            trackQuantityEndingFormat(
+                playlist.trackQuantity,
+                requireContext()
+            )
+        }"
+
+
+        binding.tracksQuantity.text = trackQuantityFormattedText
+        binding.playlistDuration.text = "320 минут"
+
+        Glide.with(this)
+            .load(playlist.sourceOfPlaylistCoverImage)
+            .placeholder(R.drawable.placeholder_playlist_cover)
+            .into(binding.playlistCover)
     }
+
 }

@@ -53,7 +53,4 @@ interface FavoriteDaoInterface {
     @Delete(entity = TrackEntity::class)
     suspend fun deleteTrackFromPlaylist(trackEntity: TrackEntity)
 
-//    @Query("SELECT * FROM tracks_in_playlist_table")
-//    suspend fun getIDsFromTracksInPlaylists(albumId : Int) : List<TrackInPlaylistEntity>
-
 }
