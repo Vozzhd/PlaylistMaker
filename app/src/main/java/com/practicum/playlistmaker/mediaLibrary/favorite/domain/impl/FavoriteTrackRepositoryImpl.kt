@@ -1,8 +1,8 @@
 package com.practicum.playlistmaker.mediaLibrary.favorite.domain.impl
 
-import com.practicum.playlistmaker.mediaLibrary.favorite.data.converters.TrackDbConverter
+import com.practicum.playlistmaker.roomTables.converters.TrackDbConverter
 import com.practicum.playlistmaker.utilities.AppDatabase
-import com.practicum.playlistmaker.mediaLibrary.favorite.data.db.entity.TrackEntity
+import com.practicum.playlistmaker.roomTables.tables.FavoriteTableEntity
 import com.practicum.playlistmaker.mediaLibrary.favorite.domain.api.FavoriteTrackRepository
 import com.practicum.playlistmaker.player.domain.entity.Track
 import kotlinx.coroutines.flow.Flow
@@ -23,10 +23,10 @@ class FavoriteTrackRepositoryImpl(
 
     override fun getFavoriteTrackList(): Flow<List<Track>> = flow {
         val favoriteTrackList = appDatabase.daoInterface().getFavoriteTracksTable()
-        emit(convertFromTrackEntity(favoriteTrackList))
+        emit(convertFromFavoriteTableEntity(favoriteTrackList))
     }
 
-    fun convertFromTrackEntity(favoriteTrackList: List<TrackEntity>): List<Track> {
+    private fun convertFromFavoriteTableEntity(favoriteTrackList: List<FavoriteTableEntity>): List<Track> {
         return favoriteTrackList.map { trackList ->
             trackDbConvertor.map(trackList)
         }

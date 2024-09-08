@@ -1,12 +1,12 @@
-package com.practicum.playlistmaker.playlistCreating.data.converters
+package com.practicum.playlistmaker.roomTables.converters
 
 import com.practicum.playlistmaker.player.domain.entity.Track
-import com.practicum.playlistmaker.playlistCreating.data.entity.TrackInPlaylistEntity
+import com.practicum.playlistmaker.roomTables.tables.TracksInPlaylistsTableEntity
 
 class TrackDbConverterForPlaylist {
 
-    fun map(track: Track): TrackInPlaylistEntity {
-        return TrackInPlaylistEntity(
+    fun map(track: Track): TracksInPlaylistsTableEntity {
+        return TracksInPlaylistsTableEntity(
             track.trackId,
             track.artworkUrl100,
             track.trackName,
@@ -22,7 +22,7 @@ class TrackDbConverterForPlaylist {
     }
 
 
-    fun map(track: TrackInPlaylistEntity): Track {
+    fun map(track: TracksInPlaylistsTableEntity): Track {
         return Track(
             track.trackName,
             track.artistName,

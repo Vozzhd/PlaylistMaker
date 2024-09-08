@@ -1,15 +1,13 @@
 package com.practicum.playlistmaker.playlistCreating.domain.impl
 
-import  android.content.Context
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.practicum.playlistmaker.player.domain.entity.Track
-import com.practicum.playlistmaker.playlistCreating.data.converters.PlaylistDbConverter
-import com.practicum.playlistmaker.playlistCreating.data.converters.TrackDbConverterForPlaylist
+import com.practicum.playlistmaker.roomTables.converters.PlaylistDbConverter
+import com.practicum.playlistmaker.roomTables.converters.TrackDbConverterForPlaylist
 import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerRepository
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.AppDatabase
-import com.practicum.playlistmaker.utilities.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

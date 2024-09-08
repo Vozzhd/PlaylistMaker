@@ -1,11 +1,11 @@
-package com.practicum.playlistmaker.mediaLibrary.favorite.data.converters
+package com.practicum.playlistmaker.roomTables.converters
 
-import com.practicum.playlistmaker.mediaLibrary.favorite.data.db.entity.TrackEntity
+import com.practicum.playlistmaker.roomTables.tables.FavoriteTableEntity
 import com.practicum.playlistmaker.player.domain.entity.Track
 
 class TrackDbConverter {
-    fun map(track: Track): TrackEntity {
-        return TrackEntity(
+    fun map(track: Track): FavoriteTableEntity {
+        return FavoriteTableEntity(
             track.trackId,
             track.artworkUrl100,
             track.trackName,
@@ -19,7 +19,7 @@ class TrackDbConverter {
         )
     }
 
-fun map (track: TrackEntity) : Track {
+fun map (track: FavoriteTableEntity) : Track {
     return Track(
         track.trackName,
         track.artistName,

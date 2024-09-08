@@ -1,10 +1,10 @@
-package com.practicum.playlistmaker.mediaLibrary.favorite.data.db.entity
+package com.practicum.playlistmaker.roomTables.tables
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "favorite_table")
-data class TrackEntity(
+data class FavoriteTableEntity(
     @PrimaryKey
     val trackId: String,
     val artworkUrl100: String,
