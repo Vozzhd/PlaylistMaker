@@ -35,10 +35,10 @@ interface DaoInterface {
     suspend fun getPlaylists(): List<PlaylistsTableEntity>
 
     @Query("UPDATE playlists_table SET trackQuantity = :trackQuantity WHERE id = :playlistId")
-    suspend fun updateTracksQuantityInPlaylist(trackQuantity: Int, playlistId: Int?)
+    suspend fun updateTracksQuantityInPlaylist(trackQuantity: Int, playlistId: Int)
 
     @Query("UPDATE playlists_table SET listOfTrackIDs =:listOfTrackIDs WHERE id =:playlistId")
-    suspend fun updateListOfTrackIDs(listOfTrackIDs: String, playlistId: Int?)
+    suspend fun updateListOfTrackIDs(listOfTrackIDs: String, playlistId: Int)
 
     @Delete(entity = PlaylistsTableEntity::class)
     suspend fun deletePlaylist(playlistsTableEntity: PlaylistsTableEntity)

@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "playlists_table")
 data class PlaylistsTableEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int?,
+    @PrimaryKey(autoGenerate = false)
+    val id: Int,
     val name: String,
     val description: String,
     val trackQuantity: Int,
