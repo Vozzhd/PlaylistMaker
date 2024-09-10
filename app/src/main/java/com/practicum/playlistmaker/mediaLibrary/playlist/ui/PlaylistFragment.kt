@@ -7,20 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
 import com.practicum.playlistmaker.mediaLibrary.playlist.ui.viewModel.PlaylistViewModel
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.KEY_FOR_PLAYLIST
+import com.practicum.playlistmaker.utilities.minutesQuantityEndingFormat
 import com.practicum.playlistmaker.utilities.trackQuantityEndingFormat
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlaylistFragment : Fragment() {
 
     private var _binding: FragmentPlaylistBinding? = null
     private val binding get() = _binding!!
-
+    val dateFormat by lazy { SimpleDateFormat("m", Locale.getDefault()) }
     private val viewModel by viewModel<PlaylistViewModel>()
 
     companion object {
@@ -44,7 +46,6 @@ class PlaylistFragment : Fragment() {
 
         val playlist = requireArguments().get(KEY_FOR_PLAYLIST) as Playlist
         viewModel.initPlaylist(playlist)
-
         binding.playlistName.text = playlist.name
         binding.playlistDescription.text = playlist.description
 
@@ -55,17 +56,28 @@ class PlaylistFragment : Fragment() {
             )
         }"
 
-
-
+        viewModel.observePlaylistDuration().observe(viewLifecycleOwner) { renderDuration(it) }
 
 
         binding.tracksQuantity.text = trackQuantityFormattedText
-        binding.playlistDuration.text = "320 минут"
+
 
         Glide.with(this)
             .load(playlist.sourceOfPlaylistCoverImage)
             .placeholder(R.drawable.placeholder_playlist_cover)
             .into(binding.playlistCover)
+    }
+
+    private fun renderDuration(playlistDurationInMillis: Long) {
+        val playlistDurationInMinutes = dateFormat.format(playlistDurationInMillis)
+
+        binding.playlistDuration.text = "${playlistDurationInMinutes.toString()} ${
+            minutesQuantityEndingFormat(
+                playlistDurationInMinutes.toInt(),
+                requireContext()
+            )
+        }"
+
     }
 
 }
