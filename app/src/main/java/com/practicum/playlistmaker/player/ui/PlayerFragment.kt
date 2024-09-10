@@ -171,7 +171,6 @@ class PlayerFragment() : Fragment() {
         }
     }
 
-
     private fun addTrackToPlaylist(track: Track, playlist: Playlist) {
         viewModel.addRequestTrackToPlaylist(track, playlist)
         binding.playlistsRecyclerView.adapter?.notifyDataSetChanged()

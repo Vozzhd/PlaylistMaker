@@ -1,12 +1,12 @@
 package com.practicum.playlistmaker.playlistCreating.domain.impl
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.roomTables.converters.PlaylistDbConverter
 import com.practicum.playlistmaker.roomTables.converters.TrackDbConverterForPlaylist
 import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerRepository
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
+import com.practicum.playlistmaker.roomTables.crossTables.PlaylistWithTracks
+import com.practicum.playlistmaker.roomTables.crossTables.PlaylistsTracksInPlaylistsCrossReferenceTable
 import com.practicum.playlistmaker.utilities.AppDatabase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -23,6 +23,12 @@ class PlaylistManagerRepositoryImplementation(
         emit(convertedPlaylist)
     }
 
+    override suspend fun getTracksInPlaylist(playlistId: Int): List<Track> {
+        val tracksInPlaylistData = appDatabase.daoInterface().getTracksInPlaylist(playlistId)
+        val mappedTrackList = tracksInPlaylistData.tracks.map { track -> trackDbConverterForPlaylist.map(track)}
+        return mappedTrackList
+    }
+
     override suspend fun addPlaylist(playlist: Playlist): Long {
         return appDatabase.daoInterface().insertPlaylist(playlistDbConverter.map(playlist))
     }
@@ -33,17 +39,10 @@ class PlaylistManagerRepositoryImplementation(
 
     override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist)  {
 
-        val updatedTrackList = playlist.listOfTrackIDs + track.trackId
         val updatedQuantity = playlist.trackQuantity + 1
 
-        val gsonBuilder = GsonBuilder()
-        val gson: Gson = gsonBuilder.create()
-
-        val listOfTrackIDs = gson.toJson(updatedTrackList)
-
-        appDatabase.daoInterface().updateListOfTrackIDs(listOfTrackIDs, playlist.id)
-        appDatabase.daoInterface().updateTracksQuantityInPlaylist(updatedQuantity, playlist.id)
+        appDatabase.daoInterface().updateTracksQuantityInPlaylist(updatedQuantity, playlist.playlistId)
         appDatabase.daoInterface().insertTrackToPlaylist(trackDbConverterForPlaylist.map(track))
-
+        appDatabase.daoInterface().insertTrackToCrossTable(PlaylistsTracksInPlaylistsCrossReferenceTable(track.trackId,playlist.playlistId))
     }
 }

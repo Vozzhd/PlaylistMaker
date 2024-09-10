@@ -111,12 +111,14 @@ class PlayerViewModel(
 
 
     fun addRequestTrackToPlaylist(track: Track, playlist: Playlist) {
-        if (playlist.listOfTrackIDs.contains(track.trackId)) {
-            addTrackStatus.postValue(Result(false,playlist.name))
-        } else {
-            viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val tracksInPlaylist =
+                playlistManagerInteractor.getTracksInPlaylist(playlist.playlistId)
+            if (tracksInPlaylist.contains(track)) {
+                addTrackStatus.postValue(Result(false, playlist.name))
+            } else {
                 playlistManagerInteractor.addTrackToPlaylist(track, playlist)
-                addTrackStatus.postValue(Result(true,playlist.name))
+                addTrackStatus.postValue(Result(true, playlist.name))
                 updateList()
             }
         }

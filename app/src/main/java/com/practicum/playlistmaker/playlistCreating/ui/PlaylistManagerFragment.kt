@@ -93,14 +93,7 @@ class PlaylistManagerFragment : Fragment() {
 
         binding.createButton.setOnClickListener {
             viewModel.createPlaylist()
-            Toast.makeText(
-                requireContext(),
-                "${requireContext().getString(R.string.playlist)} ${binding.name.text} ${
-                    requireContext().getString(R.string.created)
-                }.",
-                Toast.LENGTH_SHORT
-            ).show()
-
+            Toast.makeText(requireContext(), "${requireContext().getString(R.string.playlist)} ${binding.name.text} ${requireContext().getString(R.string.created)}.", Toast.LENGTH_SHORT).show()
             findNavController().popBackStack()
         }
 

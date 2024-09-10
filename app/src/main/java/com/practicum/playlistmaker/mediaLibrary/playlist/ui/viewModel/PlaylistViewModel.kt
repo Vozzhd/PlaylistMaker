@@ -17,4 +17,9 @@ class PlaylistViewModel : ViewModel() {
     fun onTrackClick(track: Track) {
         clickEvent.postValue(track)
     }
+
+    fun calculatePlaylistTime(playlist: Playlist) {
+
+    }
+
 }

@@ -43,15 +43,20 @@ class PlaylistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val playlist = requireArguments().get(KEY_FOR_PLAYLIST) as Playlist
+        viewModel.initPlaylist(playlist)
 
         binding.playlistName.text = playlist.name
         binding.playlistDescription.text = playlist.description
+
         val trackQuantityFormattedText = "${playlist.trackQuantity} ${
             trackQuantityEndingFormat(
                 playlist.trackQuantity,
                 requireContext()
             )
         }"
+
+
+
 
 
         binding.tracksQuantity.text = trackQuantityFormattedText

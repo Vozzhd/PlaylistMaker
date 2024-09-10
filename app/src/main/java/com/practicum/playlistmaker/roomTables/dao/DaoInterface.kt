@@ -5,6 +5,10 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
+import com.practicum.playlistmaker.player.domain.entity.Track
+import com.practicum.playlistmaker.roomTables.crossTables.PlaylistWithTracks
+import com.practicum.playlistmaker.roomTables.crossTables.PlaylistsTracksInPlaylistsCrossReferenceTable
 import com.practicum.playlistmaker.roomTables.tables.FavoriteTableEntity
 import com.practicum.playlistmaker.roomTables.tables.PlaylistsTableEntity
 import com.practicum.playlistmaker.roomTables.tables.TracksInPlaylistsTableEntity
@@ -24,7 +28,7 @@ interface DaoInterface {
     suspend fun getFavoriteTracksTable(): List<FavoriteTableEntity>
 
     @Query("SELECT trackId FROM favorite_table")
-    suspend fun getFavoriteIDsFromFavoriteTable(): List<String>
+    suspend fun getFavoriteIDsFromFavoriteTable(): List<Int>
 
     //Manage playlist's
 
@@ -34,11 +38,8 @@ interface DaoInterface {
     @Query("SELECT * FROM playlists_table")
     suspend fun getPlaylists(): List<PlaylistsTableEntity>
 
-    @Query("UPDATE playlists_table SET trackQuantity = :trackQuantity WHERE id = :playlistId")
+    @Query("UPDATE playlists_table SET trackQuantity = :trackQuantity WHERE playlistId = :playlistId")
     suspend fun updateTracksQuantityInPlaylist(trackQuantity: Int, playlistId: Int)
-
-    @Query("UPDATE playlists_table SET listOfTrackIDs =:listOfTrackIDs WHERE id =:playlistId")
-    suspend fun updateListOfTrackIDs(listOfTrackIDs: String, playlistId: Int)
 
     @Delete(entity = PlaylistsTableEntity::class)
     suspend fun deletePlaylist(playlistsTableEntity: PlaylistsTableEntity)
@@ -47,10 +48,15 @@ interface DaoInterface {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTrackToPlaylist(track: TracksInPlaylistsTableEntity): Long
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertTrackToPlaylistNew(track: FavoriteTableEntity): Long
-
     @Delete(entity = FavoriteTableEntity::class)
     suspend fun deleteTrackFromPlaylist(favoriteTableEntity: FavoriteTableEntity)
+
+    //Cross-reference tables functions
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTrackToCrossTable(entity: PlaylistsTracksInPlaylistsCrossReferenceTable)
+
+    @Transaction
+    @Query("SELECT * FROM playlists_table WHERE playlistId = :playlistId")
+    suspend fun getTracksInPlaylist(playlistId: Int): PlaylistWithTracks
 
 }

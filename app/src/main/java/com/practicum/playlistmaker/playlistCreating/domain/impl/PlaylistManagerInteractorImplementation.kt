@@ -4,6 +4,7 @@ import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerInteractor
 import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerRepository
 import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
+import com.practicum.playlistmaker.roomTables.crossTables.PlaylistWithTracks
 import com.practicum.playlistmaker.utilities.Resource
 import kotlinx.coroutines.flow.Flow
 
@@ -20,6 +21,10 @@ class PlaylistManagerInteractorImplementation(private val playlistManagerReposit
 
     override fun getPlaylistsFromTable(): Flow<List<Playlist>> {
         return playlistManagerRepository.getPlaylistsFromTable()
+    }
+
+    override suspend fun getTracksInPlaylist(playlistId: Int): List<Track> {
+        return playlistManagerRepository.getTracksInPlaylist(playlistId)
     }
 
     override suspend fun addTrackToPlaylist(track: Track, playlistId: Playlist) {
