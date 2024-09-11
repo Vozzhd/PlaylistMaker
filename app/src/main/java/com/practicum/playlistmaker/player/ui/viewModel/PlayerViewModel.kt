@@ -9,8 +9,8 @@ import com.practicum.playlistmaker.player.domain.api.GetTrackUseCase
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
-import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerInteractor
-import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
+import com.practicum.playlistmaker.playlistManage.domain.api.PlaylistManagerInteractor
+import com.practicum.playlistmaker.playlistManage.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -112,8 +112,8 @@ class PlayerViewModel(
 
     fun addRequestTrackToPlaylist(track: Track, playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
-            val tracksInPlaylist =
-                playlistManagerInteractor.getTracksInPlaylist(playlist.playlistId)
+
+            val tracksInPlaylist = playlistManagerInteractor.getTracksInPlaylist(playlist.playlistId)
             if (tracksInPlaylist.contains(track)) {
                 addTrackStatus.postValue(Result(false, playlist.name))
             } else {

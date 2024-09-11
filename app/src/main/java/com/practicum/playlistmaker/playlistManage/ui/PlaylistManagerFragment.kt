@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.playlistCreating.ui
+package com.practicum.playlistmaker.playlistManage.ui
 
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -18,7 +18,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistManagerBinding
-import com.practicum.playlistmaker.playlistCreating.ui.model.PlaylistManagerViewModel
+import com.practicum.playlistmaker.playlistManage.ui.model.PlaylistManagerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 

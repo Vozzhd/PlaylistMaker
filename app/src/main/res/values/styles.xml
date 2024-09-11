@@ -87,6 +87,7 @@
 
     <style name="RegularBigText" parent="RegularText">
         <item name="android:textSize">@dimen/textSizeForRegularBig</item>
+        <item name="android:textColor">@color/YP_black</item>
     </style>
 
     <style name="TrackDetails">

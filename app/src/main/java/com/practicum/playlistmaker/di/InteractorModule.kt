@@ -8,9 +8,8 @@ import com.practicum.playlistmaker.player.domain.api.GetTrackUseCase
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.interactor.GetTrackUseCaseImpl
 import com.practicum.playlistmaker.player.domain.interactor.MediaPlayerInteractorImpl
-import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerInteractor
-import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
-import com.practicum.playlistmaker.playlistCreating.domain.impl.PlaylistManagerInteractorImplementation
+import com.practicum.playlistmaker.playlistManage.domain.api.PlaylistManagerInteractor
+import com.practicum.playlistmaker.playlistManage.domain.impl.PlaylistManagerInteractorImplementation
 import com.practicum.playlistmaker.search.domain.api.HistoryInteractor
 import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.useCase.HistoryInteractorImplementation

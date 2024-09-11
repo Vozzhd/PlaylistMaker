@@ -14,9 +14,8 @@ import com.practicum.playlistmaker.databinding.PlaylistsFragmentBinding
 import com.practicum.playlistmaker.mediaLibrary.playlist.ui.PlaylistFragment
 import com.practicum.playlistmaker.mediaLibrary.playlists.ui.presenter.PlaylistsFragmentScreenState
 import com.practicum.playlistmaker.mediaLibrary.playlists.ui.viewModel.PlaylistsFragmentViewModel
-import com.practicum.playlistmaker.player.ui.PlayerFragment
 import com.practicum.playlistmaker.player.ui.presenters.PlaylistsAdapterPlaylistFragment
-import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
+import com.practicum.playlistmaker.playlistManage.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

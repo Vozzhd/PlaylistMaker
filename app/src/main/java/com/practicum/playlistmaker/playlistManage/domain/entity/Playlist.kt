@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.playlistCreating.domain.entity
+package com.practicum.playlistmaker.playlistManage.domain.entity
 
 import android.net.Uri
 import java.io.Serializable

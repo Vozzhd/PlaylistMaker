@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.databinding.PlaylistCardBigBinding
 import com.practicum.playlistmaker.mediaLibrary.playlists.ui.presenter.PlaylistAdapterPlayerFragment
-import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
+import com.practicum.playlistmaker.playlistManage.domain.entity.Playlist
 
 class PlaylistsAdapterPlaylistFragment(private val clickListener: PlaylistAdapterPlayerFragment.PlaylistClickListener) :
     RecyclerView.Adapter<PlaylistsViewHolderBigCard>() {

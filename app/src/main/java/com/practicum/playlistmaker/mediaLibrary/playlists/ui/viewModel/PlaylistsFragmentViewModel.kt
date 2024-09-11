@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.mediaLibrary.playlists.ui.presenter.PlaylistsFragmentScreenState
-import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerInteractor
-import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
+import com.practicum.playlistmaker.playlistManage.domain.api.PlaylistManagerInteractor
+import com.practicum.playlistmaker.playlistManage.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.SingleEventLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

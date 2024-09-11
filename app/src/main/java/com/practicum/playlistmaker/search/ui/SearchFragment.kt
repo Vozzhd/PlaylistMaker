@@ -140,21 +140,21 @@ class SearchFragment : Fragment() {
         binding.progressBarAtView.visibility = View.VISIBLE
     }
 
-    private fun showContent(movies: List<Track>) {
+    private fun showContent(tracks: List<Track>) {
         binding.progressBarAtView.visibility = View.GONE
         binding.recyclerViewTracks.visibility = View.VISIBLE
         trackListAdapter?.trackList?.clear()
-        trackListAdapter?.trackList?.addAll(movies)
+        trackListAdapter?.trackList?.addAll(tracks)
         trackListAdapter?.notifyDataSetChanged()
     }
 
-    private fun showHistory(movies: List<Track>) {
-        if (movies.isEmpty()) {
+    private fun showHistory(tracks: List<Track>) {
+        if (tracks.isEmpty()) {
             trackListAdapter?.trackList?.clear()
             binding.recyclerViewTracks.visibility = View.GONE
         } else {
             trackListAdapter?.trackList?.clear()
-            trackListAdapter?.trackList?.addAll(movies)
+            trackListAdapter?.trackList?.addAll(tracks)
             trackListAdapter?.notifyDataSetChanged()
             binding.progressBarAtView.visibility = View.GONE
             binding.placeholderErrorLayout.visibility = View.GONE

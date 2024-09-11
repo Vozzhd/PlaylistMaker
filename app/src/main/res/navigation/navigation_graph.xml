@@ -43,13 +43,17 @@
     </fragment>
     <fragment
         android:id="@+id/newPlaylistFragment"
-        android:name="com.practicum.playlistmaker.playlistCreating.ui.PlaylistManagerFragment"
+        android:name="com.practicum.playlistmaker.playlistManage.ui.PlaylistManagerFragment"
         android:label="fragment_new_playlist"
         tools:layout="@layout/fragment_playlist_manager" />
     <fragment
         android:id="@+id/playlistFragment"
         android:name="com.practicum.playlistmaker.mediaLibrary.playlist.ui.PlaylistFragment"
         android:label="fragment_playlist"
-        tools:layout="@layout/fragment_playlist" />
+        tools:layout="@layout/fragment_playlist" >
+        <action
+            android:id="@+id/action_playlistFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
+    </fragment>
 
 </navigation>

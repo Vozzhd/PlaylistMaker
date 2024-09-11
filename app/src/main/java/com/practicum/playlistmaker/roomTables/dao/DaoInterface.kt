@@ -48,8 +48,8 @@ interface DaoInterface {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTrackToPlaylist(track: TracksInPlaylistsTableEntity): Long
 
-    @Delete(entity = FavoriteTableEntity::class)
-    suspend fun deleteTrackFromPlaylist(favoriteTableEntity: FavoriteTableEntity)
+    @Delete(entity = TracksInPlaylistsTableEntity::class)
+    suspend fun deleteTrackFromPlaylist(tracksInPlaylistsTableEntity: TracksInPlaylistsTableEntity)
 
     //Cross-reference tables functions
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -58,5 +58,9 @@ interface DaoInterface {
     @Transaction
     @Query("SELECT * FROM playlists_table WHERE playlistId = :playlistId")
     suspend fun getTracksInPlaylist(playlistId: Int): PlaylistWithTracks
+
+    @Query("DELETE FROM cross_reference_track_playlist WHERE trackId =:trackId")
+    suspend fun deleteTrackFromCrossRefTable(trackId: Int)
+
 
 }

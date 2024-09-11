@@ -1,12 +1,11 @@
-package com.practicum.playlistmaker.playlistCreating.ui.model
+package com.practicum.playlistmaker.playlistManage.ui.model
 
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.playlistCreating.domain.api.PlaylistManagerInteractor
-import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
-import com.practicum.playlistmaker.utilities.App
+import com.practicum.playlistmaker.playlistManage.domain.api.PlaylistManagerInteractor
+import com.practicum.playlistmaker.playlistManage.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.nextPlaylistId
 import kotlinx.coroutines.launch
 

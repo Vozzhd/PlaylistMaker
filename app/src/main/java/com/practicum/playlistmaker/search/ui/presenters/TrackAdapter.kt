@@ -5,8 +5,9 @@ import android.os.Looper
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.player.domain.entity.Track
+import com.practicum.playlistmaker.utilities.TrackClickListener
 
-class TrackAdapter(private val clickListener: ClickListener) : RecyclerView.Adapter<TrackViewHolder>() {
+class TrackAdapter(private val trackClickListener: TrackClickListener) : RecyclerView.Adapter<TrackViewHolder>() {
     companion object {
         const val CLICK_DEBOUNCE_DELAY = 1000L
     }
@@ -34,12 +35,10 @@ class TrackAdapter(private val clickListener: ClickListener) : RecyclerView.Adap
         holder.bind(trackList[position])
         holder.itemView.setOnClickListener {
             if (clickDebounce()) {
-                clickListener.click(trackList[position])
+                trackClickListener.click(trackList[position])
             }
         }
 
     }
-    fun interface ClickListener {
-        fun click(track: Track)
-    }
+
 }

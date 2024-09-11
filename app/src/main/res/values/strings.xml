@@ -66,4 +66,7 @@
     <string name="fromTwoToFourMinutesEnding">минуты</string>
     <string name="singleMinuteEnding">минута</string>
     <string name="severalMinuteEnding">минут</string>
+    <string name="deletingTrackFromPlaylist">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="no">нет</string>
+    <string name="yes">да</string>
 </resources>

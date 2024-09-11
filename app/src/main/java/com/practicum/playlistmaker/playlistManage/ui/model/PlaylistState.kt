@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.playlistCreating.ui.model
+package com.practicum.playlistmaker.playlistManage.ui.model
 
 import android.net.Uri
 
