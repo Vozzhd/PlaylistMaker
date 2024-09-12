@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -20,6 +21,7 @@ import com.practicum.playlistmaker.player.ui.PlayerFragment
 import com.practicum.playlistmaker.playlistManage.domain.entity.Playlist
 import com.practicum.playlistmaker.search.ui.SearchFragment.Companion.CLICK_DEBOUNCE_DELAY
 import com.practicum.playlistmaker.utilities.KEY_FOR_PLAYLIST
+import com.practicum.playlistmaker.utilities.Result
 import com.practicum.playlistmaker.utilities.debounce
 import com.practicum.playlistmaker.utilities.minutesQuantityEndingFormat
 import com.practicum.playlistmaker.utilities.trackQuantityEndingFormat
@@ -85,6 +87,7 @@ class PlaylistFragment : Fragment() {
         viewModel.observePlaylistDuration().observe(viewLifecycleOwner) { renderDuration(it) }
         viewModel.observePlaylistTracks().observe(viewLifecycleOwner) { fillTracks(it) }
         viewModel.observePlaylistQuantity().observe(viewLifecycleOwner) { renderQuantity(it) }
+        viewModel.observeShareStatus().observe(viewLifecycleOwner) { shareAction(it) }
 
         playlistAdapter = PlaylistAdapter(onTrackClickDebounce!!, onLongTrackClickDebounce!!)
 
@@ -94,11 +97,36 @@ class PlaylistFragment : Fragment() {
 
         binding.tracksQuantity.text = trackQuantityFormattedText
 
+        binding.shareButton.setOnClickListener {
+            viewModel.sharePlaylist(playlist)
+        }
+
         Glide.with(this)
             .load(playlist.sourceOfPlaylistCoverImage)
             .placeholder(R.drawable.placeholder_playlist_cover)
             .into(binding.playlistCover)
     }
+
+    private fun showToastEmpty() {
+        Toast.makeText(
+            requireContext(),
+            requireContext().getString(R.string.sharePlaylistIsEmpty),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun shareAction(result: Result) {
+        when (result.result) {
+            true -> sharePlaylist()
+            false -> showToastEmpty()
+        }
+    }
+
+    private fun sharePlaylist() {
+
+    }
+
+
     private fun renderQuantity(it: Int) {
         playlist.trackQuantity = it
         val trackQuantityFormattedText = "${it.toString()} ${

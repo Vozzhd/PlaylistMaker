@@ -69,4 +69,5 @@
     <string name="deletingTrackFromPlaylist">Вы уверены, что хотите удалить трек из плейлиста?</string>
     <string name="no">нет</string>
     <string name="yes">да</string>
+    <string name="sharePlaylistIsEmpty">В этом плейлисте нет списка треков, которым можно поделиться</string>
 </resources>

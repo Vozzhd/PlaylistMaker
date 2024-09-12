@@ -7,12 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.playlistManage.domain.api.PlaylistManagerInteractor
 import com.practicum.playlistmaker.playlistManage.domain.entity.Playlist
+import com.practicum.playlistmaker.settings.domain.api.SharingInteractor
+import com.practicum.playlistmaker.utilities.Result
 import com.practicum.playlistmaker.utilities.SingleEventLiveData
+import com.practicum.playlistmaker.utilities.trackQuantityEndingFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel(
-    private val playlistManagerInteractor: PlaylistManagerInteractor
+    private val playlistManagerInteractor: PlaylistManagerInteractor,
+    private val sharingInteractor: SharingInteractor
 ) : ViewModel() {
 
     private val clickEvent = SingleEventLiveData<Track>()
@@ -20,12 +24,14 @@ class PlaylistViewModel(
     private val playlistDuration = MutableLiveData<Long>()
     private val playlistTracks = MutableLiveData<List<Track>>()
     private val playlistQuantity = MutableLiveData<Int>()
+    private val shareStatus = MutableLiveData<Result>()
 
     fun observePlaylistDuration(): LiveData<Long> = playlistDuration
     fun observeClickEvent(): LiveData<Track> = clickEvent
     fun observeLongClickEvent(): LiveData<Track> = longClickEvent
     fun observePlaylistTracks(): LiveData<List<Track>> = playlistTracks
     fun observePlaylistQuantity(): LiveData<Int> = playlistQuantity
+    fun observeShareStatus(): LiveData<Result> = shareStatus
 
     fun updatePlaylistInformation(playlist: Playlist) {
         calculatePlaylistTime(playlist)
@@ -41,7 +47,8 @@ class PlaylistViewModel(
 
     private fun getTracksInPlaylist(playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
-            playlistTracks.postValue(playlistManagerInteractor.getTracksInPlaylist(playlist.playlistId))
+            val listWithTracks = playlistManagerInteractor.getTracksInPlaylist(playlist.playlistId)
+            playlistTracks.postValue(listWithTracks)
         }
     }
 
@@ -66,7 +73,25 @@ class PlaylistViewModel(
 
     fun deleteTrackFromPlaylist(track: Track, playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
-            playlistManagerInteractor.deleteTrackFromPlaylist(track,playlist)
+            playlistManagerInteractor.deleteTrackFromPlaylist(track, playlist)
+        }
+    }
+
+    fun sharePlaylist(playlist: Playlist) {
+        if (playlist.trackQuantity == 0) {
+            shareStatus.postValue(Result(false, ""))
+        } else {
+            viewModelScope.launch(Dispatchers.IO) {
+                val list = playlistManagerInteractor.getTracksInPlaylist(playlist.playlistId)
+                var formattedTextList = ""
+                var trackNumber = 0
+                list.forEach { track ->
+                    ++trackNumber
+                    formattedTextList += "${trackNumber}. ${track.artistName} - ${track.trackName}\n"
+                }
+                shareStatus.postValue(Result(true, formattedTextList))
+                sharingInteractor.sharePlaylist(formattedTextList)
+            }
         }
     }
 }

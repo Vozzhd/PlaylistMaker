@@ -16,7 +16,6 @@ const val KEY_FOR_PLAYLIST = "Playlist"
 const val DEFAULT_TEXT = ""
 const val SHARED_PREFS = "PlaylistMaker shared prefs"
 const val DARK_THEME = "dark theme"
-var nextPlaylistId : Int = 0
 
 class App : Application() {
 

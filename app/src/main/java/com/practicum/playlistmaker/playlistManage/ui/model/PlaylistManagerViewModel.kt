@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.playlistManage.domain.api.PlaylistManagerInteractor
 import com.practicum.playlistmaker.playlistManage.domain.entity.Playlist
-import com.practicum.playlistmaker.utilities.nextPlaylistId
 import kotlinx.coroutines.launch
 
 class PlaylistManagerViewModel(
@@ -22,7 +21,7 @@ class PlaylistManagerViewModel(
     fun createPlaylist() {
         viewModelScope.launch { playlistManagerInteractor.addPlaylist(
                 Playlist(
-                    generatePlaylistID(),
+                    0,
                     playlistStateMutableLiveData.value?.playlistName as String,
                     playlistStateMutableLiveData.value?.playlistDescription as String,
                     0,
@@ -30,9 +29,6 @@ class PlaylistManagerViewModel(
                 )
             )
         }
-    }
-    private fun generatePlaylistID():Int {
-        return ++nextPlaylistId
     }
     fun setUri(uri: Uri) { playlistStateMutableLiveData.value?.sourceForImageCover = uri }
     fun setPlaylistName(name: CharSequence?) { playlistStateMutableLiveData.value?.playlistName = name.toString() }

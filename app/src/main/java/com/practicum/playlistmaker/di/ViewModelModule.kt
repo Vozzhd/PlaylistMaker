@@ -35,6 +35,6 @@ val viewModelModule = module {
         PlaylistsFragmentViewModel(get())
     }
     viewModel {
-        PlaylistViewModel(get())
+        PlaylistViewModel(get(),get())
     }
 }

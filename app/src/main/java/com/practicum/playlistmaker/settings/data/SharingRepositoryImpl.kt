@@ -21,4 +21,8 @@ class SharingRepositoryImpl (private val context : Context) : SharingRepository 
             addressee = context.getString(R.string.supportLetterAddressee)
         )
     }
+
+    override fun getSharingPlaylistText(): String {
+        return "Bla-bla-bla"
+    }
 }

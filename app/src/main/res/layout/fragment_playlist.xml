@@ -103,7 +103,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/shareButton"
             style="@style/RegularImageSmallView"
             android:layout_marginTop="@dimen/defaultMargin"
             android:src="@drawable/share_icon_black"
@@ -117,7 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/defaultMargin"
             android:src="@drawable/three_dots"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/shareButton"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

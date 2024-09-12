@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface PlaylistManagerInteractor {
 
     fun getPlaylistsFromTable(): Flow<List<Playlist>>
+
     suspend fun getTracksInPlaylist(playlistId: Int): List<Track>
     suspend fun addPlaylist(playlist: Playlist): Long
     suspend fun deletePlaylist(playlist: Playlist)
