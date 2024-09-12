@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.roomTables.converters
 
 import android.net.Uri
 import com.practicum.playlistmaker.roomTables.tables.PlaylistsTableEntity
-import com.practicum.playlistmaker.playlistManage.domain.entity.Playlist
+import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.entity.Playlist
 
 
 class PlaylistDbConverter {

@@ -9,8 +9,8 @@ import com.practicum.playlistmaker.player.domain.api.GetTrackUseCase
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerInteractor
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
-import com.practicum.playlistmaker.playlistManage.domain.api.PlaylistManagerInteractor
-import com.practicum.playlistmaker.playlistManage.domain.entity.Playlist
+import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.api.PlaylistManagerInteractor
+import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

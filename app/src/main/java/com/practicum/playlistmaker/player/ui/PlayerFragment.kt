@@ -19,7 +19,7 @@ import com.practicum.playlistmaker.mediaLibrary.playlists.ui.presenter.PlaylistA
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.player.ui.viewModel.PlayerViewModel
-import com.practicum.playlistmaker.playlistManage.domain.entity.Playlist
+import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
 import com.practicum.playlistmaker.utilities.Result
 import org.koin.androidx.viewmodel.ext.android.viewModel

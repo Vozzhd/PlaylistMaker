@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 import com.practicum.playlistmaker.player.domain.entity.Track
-import com.practicum.playlistmaker.playlistManage.domain.entity.Playlist
+import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.entity.Playlist
 
 data class TrackWithPlaylists(
     @Embedded val track: Track,

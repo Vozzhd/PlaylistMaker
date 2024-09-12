@@ -1,9 +1,9 @@
-package com.practicum.playlistmaker.playlistManage.domain.impl
+package com.practicum.playlistmaker.playlistManage.createPlaylist.domain.impl
 
 import com.practicum.playlistmaker.player.domain.entity.Track
-import com.practicum.playlistmaker.playlistManage.domain.api.PlaylistManagerInteractor
-import com.practicum.playlistmaker.playlistManage.domain.api.PlaylistManagerRepository
-import com.practicum.playlistmaker.playlistManage.domain.entity.Playlist
+import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.api.PlaylistManagerInteractor
+import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.api.PlaylistManagerRepository
+import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.entity.Playlist
 import kotlinx.coroutines.flow.Flow
 
 class PlaylistManagerInteractorImplementation(private val playlistManagerRepository: PlaylistManagerRepository) :
@@ -19,6 +19,10 @@ class PlaylistManagerInteractorImplementation(private val playlistManagerReposit
 
     override fun getPlaylistsFromTable(): Flow<List<Playlist>> {
         return playlistManagerRepository.getPlaylistsFromTable()
+    }
+
+    override suspend fun editPlaylist(playlist: Playlist) {
+        playlistManagerRepository.editPlaylist(playlist)
     }
 
     override suspend fun getTracksInPlaylist(playlistId: Int): List<Track> {

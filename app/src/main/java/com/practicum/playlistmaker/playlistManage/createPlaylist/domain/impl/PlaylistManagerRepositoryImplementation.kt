@@ -1,10 +1,10 @@
-package com.practicum.playlistmaker.playlistManage.domain.impl
+package com.practicum.playlistmaker.playlistManage.createPlaylist.domain.impl
 
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.roomTables.converters.PlaylistDbConverter
 import com.practicum.playlistmaker.roomTables.converters.TrackDbConverterForPlaylist
-import com.practicum.playlistmaker.playlistManage.domain.api.PlaylistManagerRepository
-import com.practicum.playlistmaker.playlistManage.domain.entity.Playlist
+import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.api.PlaylistManagerRepository
+import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.entity.Playlist
 import com.practicum.playlistmaker.roomTables.crossTables.PlaylistsTracksInPlaylistsCrossReferenceTable
 import com.practicum.playlistmaker.utilities.AppDatabase
 import kotlinx.coroutines.flow.Flow
@@ -20,6 +20,11 @@ class PlaylistManagerRepositoryImplementation(
         val playlists = appDatabase.daoInterface().getPlaylists()
         val convertedPlaylist = playlists.map { playlist -> playlistDbConverter.map(playlist) }
         emit(convertedPlaylist)
+    }
+
+    override suspend fun editPlaylist(playlist: Playlist) {
+        val convertedPlaylist = playlistDbConverter.map(playlist)
+        appDatabase.daoInterface().editPlaylist(convertedPlaylist)
     }
 
     override suspend fun getTracksInPlaylist(playlistId: Int): List<Track> {

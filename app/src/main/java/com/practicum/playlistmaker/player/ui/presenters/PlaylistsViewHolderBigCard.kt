@@ -5,7 +5,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistCardBigBinding
-import com.practicum.playlistmaker.playlistManage.domain.entity.Playlist
+import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.trackQuantityEndingFormat
 
 class PlaylistsViewHolderBigCard(private val binding: PlaylistCardBigBinding) :

@@ -12,8 +12,8 @@ import com.practicum.playlistmaker.player.domain.api.GetTrackRepository
 import com.practicum.playlistmaker.player.domain.api.MediaPlayerRepository
 import com.practicum.playlistmaker.roomTables.converters.PlaylistDbConverter
 import com.practicum.playlistmaker.roomTables.converters.TrackDbConverterForPlaylist
-import com.practicum.playlistmaker.playlistManage.domain.api.PlaylistManagerRepository
-import com.practicum.playlistmaker.playlistManage.domain.impl.PlaylistManagerRepositoryImplementation
+import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.api.PlaylistManagerRepository
+import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.impl.PlaylistManagerRepositoryImplementation
 import com.practicum.playlistmaker.search.data.api.TracksRepositoryImplementation
 import com.practicum.playlistmaker.search.data.local.HistoryRepositoryImplementation
 import com.practicum.playlistmaker.search.domain.api.HistoryRepository

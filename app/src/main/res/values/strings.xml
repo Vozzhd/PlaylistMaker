@@ -70,4 +70,9 @@
     <string name="no">нет</string>
     <string name="yes">да</string>
     <string name="sharePlaylistIsEmpty">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="sharePlaylist">Поделиться</string>
+    <string name="editPlaylistInfo">Редактировать информацию</string>
+    <string name="deletePlaylist">Удалить плейлист</string>
+    <string name="edit">Редактировать</string>
+    <string name="save">Сохранить</string>
 </resources>

@@ -210,31 +210,32 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/shareButtonExtended"
+            android:id="@+id/sharePlaylistFrameButton"
             style="@style/FrameButtonsInExtendedPlaylistMenu"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:gravity="center_vertical"
             android:paddingStart="16dp"
-            android:text="Поделиться" />
+            android:text="@string/sharePlaylist" />
 
 
         <TextView
+            android:id="@+id/editPlaylistFrameButton"
             style="@style/FrameButtonsInExtendedPlaylistMenu"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:gravity="center_vertical"
             android:paddingStart="16dp"
-            android:text="Редактировать информацию" />
+            android:text="@string/editPlaylistInfo" />
 
         <TextView
-            android:id="@+id/deletePlaylist"
+            android:id="@+id/deletePlaylistFrameButton"
             style="@style/FrameButtonsInExtendedPlaylistMenu"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:gravity="center_vertical"
             android:paddingStart="16dp"
-            android:text="Удалить плейлист" />
+            android:text="@string/deletePlaylist" />
 
 
     </LinearLayout>

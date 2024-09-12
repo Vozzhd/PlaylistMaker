@@ -20,7 +20,8 @@ import com.practicum.playlistmaker.mediaLibrary.playlist.ui.presenters.PlaylistA
 import com.practicum.playlistmaker.mediaLibrary.playlist.ui.viewModel.PlaylistViewModel
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.ui.PlayerFragment
-import com.practicum.playlistmaker.playlistManage.domain.entity.Playlist
+import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.entity.Playlist
+import com.practicum.playlistmaker.playlistManage.createPlaylist.ui.EditPlaylistFragment
 import com.practicum.playlistmaker.search.ui.SearchFragment.Companion.CLICK_DEBOUNCE_DELAY
 import com.practicum.playlistmaker.utilities.KEY_FOR_PLAYLIST
 import com.practicum.playlistmaker.utilities.Result
@@ -63,6 +64,7 @@ class PlaylistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         playlist = requireArguments().get(KEY_FOR_PLAYLIST) as Playlist
+        viewModel.updatePlaylistInformation(playlist)
         onTrackClickDebounce =
             debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
                 viewModel.onTrackClick(track)
@@ -107,14 +109,20 @@ class PlaylistFragment : Fragment() {
         binding.shareButton.setOnClickListener {
             viewModel.sharePlaylist(playlist)
         }
-        binding.shareButtonExtended.setOnClickListener{
+        binding.sharePlaylistFrameButton.setOnClickListener {
             viewModel.sharePlaylist(playlist)
         }
 
         binding.extendedMenu.setOnClickListener {
             extendedBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
         }
-        binding.deletePlaylist.setOnClickListener{
+        binding.editPlaylistFrameButton.setOnClickListener {
+
+            findNavController().navigate(
+                R.id.action_playlistFragment_to_editPlaylist,
+                EditPlaylistFragment.createArgs(playlist))
+        }
+        binding.deletePlaylistFrameButton.setOnClickListener {
             viewModel.deletePlaylist(playlist)
             findNavController().popBackStack()
 

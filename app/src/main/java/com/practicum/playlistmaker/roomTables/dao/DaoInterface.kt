@@ -6,7 +6,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.practicum.playlistmaker.player.domain.entity.Track
+import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.entity.Playlist
 import com.practicum.playlistmaker.roomTables.crossTables.PlaylistWithTracks
 import com.practicum.playlistmaker.roomTables.crossTables.PlaylistsTracksInPlaylistsCrossReferenceTable
 import com.practicum.playlistmaker.roomTables.tables.FavoriteTableEntity
@@ -62,5 +64,7 @@ interface DaoInterface {
     @Query("DELETE FROM cross_reference_track_playlist WHERE trackId =:trackId")
     suspend fun deleteTrackFromCrossRefTable(trackId: Int)
 
+    @Update
+    suspend fun editPlaylist(playlist: PlaylistsTableEntity)
 
 }
