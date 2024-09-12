@@ -5,12 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
@@ -39,6 +41,7 @@ class PlaylistFragment : Fragment() {
     private var onLongTrackClickDebounce: ((Track) -> Unit)? = null
     private var playlistAdapter: PlaylistAdapter? = null
     private lateinit var playlist: Playlist
+    private lateinit var extendedBottomSheet: BottomSheetBehavior<LinearLayout>
 
     companion object {
         fun createArgs(playlist: Playlist): Bundle {
@@ -70,6 +73,10 @@ class PlaylistFragment : Fragment() {
                 viewModel.onLongTrackClick(track)
             }
 
+
+        extendedBottomSheet = BottomSheetBehavior.from(binding.extendedMenuBottomSheet)
+        extendedBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
+
         viewModel.updatePlaylistInformation(playlist)
 
         binding.playlistName.text = playlist.name
@@ -99,6 +106,18 @@ class PlaylistFragment : Fragment() {
 
         binding.shareButton.setOnClickListener {
             viewModel.sharePlaylist(playlist)
+        }
+        binding.shareButtonExtended.setOnClickListener{
+            viewModel.sharePlaylist(playlist)
+        }
+
+        binding.extendedMenu.setOnClickListener {
+            extendedBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        binding.deletePlaylist.setOnClickListener{
+            viewModel.deletePlaylist(playlist)
+            findNavController().popBackStack()
+
         }
 
         Glide.with(this)

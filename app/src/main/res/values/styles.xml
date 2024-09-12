@@ -186,6 +186,13 @@
         <item name="android:textColor">@color/YP_blue</item>
     </style>
 
+    <style name="FrameButtonsInExtendedPlaylistMenu">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">16sp</item>
+
+    </style>
+
     <dimen name="bigBoldTextSize">24sp</dimen>
     <dimen name="textSizeForRegularBig">18sp</dimen>
 </resources>
