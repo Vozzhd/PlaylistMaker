@@ -25,7 +25,7 @@ class PlaylistViewModel(
     private val playlistTracks = MutableLiveData<List<Track>>()
     private val playlistQuantity = MutableLiveData<Int>()
     private val shareStatus = MutableLiveData<Result>()
-
+    private val trackListForShare = MutableLiveData<List<Track>>()
 
     fun observePlaylistDuration(): LiveData<Long> = playlistDuration
     fun observeClickEvent(): LiveData<Track> = clickEvent
@@ -33,7 +33,8 @@ class PlaylistViewModel(
     fun observePlaylistTracks(): LiveData<List<Track>> = playlistTracks
     fun observePlaylistQuantity(): LiveData<Int> = playlistQuantity
     fun observeShareStatus(): LiveData<Result> = shareStatus
-    fun observePlaylist():LiveData<Playlist> = playlist
+    fun observePlaylist(): LiveData<Playlist> = playlist
+    fun observeTrackListForShare(): LiveData<List<Track>> = trackListForShare
 
     fun updatePlaylistInformation(playlist: Playlist) {
         calculatePlaylistTime(playlist)
@@ -86,23 +87,24 @@ class PlaylistViewModel(
         }
     }
 
-    fun sharePlaylist(playlist: Playlist) {
+    fun shareRequest(playlist: Playlist) {
         if (playlist.trackQuantity == 0) {
             shareStatus.postValue(Result(false, ""))
         } else {
-            viewModelScope.launch(Dispatchers.IO) {
-                val list = playlistManagerInteractor.getTracksInPlaylist(playlist.playlistId)
-                var formattedTextList = ""
-                var trackNumber = 0
-                list.forEach { track ->
-                    ++trackNumber
-                    formattedTextList += "${trackNumber}. ${track.artistName} - ${track.trackName}\n"
-                }
-                shareStatus.postValue(Result(true, formattedTextList))
-                sharingInteractor.sharePlaylist(formattedTextList)
-            }
+            shareStatus.postValue(Result(true, ""))
         }
     }
+
+    fun getTrackList(playlistId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            trackListForShare.postValue(playlistManagerInteractor.getTracksInPlaylist(playlistId))
+        }
+    }
+
+    fun shareTrackList(shareText: String) {
+        sharingInteractor.sharePlaylist(shareText)
+    }
+
 
     fun deletePlaylist(playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {

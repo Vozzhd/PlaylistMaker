@@ -36,7 +36,8 @@ class PlaylistFragment : Fragment() {
 
     private var _binding: FragmentPlaylistBinding? = null
     private val binding get() = _binding!!
-    val dateFormat by lazy { SimpleDateFormat("m", Locale.getDefault()) }
+    val dateFormatForPlaylist by lazy { SimpleDateFormat("m", Locale.getDefault()) }
+    private val dateFormatForTrack by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     private val viewModel by viewModel<PlaylistViewModel>()
     private var onTrackClickDebounce: ((Track) -> Unit)? = null
     private var onLongTrackClickDebounce: ((Track) -> Unit)? = null
@@ -99,6 +100,7 @@ class PlaylistFragment : Fragment() {
         viewModel.observePlaylistQuantity().observe(viewLifecycleOwner) { renderQuantity(it) }
         viewModel.observeShareStatus().observe(viewLifecycleOwner) { shareAction(it) }
         viewModel.observePlaylist().observe(viewLifecycleOwner) { updatePlaylistInformation(it) }
+        viewModel.observeTrackListForShare().observe(viewLifecycleOwner) { share(it) }
 
         playlistAdapter = PlaylistAdapter(onTrackClickDebounce!!, onLongTrackClickDebounce!!)
 
@@ -110,10 +112,10 @@ class PlaylistFragment : Fragment() {
         binding.tracksQuantity.text = trackQuantityFormattedText
 
         binding.shareButton.setOnClickListener {
-            viewModel.sharePlaylist(playlist)
+            viewModel.shareRequest(playlist)
         }
         binding.sharePlaylistFrameButton.setOnClickListener {
-            viewModel.sharePlaylist(playlist)
+            viewModel.shareRequest(playlist)
         }
 
         binding.extendedMenu.setOnClickListener {
@@ -138,23 +140,40 @@ class PlaylistFragment : Fragment() {
             .into(binding.playlistCover)
     }
 
+    private fun share(it: List<Track>) {
+
+        var formattedTextList = ""
+        var trackNumber = 0L
+        var trackDuration = ""
+        formattedTextList =
+            "${playlist.name}\n${playlist.description}\n${playlist.trackQuantity} ${trackQuantityEndingFormat(playlist.trackQuantity, requireContext())}\n"
+
+        it.forEach { track ->
+            ++trackNumber
+            trackDuration = dateFormatForTrack.format(track.trackTimeMillis.toInt())
+            formattedTextList += "${trackNumber}. ${track.artistName} - ${track.trackName} (${trackDuration})\n"
+        }
+        viewModel.shareTrackList(formattedTextList)
+    }
+
+
+    private fun shareAction(result: Result) {
+        when (result.result) {
+            true -> sharePlaylist(playlist)
+            false -> showToastEmpty()
+        }
+    }
+
+    private fun sharePlaylist(playlist: Playlist) {
+        viewModel.getTrackList(playlist.playlistId)
+    }
+
     private fun showToastEmpty() {
         Toast.makeText(
             requireContext(),
             requireContext().getString(R.string.sharePlaylistIsEmpty),
             Toast.LENGTH_SHORT
         ).show()
-    }
-
-    private fun shareAction(result: Result) {
-        when (result.result) {
-            true -> sharePlaylist()
-            false -> showToastEmpty()
-        }
-    }
-
-    private fun sharePlaylist() {
-
     }
 
     private fun updatePlaylistInformation(playlistFromTable: Playlist) {
@@ -208,7 +227,7 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun renderDuration(playlistDurationInMillis: Long) {
-        val playlistDurationInMinutes = dateFormat.format(playlistDurationInMillis)
+        val playlistDurationInMinutes = dateFormatForPlaylist.format(playlistDurationInMillis)
 
         binding.playlistDuration.text = "${playlistDurationInMinutes.toString()} ${
             minutesQuantityEndingFormat(
