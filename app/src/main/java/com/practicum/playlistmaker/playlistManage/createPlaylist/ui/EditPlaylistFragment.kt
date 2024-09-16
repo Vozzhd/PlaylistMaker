@@ -25,7 +25,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class EditPlaylistFragment : Fragment() {
     private var _binding: FragmentEditPlaylistBinding? = null
     private val binding get() = _binding!!
-    private lateinit var playlist: Playlist
 
     companion object {
         fun createArgs(playlist: Playlist): Bundle {
@@ -53,23 +52,26 @@ class EditPlaylistFragment : Fragment() {
         binding.description.setText(playlist.description)
         binding.playlistCover.setImageURI(playlist.sourceOfPlaylistCoverImage)
 
-        var nameForEdit = ""
-        var descriptionForEdit = ""
+        var nameForEdit = playlist.name
+        var descriptionForEdit = playlist.description
 
-        val albumNameTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        saveButtonState(binding.name.text)
+
+        val playlistNameTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(text: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
                 nameForEdit = text.toString()
-                createButtonState(text)
+                saveButtonState(text)
                 frameAndTextColorsState(binding.albumNameFrame, text)
                 viewModel.setPlaylistName(text)
             }
 
             override fun afterTextChanged(s: Editable?) {}
         }
-        val albumDescriptionTextWatcher = object : TextWatcher {
+
+        val playlistDescriptionTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
                 viewModel.setPlaylistDescription(text)
@@ -85,16 +87,18 @@ class EditPlaylistFragment : Fragment() {
                 if (uri != null) {
                     binding.playlistCover.setImageURI(uri)
                     viewModel.setUri(uri)
+                    playlist.sourceOfPlaylistCoverImage = uri
                 }
             }
+
         binding.playlistCover.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
 
 
-        binding.name.addTextChangedListener(albumNameTextWatcher)
-        binding.description.addTextChangedListener(albumDescriptionTextWatcher)
+        binding.name.addTextChangedListener(playlistNameTextWatcher)
+        binding.description.addTextChangedListener(playlistDescriptionTextWatcher)
         binding.backButton.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -114,7 +118,7 @@ class EditPlaylistFragment : Fragment() {
     }
 
 
-    private fun createButtonState(text: CharSequence?) {
+    private fun saveButtonState(text: CharSequence?) {
         binding.saveButton.isEnabled = !text.isNullOrEmpty()
     }
 
