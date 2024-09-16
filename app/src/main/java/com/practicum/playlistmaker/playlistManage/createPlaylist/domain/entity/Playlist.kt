@@ -4,9 +4,9 @@ import android.net.Uri
 import java.io.Serializable
 class Playlist(
     val playlistId: Int = 0,
-    val name: String,
-    val description: String,
+    var name: String,
+    var description: String,
     var trackQuantity:Int,
-    val sourceOfPlaylistCoverImage: Uri? = Uri.EMPTY
+    var sourceOfPlaylistCoverImage: Uri? = Uri.EMPTY
 ): Serializable {
 }

@@ -67,4 +67,7 @@ interface DaoInterface {
     @Update
     suspend fun editPlaylist(playlist: PlaylistsTableEntity)
 
+    @Query("SELECT * FROM playlists_table WHERE playlistId = :playlistId")
+    suspend fun getPlaylist(playlistId: Int): PlaylistsTableEntity
+
 }

@@ -64,7 +64,9 @@ class PlaylistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         playlist = requireArguments().get(KEY_FOR_PLAYLIST) as Playlist
+
         viewModel.updatePlaylistInformation(playlist)
+
         onTrackClickDebounce =
             debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
                 viewModel.onTrackClick(track)
@@ -74,7 +76,6 @@ class PlaylistFragment : Fragment() {
             debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
                 viewModel.onLongTrackClick(track)
             }
-
 
         extendedBottomSheet = BottomSheetBehavior.from(binding.extendedMenuBottomSheet)
         extendedBottomSheet.state = BottomSheetBehavior.STATE_HIDDEN
@@ -97,11 +98,13 @@ class PlaylistFragment : Fragment() {
         viewModel.observePlaylistTracks().observe(viewLifecycleOwner) { fillTracks(it) }
         viewModel.observePlaylistQuantity().observe(viewLifecycleOwner) { renderQuantity(it) }
         viewModel.observeShareStatus().observe(viewLifecycleOwner) { shareAction(it) }
+        viewModel.observePlaylist().observe(viewLifecycleOwner) { updatePlaylistInformation(it) }
 
         playlistAdapter = PlaylistAdapter(onTrackClickDebounce!!, onLongTrackClickDebounce!!)
 
         binding.tracksInPlaylistRecyclerView.layoutManager =
             LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false)
+
         binding.tracksInPlaylistRecyclerView.adapter = playlistAdapter
 
         binding.tracksQuantity.text = trackQuantityFormattedText
@@ -120,7 +123,8 @@ class PlaylistFragment : Fragment() {
 
             findNavController().navigate(
                 R.id.action_playlistFragment_to_editPlaylist,
-                EditPlaylistFragment.createArgs(playlist))
+                EditPlaylistFragment.createArgs(playlist)
+            )
         }
         binding.deletePlaylistFrameButton.setOnClickListener {
             viewModel.deletePlaylist(playlist)
@@ -153,6 +157,17 @@ class PlaylistFragment : Fragment() {
 
     }
 
+    private fun updatePlaylistInformation(playlistFromTable: Playlist) {
+        playlist = playlistFromTable
+        binding.playlistName.text = playlist.name
+        binding.playlistDescription.text = playlist.description
+        binding.albumCoverImage
+
+        Glide.with(this)
+            .load(playlistFromTable.sourceOfPlaylistCoverImage)
+            .placeholder(R.drawable.placeholder_playlist_cover)
+            .into(binding.playlistCover)
+    }
 
     private fun renderQuantity(it: Int) {
         playlist.trackQuantity = it
@@ -173,10 +188,10 @@ class PlaylistFragment : Fragment() {
                 run {
                     viewModel.deleteTrackFromPlaylist(it, playlist)
                     viewModel.updatePlaylistInformation(playlist)
-                    playlistAdapter?.notifyDataSetChanged()
                 }
             }
             .show()
+        playlistAdapter?.notifyDataSetChanged()
     }
 
     private fun fillTracks(trackList: List<Track>) {

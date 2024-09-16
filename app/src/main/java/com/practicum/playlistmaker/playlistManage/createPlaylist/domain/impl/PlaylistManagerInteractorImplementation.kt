@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.Flow
 class PlaylistManagerInteractorImplementation(private val playlistManagerRepository: PlaylistManagerRepository) :
     PlaylistManagerInteractor {
 
-    override suspend fun addPlaylist(playlist: Playlist): Long {
-        return playlistManagerRepository.addPlaylist(playlist)
+    override suspend fun addPlaylist(playlist: Playlist) {
+        playlistManagerRepository.addPlaylist(playlist)
     }
 
     override suspend fun deletePlaylist(playlist: Playlist) {
@@ -27,6 +27,10 @@ class PlaylistManagerInteractorImplementation(private val playlistManagerReposit
 
     override suspend fun getTracksInPlaylist(playlistId: Int): List<Track> {
         return playlistManagerRepository.getTracksInPlaylist(playlistId)
+    }
+
+    override suspend fun getPlaylist(playlistId: Int): Playlist {
+        return playlistManagerRepository.getPlaylist(playlistId)
     }
 
     override suspend fun addTrackToPlaylist(track: Track, playlistId: Playlist) {

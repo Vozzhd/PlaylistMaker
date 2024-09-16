@@ -54,4 +54,8 @@ class PlaylistManagerRepositoryImplementation(
         appDatabase.daoInterface().deleteTrackFromCrossRefTable(track.trackId)
         appDatabase.daoInterface().updateTracksQuantityInPlaylist(appDatabase.daoInterface().getTracksInPlaylist(playlist.playlistId).tracks.size, playlist.playlistId)
     }
+
+    override suspend fun getPlaylist(playlistId: Int): Playlist {
+        return playlistDbConverter.map(appDatabase.daoInterface().getPlaylist(playlistId))
+    }
 }

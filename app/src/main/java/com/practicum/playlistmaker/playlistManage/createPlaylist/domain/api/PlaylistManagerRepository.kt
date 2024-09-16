@@ -12,4 +12,6 @@ interface PlaylistManagerRepository {
     suspend fun deletePlaylist(playlist: Playlist)
     suspend fun addTrackToPlaylist(track: Track, playlistId: Playlist)
     suspend fun deleteTrackFromPlaylist(track: Track, playlist: Playlist)
+    suspend fun getPlaylist(playlistId: Int): Playlist
+
 }

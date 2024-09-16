@@ -10,7 +10,6 @@ import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.entity.P
 import com.practicum.playlistmaker.settings.domain.api.SharingInteractor
 import com.practicum.playlistmaker.utilities.Result
 import com.practicum.playlistmaker.utilities.SingleEventLiveData
-import com.practicum.playlistmaker.utilities.trackQuantityEndingFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -21,10 +20,12 @@ class PlaylistViewModel(
 
     private val clickEvent = SingleEventLiveData<Track>()
     private val longClickEvent = SingleEventLiveData<Track>()
+    private val playlist = MutableLiveData<Playlist>()
     private val playlistDuration = MutableLiveData<Long>()
     private val playlistTracks = MutableLiveData<List<Track>>()
     private val playlistQuantity = MutableLiveData<Int>()
     private val shareStatus = MutableLiveData<Result>()
+
 
     fun observePlaylistDuration(): LiveData<Long> = playlistDuration
     fun observeClickEvent(): LiveData<Track> = clickEvent
@@ -32,11 +33,19 @@ class PlaylistViewModel(
     fun observePlaylistTracks(): LiveData<List<Track>> = playlistTracks
     fun observePlaylistQuantity(): LiveData<Int> = playlistQuantity
     fun observeShareStatus(): LiveData<Result> = shareStatus
+    fun observePlaylist():LiveData<Playlist> = playlist
 
     fun updatePlaylistInformation(playlist: Playlist) {
         calculatePlaylistTime(playlist)
         getTracksInPlaylist(playlist)
         getTracksQuantityInPlaylist(playlist)
+        getPlaylistInformation(playlist)
+    }
+
+    private fun getPlaylistInformation(it: Playlist) {
+        viewModelScope.launch(Dispatchers.IO) {
+            playlist.postValue(playlistManagerInteractor.getPlaylist(it.playlistId))
+        }
     }
 
     private fun getTracksQuantityInPlaylist(playlist: Playlist) {
