@@ -11,6 +11,7 @@ import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.entity.Playlist
 import com.practicum.playlistmaker.roomTables.crossTables.PlaylistWithTracks
 import com.practicum.playlistmaker.roomTables.crossTables.PlaylistsTracksInPlaylistsCrossReferenceTable
+import com.practicum.playlistmaker.roomTables.crossTables.TrackWithPlaylists
 import com.practicum.playlistmaker.roomTables.tables.FavoriteTableEntity
 import com.practicum.playlistmaker.roomTables.tables.PlaylistsTableEntity
 import com.practicum.playlistmaker.roomTables.tables.TracksInPlaylistsTableEntity
@@ -61,13 +62,20 @@ interface DaoInterface {
     @Query("SELECT * FROM playlists_table WHERE playlistId = :playlistId")
     suspend fun getTracksInPlaylist(playlistId: Int): PlaylistWithTracks
 
-    @Query("DELETE FROM cross_reference_track_playlist WHERE trackId =:trackId")
-    suspend fun deleteTrackFromCrossRefTable(trackId: Int)
+    @Transaction
+    @Query("SELECT * FROM tracks_in_playlist_table WHERE trackId = :trackId")
+    suspend fun getPlaylistsOfTrack(trackId: Int): TrackWithPlaylists
+
+    @Query("DELETE FROM cross_reference_track_playlist WHERE trackId =:trackId AND playlistId =:playlistId")
+    suspend fun deleteTrackFromCrossRefTable(trackId: Int,playlistId: Int)
 
     @Update
     suspend fun editPlaylist(playlist: PlaylistsTableEntity)
 
     @Query("SELECT * FROM playlists_table WHERE playlistId = :playlistId")
     suspend fun getPlaylist(playlistId: Int): PlaylistsTableEntity
+
+    @Query("DELETE FROM tracks_in_playlist_table WHERE trackId =:trackId")
+    suspend fun deleteTrackFromPlaylistsTable(trackId: Int)
 
 }

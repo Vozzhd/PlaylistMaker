@@ -44,15 +44,34 @@ class PlaylistManagerRepositoryImplementation(
 
     override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist) {
         appDatabase.daoInterface().insertTrackToPlaylist(trackDbConverterForPlaylist.map(track))
-        appDatabase.daoInterface().insertTrackToCrossTable(PlaylistsTracksInPlaylistsCrossReferenceTable(track.trackId, playlist.playlistId))
-        appDatabase.daoInterface().updateTracksQuantityInPlaylist(appDatabase.daoInterface().getTracksInPlaylist(playlist.playlistId).tracks.size, playlist.playlistId)
+        appDatabase.daoInterface().insertTrackToCrossTable(
+            PlaylistsTracksInPlaylistsCrossReferenceTable(
+                track.trackId,
+                playlist.playlistId
+            )
+        )
+        appDatabase.daoInterface().updateTracksQuantityInPlaylist(
+            appDatabase.daoInterface().getTracksInPlaylist(playlist.playlistId).tracks.size,
+            playlist.playlistId
+        )
 
     }
 
     override suspend fun deleteTrackFromPlaylist(track: Track, playlist: Playlist) {
-        appDatabase.daoInterface().deleteTrackFromPlaylist(trackDbConverterForPlaylist.map(track))
-        appDatabase.daoInterface().deleteTrackFromCrossRefTable(track.trackId)
-        appDatabase.daoInterface().updateTracksQuantityInPlaylist(appDatabase.daoInterface().getTracksInPlaylist(playlist.playlistId).tracks.size, playlist.playlistId)
+
+        appDatabase.daoInterface().deleteTrackFromCrossRefTable(track.trackId, playlist.playlistId)
+
+        val trackWithPlaylist = appDatabase.daoInterface().getPlaylistsOfTrack(track.trackId)
+
+        val mappedPlaylists = trackWithPlaylist.playlists.map { playlist -> playlistDbConverter.map(playlist) }
+        if (mappedPlaylists.isEmpty()) {
+            appDatabase.daoInterface().deleteTrackFromPlaylist(trackDbConverterForPlaylist.map(track))
+        }
+
+        appDatabase.daoInterface().updateTracksQuantityInPlaylist(
+            appDatabase.daoInterface().getTracksInPlaylist(playlist.playlistId).tracks.size,
+            playlist.playlistId
+        )
     }
 
     override suspend fun getPlaylist(playlistId: Int): Playlist {

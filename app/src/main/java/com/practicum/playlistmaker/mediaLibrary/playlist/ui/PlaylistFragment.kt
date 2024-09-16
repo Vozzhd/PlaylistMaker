@@ -128,6 +128,7 @@ class PlaylistFragment : Fragment() {
                 EditPlaylistFragment.createArgs(playlist)
             )
         }
+
         binding.deletePlaylistFrameButton.setOnClickListener {
             viewModel.deletePlaylist(playlist)
             findNavController().popBackStack()
@@ -207,6 +208,7 @@ class PlaylistFragment : Fragment() {
                 run {
                     viewModel.deleteTrackFromPlaylist(it, playlist)
                     viewModel.updatePlaylistInformation(playlist)
+                    playlistAdapter?.notifyDataSetChanged()
                 }
             }
             .show()
