@@ -8,9 +8,6 @@ import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.utilities.TrackClickListener
 
 class TrackAdapter(private val trackClickListener: TrackClickListener) : RecyclerView.Adapter<TrackViewHolder>() {
-    companion object {
-        const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
 
     var trackList: MutableList<Track> = mutableListOf()
     private var isClickAllowed = true
@@ -39,6 +36,10 @@ class TrackAdapter(private val trackClickListener: TrackClickListener) : Recycle
             }
         }
 
+    }
+
+    companion object {
+        const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
 }

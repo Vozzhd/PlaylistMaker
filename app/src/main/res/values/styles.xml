@@ -167,23 +167,24 @@
         <item name="materialAlertDialogBodyTextStyle">@style/MaterialAlertBodyText</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveMaterialAlertButtonText</item>
         <item name="buttonBarNegativeButtonStyle">@style/MaterialAlertButtonText</item>
+
     </style>
 
     <style name="MaterialAlertDialogText" parent="@style/MaterialAlertDialog.MaterialComponents.Title.Text.CenterStacked">
-        <item name="android:textColor">@color/YP_blue</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
 
     <style name="MaterialAlertBodyText" parent="MaterialAlertDialog.Material3.Body.Text.CenterStacked">
-        <item name="android:textColor">@color/YP_blue</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textSize">@dimen/defaultTextSizeSmall</item>
         <item name="android:maxEms">25</item>
     </style>
 
     <style name="MaterialAlertButtonText" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/YP_blue</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
     <style name="PositiveMaterialAlertButtonText" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/YP_blue</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
 
     <style name="FrameButtonsInExtendedPlaylistMenu">
@@ -191,6 +192,11 @@
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">16sp</item>
 
+    </style>
+
+    <style name="cutCornerStyle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
     </style>
 
     <dimen name="bigBoldTextSize">24sp</dimen>

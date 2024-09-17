@@ -33,14 +33,6 @@ class PlayerFragment() : Fragment() {
     private val viewModel by viewModel<PlayerViewModel>()
     private lateinit var bottomSheet: BottomSheetBehavior<LinearLayout>
 
-    companion object {
-        fun createArgs(track: Track): Bundle {
-            return bundleOf(
-                KEY_FOR_TRACK to track
-            )
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -216,5 +208,13 @@ class PlayerFragment() : Fragment() {
     override fun onDestroy() {
         viewModel.release()
         super.onDestroy()
+    }
+
+    companion object {
+        fun createArgs(track: Track): Bundle {
+            return bundleOf(
+                KEY_FOR_TRACK to track
+            )
+        }
     }
 }

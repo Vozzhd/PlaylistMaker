@@ -26,13 +26,6 @@ class EditPlaylistFragment : Fragment() {
     private var _binding: FragmentEditPlaylistBinding? = null
     private val binding get() = _binding!!
 
-    companion object {
-        fun createArgs(playlist: Playlist): Bundle {
-            return bundleOf(
-                KEY_FOR_PLAYLIST to playlist
-            )
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -195,5 +188,11 @@ class EditPlaylistFragment : Fragment() {
         }
     }
 
-
+    companion object {
+        fun createArgs(playlist: Playlist): Bundle {
+            return bundleOf(
+                KEY_FOR_PLAYLIST to playlist
+            )
+        }
+    }
 }

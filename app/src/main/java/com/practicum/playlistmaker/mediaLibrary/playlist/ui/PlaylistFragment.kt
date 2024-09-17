@@ -45,14 +45,6 @@ class PlaylistFragment : Fragment() {
     private lateinit var playlist: Playlist
     private lateinit var extendedBottomSheet: BottomSheetBehavior<LinearLayout>
 
-    companion object {
-        fun createArgs(playlist: Playlist): Bundle {
-            return bundleOf(
-                KEY_FOR_PLAYLIST to playlist
-            )
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -94,7 +86,10 @@ class PlaylistFragment : Fragment() {
         }"
 
         viewModel.observeClickEvent().observe(viewLifecycleOwner) { openPlayerFragment(it) }
-        viewModel.observeLongClickEvent().observe(viewLifecycleOwner) { openDeleteDialog(it) }
+        viewModel.observeLongClickEvent().observe(viewLifecycleOwner) {
+            openTrackDeleteDialog(it)
+
+        }
         viewModel.observePlaylistDuration().observe(viewLifecycleOwner) { renderDuration(it) }
         viewModel.observePlaylistTracks().observe(viewLifecycleOwner) { fillTracks(it) }
         viewModel.observePlaylistQuantity().observe(viewLifecycleOwner) { renderQuantity(it) }
@@ -130,9 +125,7 @@ class PlaylistFragment : Fragment() {
         }
 
         binding.deletePlaylistFrameButton.setOnClickListener {
-            viewModel.deletePlaylist(playlist)
-            findNavController().popBackStack()
-
+            openPlaylistDeleteDialog(playlist)
         }
 
         Glide.with(this)
@@ -182,6 +175,7 @@ class PlaylistFragment : Fragment() {
         binding.playlistName.text = playlist.name
         binding.playlistDescription.text = playlist.description
         binding.albumCoverImage
+        playlistAdapter!!.notifyDataSetChanged()
 
         Glide.with(this)
             .load(playlistFromTable.sourceOfPlaylistCoverImage)
@@ -200,19 +194,29 @@ class PlaylistFragment : Fragment() {
         binding.tracksQuantity.text = trackQuantityFormattedText
     }
 
-    private fun openDeleteDialog(it: Track) {
+    private fun openTrackDeleteDialog(it: Track) {
         MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertText)
             .setTitle(requireContext().getString(R.string.deletingTrackFromPlaylist))
             .setNegativeButton(requireContext().getString(R.string.no)) { _, _ -> }
+            .setPositiveButton(requireContext().getString(R.string.yes)) { _, _ -> run {
+                viewModel.deleteTrackFromPlaylist(it, playlist)
+
+            } }
+            .show()
+    }
+
+    private fun openPlaylistDeleteDialog(it: Playlist) {
+
+        MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertText)
+            .setTitle(requireContext().getString(R.string.deletingPlaylistFromTable) + " «${playlist.name}»?")
+            .setNegativeButton(requireContext().getString(R.string.no)) { _, _ -> }
             .setPositiveButton(requireContext().getString(R.string.yes)) { _, _ ->
                 run {
-                    viewModel.deleteTrackFromPlaylist(it, playlist)
-                    viewModel.updatePlaylistInformation(playlist)
-                    playlistAdapter?.notifyDataSetChanged()
+                    viewModel.deletePlaylist(playlist)
+                    findNavController().popBackStack()
                 }
             }
             .show()
-        playlistAdapter?.notifyDataSetChanged()
     }
 
     private fun fillTracks(trackList: List<Track>) {
@@ -237,5 +241,12 @@ class PlaylistFragment : Fragment() {
                 requireContext()
             )
         }"
+    }
+    companion object {
+        fun createArgs(playlist: Playlist): Bundle {
+            return bundleOf(
+                KEY_FOR_PLAYLIST to playlist
+            )
+        }
     }
 }

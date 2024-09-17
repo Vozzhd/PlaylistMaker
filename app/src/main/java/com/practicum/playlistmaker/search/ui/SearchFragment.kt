@@ -23,10 +23,7 @@ import com.practicum.playlistmaker.utilities.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
-    companion object {
-        const val SAVED_TEXT_KEY = "Saved text in input field"
-        const val CLICK_DEBOUNCE_DELAY = 300L
-    }
+
 
     private var _binding: SearchFragmentBinding? = null
     private val binding get() = _binding!!
@@ -212,5 +209,10 @@ class SearchFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SAVED_TEXT_KEY, inputInSearchView)
+    }
+
+    companion object {
+        const val SAVED_TEXT_KEY = "Saved text in input field"
+        const val CLICK_DEBOUNCE_DELAY = 300L
     }
 }

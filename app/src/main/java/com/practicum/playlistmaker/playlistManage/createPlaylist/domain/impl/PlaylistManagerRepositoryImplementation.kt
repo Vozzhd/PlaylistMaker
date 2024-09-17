@@ -17,41 +17,41 @@ class PlaylistManagerRepositoryImplementation(
 ) : PlaylistManagerRepository {
 
     override fun getPlaylistsFromTable(): Flow<List<Playlist>> = flow {
-        val playlists = appDatabase.daoInterface().getPlaylists()
+        val playlists = appDatabase.managePlaylistDaoInterface().getPlaylists()
         val convertedPlaylist = playlists.map { playlist -> playlistDbConverter.map(playlist) }
         emit(convertedPlaylist)
     }
 
     override suspend fun editPlaylist(playlist: Playlist) {
         val convertedPlaylist = playlistDbConverter.map(playlist)
-        appDatabase.daoInterface().editPlaylist(convertedPlaylist)
+        appDatabase.managePlaylistDaoInterface().editPlaylist(convertedPlaylist)
     }
 
     override suspend fun getTracksInPlaylist(playlistId: Int): List<Track> {
-        val tracksInPlaylistData = appDatabase.daoInterface().getTracksInPlaylist(playlistId)
+        val tracksInPlaylistData = appDatabase.crossReferenceTablesDaoInterface().getTracksInPlaylist(playlistId)
         val mappedTrackList =
             tracksInPlaylistData.tracks.map { track -> trackDbConverterForPlaylist.map(track) }
         return mappedTrackList
     }
 
     override suspend fun addPlaylist(playlist: Playlist): Long {
-        return appDatabase.daoInterface().insertPlaylist(playlistDbConverter.map(playlist))
+        return appDatabase.managePlaylistDaoInterface().insertPlaylist(playlistDbConverter.map(playlist))
     }
 
     override suspend fun deletePlaylist(playlist: Playlist) {
-        appDatabase.daoInterface().deletePlaylist(playlistDbConverter.map(playlist))
+        appDatabase.managePlaylistDaoInterface().deletePlaylist(playlistDbConverter.map(playlist))
     }
 
     override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist) {
-        appDatabase.daoInterface().insertTrackToPlaylist(trackDbConverterForPlaylist.map(track))
-        appDatabase.daoInterface().insertTrackToCrossTable(
+        appDatabase.manageTracksDaoInterface().insertTrackToPlaylist(trackDbConverterForPlaylist.map(track))
+        appDatabase.crossReferenceTablesDaoInterface().insertTrackToCrossTable(
             PlaylistsTracksInPlaylistsCrossReferenceTable(
                 track.trackId,
                 playlist.playlistId
             )
         )
-        appDatabase.daoInterface().updateTracksQuantityInPlaylist(
-            appDatabase.daoInterface().getTracksInPlaylist(playlist.playlistId).tracks.size,
+        appDatabase.managePlaylistDaoInterface().updateTracksQuantityInPlaylist(
+            appDatabase.crossReferenceTablesDaoInterface().getTracksInPlaylist(playlist.playlistId).tracks.size,
             playlist.playlistId
         )
 
@@ -59,22 +59,22 @@ class PlaylistManagerRepositoryImplementation(
 
     override suspend fun deleteTrackFromPlaylist(track: Track, playlist: Playlist) {
 
-        appDatabase.daoInterface().deleteTrackFromCrossRefTable(track.trackId, playlist.playlistId)
+        appDatabase.crossReferenceTablesDaoInterface().deleteTrackFromCrossRefTable(track.trackId, playlist.playlistId)
 
-        val trackWithPlaylist = appDatabase.daoInterface().getPlaylistsOfTrack(track.trackId)
+        val trackWithPlaylist = appDatabase.crossReferenceTablesDaoInterface().getPlaylistsOfTrack(track.trackId)
 
         val mappedPlaylists = trackWithPlaylist.playlists.map { playlist -> playlistDbConverter.map(playlist) }
         if (mappedPlaylists.isEmpty()) {
-            appDatabase.daoInterface().deleteTrackFromPlaylist(trackDbConverterForPlaylist.map(track))
+            appDatabase.manageTracksDaoInterface().deleteTrackFromPlaylist(trackDbConverterForPlaylist.map(track))
         }
 
-        appDatabase.daoInterface().updateTracksQuantityInPlaylist(
-            appDatabase.daoInterface().getTracksInPlaylist(playlist.playlistId).tracks.size,
+        appDatabase.managePlaylistDaoInterface().updateTracksQuantityInPlaylist(
+            appDatabase.crossReferenceTablesDaoInterface().getTracksInPlaylist(playlist.playlistId).tracks.size,
             playlist.playlistId
         )
     }
 
     override suspend fun getPlaylist(playlistId: Int): Playlist {
-        return playlistDbConverter.map(appDatabase.daoInterface().getPlaylist(playlistId))
+        return playlistDbConverter.map(appDatabase.managePlaylistDaoInterface().getPlaylist(playlistId))
     }
 }

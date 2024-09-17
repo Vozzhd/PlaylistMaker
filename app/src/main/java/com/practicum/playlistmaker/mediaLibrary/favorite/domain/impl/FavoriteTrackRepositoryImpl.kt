@@ -14,15 +14,15 @@ class FavoriteTrackRepositoryImpl(
 ) : FavoriteTrackRepository {
 
     override suspend fun addToFavorite(track: Track) {
-        appDatabase.daoInterface().insertTrackToFavoriteTable(trackDbConvertor.map(track))
+        appDatabase.favoriteTracksDaoInterface().insertTrackToFavoriteTable(trackDbConvertor.map(track))
     }
 
     override suspend fun deleteFromFavorite(track: Track) {
-        appDatabase.daoInterface().deleteTrackFromFavoriteTable(trackDbConvertor.map(track))
+        appDatabase.favoriteTracksDaoInterface().deleteTrackFromFavoriteTable(trackDbConvertor.map(track))
     }
 
     override fun getFavoriteTrackList(): Flow<List<Track>> = flow {
-        val favoriteTrackList = appDatabase.daoInterface().getFavoriteTracksTable()
+        val favoriteTrackList = appDatabase.favoriteTracksDaoInterface().getFavoriteTracksTable()
         emit(convertFromFavoriteTableEntity(favoriteTrackList))
     }
 

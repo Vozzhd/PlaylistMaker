@@ -21,11 +21,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = PlaylistsFragment().apply { }
-        const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
-
     private var _binding: PlaylistsFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -110,4 +105,10 @@ class PlaylistsFragment : Fragment() {
         binding.playlistRecyclerView.adapter?.notifyDataSetChanged()
         super.onResume()
     }
+
+    companion object {
+        fun newInstance() = PlaylistsFragment().apply { }
+        const val CLICK_DEBOUNCE_DELAY = 1000L
+    }
+
 }

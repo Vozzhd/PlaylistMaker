@@ -37,44 +37,41 @@ class PlaylistViewModel(
     fun observeTrackListForShare(): LiveData<List<Track>> = trackListForShare
 
     fun updatePlaylistInformation(playlist: Playlist) {
-        calculatePlaylistTime(playlist)
-        getTracksInPlaylist(playlist)
-        getTracksQuantityInPlaylist(playlist)
-        getPlaylistInformation(playlist)
-    }
-
-    private fun getPlaylistInformation(it: Playlist) {
-        viewModelScope.launch(Dispatchers.IO) {
-            playlist.postValue(playlistManagerInteractor.getPlaylist(it.playlistId))
+        val playlistTemp = playlist
+        viewModelScope.launch {
+            getPlaylistInformation(playlistTemp)
+            getTracksInPlaylist(playlistTemp)
+            calculatePlaylistTime(playlistTemp)
+            getTracksQuantityInPlaylist(playlistTemp)
         }
     }
 
-    private fun getTracksQuantityInPlaylist(playlist: Playlist) {
-        viewModelScope.launch(Dispatchers.IO) {
-            playlistQuantity.postValue(playlistManagerInteractor.getTracksInPlaylist(playlist.playlistId).size)
-        }
+    suspend fun getPlaylistInformation(it: Playlist) {
+        playlist.postValue(playlistManagerInteractor.getPlaylist(it.playlistId))
     }
 
-    private fun getTracksInPlaylist(playlist: Playlist) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val listWithTracks = playlistManagerInteractor.getTracksInPlaylist(playlist.playlistId)
-            playlistTracks.postValue(listWithTracks)
-        }
+    suspend fun getTracksQuantityInPlaylist(playlist: Playlist) {
+        playlistQuantity.postValue(playlistManagerInteractor.getTracksInPlaylist(playlist.playlistId).size)
+    }
+
+    suspend fun getTracksInPlaylist(playlist: Playlist) {
+        val listWithTracks = playlistManagerInteractor.getTracksInPlaylist(playlist.playlistId)
+        playlistTracks.postValue(listWithTracks)
     }
 
     fun onTrackClick(track: Track) {
         clickEvent.postValue(track)
     }
 
-    private fun calculatePlaylistTime(playlist: Playlist) {
+    suspend fun calculatePlaylistTime(playlist: Playlist) {
         var playlistDurationInMillis = 0L
-        viewModelScope.launch(Dispatchers.IO) {
-            val list = playlistManagerInteractor.getTracksInPlaylist(playlist.playlistId)
-            list.forEach { track ->
-                playlistDurationInMillis += track.trackTimeMillis.toLong()
-            }
-            playlistDuration.postValue(playlistDurationInMillis)
+
+        val list = playlistManagerInteractor.getTracksInPlaylist(playlist.playlistId)
+        list.forEach { track ->
+            playlistDurationInMillis += track.trackTimeMillis.toLong()
         }
+        playlistDuration.postValue(playlistDurationInMillis)
+
     }
 
     fun onLongTrackClick(track: Track) {
@@ -83,8 +80,12 @@ class PlaylistViewModel(
 
     fun deleteTrackFromPlaylist(track: Track, playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
-            playlistManagerInteractor.deleteTrackFromPlaylist(track, playlist)
+            playlistManagerInteractor.deleteTrackFromPlaylist(
+                track,
+                playlist
+            )
         }
+        updatePlaylistInformation(playlist)
     }
 
     fun shareRequest(playlist: Playlist) {
@@ -96,7 +97,7 @@ class PlaylistViewModel(
     }
 
     fun getTrackList(playlistId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             trackListForShare.postValue(playlistManagerInteractor.getTracksInPlaylist(playlistId))
         }
     }
@@ -107,7 +108,7 @@ class PlaylistViewModel(
 
 
     fun deletePlaylist(playlist: Playlist) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             playlistManagerInteractor.deletePlaylist(playlist)
         }
     }
