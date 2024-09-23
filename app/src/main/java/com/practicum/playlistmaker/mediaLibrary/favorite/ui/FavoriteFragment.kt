@@ -22,10 +22,6 @@ import kotlinx.coroutines.launch
 
 class FavoriteFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = FavoriteFragment().apply { }
-    }
-
     private var _binding: FavoriteFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var onTrackClickDebounce: (Track) -> Unit
@@ -103,4 +99,9 @@ class FavoriteFragment : Fragment() {
         _binding = null
         super.onDestroyView()
     }
+
+    companion object {
+        fun newInstance() = FavoriteFragment().apply { }
+    }
+
 }

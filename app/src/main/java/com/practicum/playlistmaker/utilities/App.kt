@@ -12,14 +12,14 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 const val KEY_FOR_TRACK = "TrackInExtra"
+const val KEY_FOR_PLAYLIST = "Playlist"
 const val DEFAULT_TEXT = ""
 const val SHARED_PREFS = "PlaylistMaker shared prefs"
 const val DARK_THEME = "dark theme"
 
-
 class App : Application() {
 
-    var darkTheme: Boolean = false
+    private var darkTheme: Boolean = false
 
     override fun onCreate() {
         super.onCreate()

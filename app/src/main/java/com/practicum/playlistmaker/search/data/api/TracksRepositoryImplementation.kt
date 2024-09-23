@@ -39,7 +39,7 @@ class TracksRepositoryImplementation(
                             isFavorite = false
                         )
                     }
-                    val trackFavoriteIDs = appDatabase.daoInterface().getFavoriteIDsFromFavoriteTable()
+                    val trackFavoriteIDs = appDatabase.favoriteTracksDaoInterface().getFavoriteIDsFromFavoriteTable()
                     for (track in data) {
                         if (trackFavoriteIDs.contains(track.trackId))
                             track.isFavorite = true

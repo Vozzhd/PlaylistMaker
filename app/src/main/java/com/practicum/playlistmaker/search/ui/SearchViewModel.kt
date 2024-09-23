@@ -20,9 +20,6 @@ class SearchViewModel(
     private val context: Context
 
 ) : ViewModel() {
-    companion object {
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
-    }
 
     private val clickEvent = SingleEventLiveData<Track>()
     private val stateLiveData = MutableLiveData<TrackListState>()
@@ -96,5 +93,9 @@ class SearchViewModel(
             latestSearchText = changedText
             trackSearchDebounce(changedText)
         }
+    }
+
+    companion object {
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }

@@ -23,10 +23,7 @@ import com.practicum.playlistmaker.utilities.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
-    companion object {
-        const val SAVED_TEXT_KEY = "Saved text in input field"
-        const val CLICK_DEBOUNCE_DELAY = 300L
-    }
+
 
     private var _binding: SearchFragmentBinding? = null
     private val binding get() = _binding!!
@@ -140,21 +137,21 @@ class SearchFragment : Fragment() {
         binding.progressBarAtView.visibility = View.VISIBLE
     }
 
-    private fun showContent(movies: List<Track>) {
+    private fun showContent(tracks: List<Track>) {
         binding.progressBarAtView.visibility = View.GONE
         binding.recyclerViewTracks.visibility = View.VISIBLE
         trackListAdapter?.trackList?.clear()
-        trackListAdapter?.trackList?.addAll(movies)
+        trackListAdapter?.trackList?.addAll(tracks)
         trackListAdapter?.notifyDataSetChanged()
     }
 
-    private fun showHistory(movies: List<Track>) {
-        if (movies.isEmpty()) {
+    private fun showHistory(tracks: List<Track>) {
+        if (tracks.isEmpty()) {
             trackListAdapter?.trackList?.clear()
             binding.recyclerViewTracks.visibility = View.GONE
         } else {
             trackListAdapter?.trackList?.clear()
-            trackListAdapter?.trackList?.addAll(movies)
+            trackListAdapter?.trackList?.addAll(tracks)
             trackListAdapter?.notifyDataSetChanged()
             binding.progressBarAtView.visibility = View.GONE
             binding.placeholderErrorLayout.visibility = View.GONE
@@ -212,5 +209,10 @@ class SearchFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SAVED_TEXT_KEY, inputInSearchView)
+    }
+
+    companion object {
+        const val SAVED_TEXT_KEY = "Saved text in input field"
+        const val CLICK_DEBOUNCE_DELAY = 300L
     }
 }

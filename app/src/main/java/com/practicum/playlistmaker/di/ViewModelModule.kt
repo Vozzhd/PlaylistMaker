@@ -2,9 +2,11 @@ package com.practicum.playlistmaker.di
 
 import com.practicum.playlistmaker.main.ui.MainViewModel
 import com.practicum.playlistmaker.mediaLibrary.favorite.ui.viewModel.FavoriteFragmentViewModel
-import com.practicum.playlistmaker.mediaLibrary.playlist.ui.viewModel.PlaylistFragmentViewModel
-import com.practicum.playlistmaker.player.ui.PlayerViewModel
-import com.practicum.playlistmaker.playlistCreating.ui.model.PlaylistManagerViewModel
+import com.practicum.playlistmaker.mediaLibrary.playlist.ui.viewModel.PlaylistViewModel
+import com.practicum.playlistmaker.mediaLibrary.playlists.ui.viewModel.PlaylistsFragmentViewModel
+import com.practicum.playlistmaker.player.ui.viewModel.PlayerViewModel
+import com.practicum.playlistmaker.playlistManage.createPlaylist.ui.model.EditPlaylistViewModel
+import com.practicum.playlistmaker.playlistManage.createPlaylist.ui.model.PlaylistManagerViewModel
 import com.practicum.playlistmaker.search.ui.SearchViewModel
 import com.practicum.playlistmaker.settings.ui.SettingsViewModel
 import org.koin.android.ext.koin.androidApplication
@@ -31,6 +33,12 @@ val viewModelModule = module {
         PlaylistManagerViewModel(get())
     }
     viewModel {
-        PlaylistFragmentViewModel(get())
+        PlaylistsFragmentViewModel(get())
+    }
+    viewModel {
+        PlaylistViewModel(get(),get())
+    }
+    viewModel {
+        EditPlaylistViewModel(get())
     }
 }

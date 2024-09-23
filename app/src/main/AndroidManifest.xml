@@ -28,7 +28,9 @@
         <activity
             android:name=".player.ui.PlayerFragment"
             android:exported="false" />
-
+        <activity
+            android:name=".playlistManage.createPlaylist.ui.EditPlaylistFragment"
+            android:exported="false" />
         <activity
             android:name=".main.ui.MainActivity"
             android:exported="true"
@@ -39,5 +41,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

@@ -15,10 +15,11 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlayerFragmentBinding
-import com.practicum.playlistmaker.mediaLibrary.playlist.ui.presenter.PlaylistAdapterPlayerFragment
+import com.practicum.playlistmaker.mediaLibrary.playlists.ui.presenter.PlaylistAdapterPlayerFragment
 import com.practicum.playlistmaker.player.domain.entity.Track
 import com.practicum.playlistmaker.player.domain.model.PlayerState
-import com.practicum.playlistmaker.playlistCreating.domain.entity.Playlist
+import com.practicum.playlistmaker.player.ui.viewModel.PlayerViewModel
+import com.practicum.playlistmaker.playlistManage.createPlaylist.domain.entity.Playlist
 import com.practicum.playlistmaker.utilities.KEY_FOR_TRACK
 import com.practicum.playlistmaker.utilities.Result
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -31,14 +32,6 @@ class PlayerFragment() : Fragment() {
     private lateinit var binding: PlayerFragmentBinding
     private val viewModel by viewModel<PlayerViewModel>()
     private lateinit var bottomSheet: BottomSheetBehavior<LinearLayout>
-
-    companion object {
-        fun createArgs(track: Track): Bundle {
-            return bundleOf(
-                KEY_FOR_TRACK to track
-            )
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -128,8 +121,7 @@ class PlayerFragment() : Fragment() {
 
         viewModel.observePlayerState().observe(viewLifecycleOwner) { changeButtonImage(it) }
         viewModel.observeIsFavorite().observe(viewLifecycleOwner) { changeLikeImage(it) }
-        viewModel.observeCurrentTimeLiveData()
-            .observe(viewLifecycleOwner) { binding.elapsedTrackTime.text = it.toString() }
+        viewModel.observeCurrentTimeLiveData().observe(viewLifecycleOwner) { binding.elapsedTrackTime.text = it.toString() }
         viewModel.observeAddTrackStatus().observe(viewLifecycleOwner) { renderToast(it) }
         viewModel.observeListWithPlaylists().observe(viewLifecycleOwner) {
             playlistAdapterPlaylistFragment.listOfPlaylist.clear()
@@ -170,7 +162,6 @@ class PlayerFragment() : Fragment() {
             }
         }
     }
-
 
     private fun addTrackToPlaylist(track: Track, playlist: Playlist) {
         viewModel.addRequestTrackToPlaylist(track, playlist)
@@ -217,5 +208,13 @@ class PlayerFragment() : Fragment() {
     override fun onDestroy() {
         viewModel.release()
         super.onDestroy()
+    }
+
+    companion object {
+        fun createArgs(track: Track): Bundle {
+            return bundleOf(
+                KEY_FOR_TRACK to track
+            )
+        }
     }
 }
