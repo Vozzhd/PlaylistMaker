@@ -15,13 +15,46 @@
 - БД организована с помощью Room
 - сетевые функции приложения реализованы с помощью Retrofit
 
-#### Стек:
-- Retrofit
-- Room
-- Glide
-- GSON
-- Koin
-- JetpackNavigation
-- JSON
-- Fragments
-- XML
+#### Инструменты разработки:
+Retrofit, Room, Glide, GSON, Koin, JetpackNavigation, JSON, Fragments, XML, BottomNavigation, ViewPager2
+
+### Частичное руководство по возможностям приложения:
+
+#### Экран поиска
+1. Окно поиска
+2. История поиска, при пустой истории выведется сообщение-заглушка
+3. Кнопка очистки истории поиска, при пустой истории не отображается
+
+![PreSearchEdited](https://github.com/user-attachments/assets/fb40c253-ef9c-40ec-b30c-c558f7209c51)
+
+#### Экран результатов поиска
+1. Окно поиска
+2. Список найденных треков
+3. Элемент списка, при нажатии открывается плеер, добавляет этот элемент в историю поиска
+4. BottomNavigation с разделами приложения
+
+![SearchScreenEdited](https://github.com/user-attachments/assets/5289d6cc-1f2e-48c8-a82a-c47b0162d418)
+
+#### Экран плеера
+1. Обложка альбома
+2. Подробная информация о треке
+3. Добавление трека в плейлист
+4. Запуск/остановка воспроизведения
+5. Добавление в избранное
+
+![PlayerScreenEdited](https://github.com/user-attachments/assets/eb343414-ab03-4caf-b49f-cc3d0bfd7dae)
+
+#### Экран медиатеки
+1. Страница со списом избрынных треков
+2. Страница со списком плейлистов
+3. Общая вкладка в BottomNavigationView. Для страниц использован ViewPager2
+   
+![FavoriteViewEdited](https://github.com/user-attachments/assets/a0f9f684-b876-4078-b7f4-76dcd42006d1)
+
+#### Экран создания плейлиста
+1. Добавление обложки из галереи
+2. Название плейлиста - без названия плейлист создан не будет
+3. Описание плейлиста - может быть пустым
+4. Завершение создания плейлиста
+
+![PlaylistCreatingEdited](https://github.com/user-attachments/assets/81fa37e4-5b67-4f7d-9c7b-02a597b769c8)
